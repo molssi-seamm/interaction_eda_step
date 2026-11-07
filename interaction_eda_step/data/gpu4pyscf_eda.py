@@ -9,12 +9,14 @@ Runs in the GPU4PySCF environment, which needs nothing from SEAMM:
 
     {"settings": {"xc": "wb97m-v", "basis": "def2-tzvpd", "auxbasis": null,
                   "nlc": null, "disp": null, "svd_threshold": null,
-                  "ferf": "coupled", "verbose": 3},
+                  "ferf": "coupled", "response_nlc": true, "verbose": 3},
      "calculations": [{"id": "0+1",
                        "fragments": [{"label": "0:Li+", "symbols": ["Li"],
                                       "coordinates": [[0.0, 0.0, 0.0]],
                                       "charge": 1, "spin": 0}, ...]}, ...]}
 
+``nlc: false`` removes VV10 from the whole functional; ``response_nlc: false``
+removes it only from the FERF response kernel (the SCF and SCF-MI keep it).
 Coordinates are in Å. Each calculation appends one JSON line to the results file:
 the ALMO-EDA terms in kJ/mol, the energies in hartree, the wall time, the peak GPU
 memory and the versions -- or the error. Calculations already in the results file
@@ -111,6 +113,19 @@ def main(argv=None):
         eda_module._get_eda_polarization_FERF_subspace_projector = functools.partial(
             eda_module._get_eda_polarization_FERF_subspace_projector, **ferf_options
         )
+
+    if not settings.get("response_nlc", True):
+        # VV10 off in the FERF response kernel only; the SCF and SCF-MI keep the
+        # full functional (the Psi4-parity mode). eda.py looks gen_vind up at
+        # call time, so rebinding the module attribute is enough.
+        import gpu4pyscf.properties.polarizability as polarizability
+
+        _gen_vind = polarizability.gen_vind
+
+        def gen_vind_no_nlc(mf, mo_coeff, mo_occ, with_nlc=True):
+            return _gen_vind(mf, mo_coeff, mo_occ, with_nlc=False)
+
+        polarizability.gen_vind = gen_vind_no_nlc
 
     nlc = settings.get("nlc")
     if isinstance(nlc, str) and nlc.lower() in ("false", "no", "none", "off", "0", ""):

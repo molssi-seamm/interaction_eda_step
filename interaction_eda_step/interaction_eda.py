@@ -143,8 +143,10 @@ class InteractionEda(seamm.Node):
         options = []
         if P["density fitting"] != "no":
             options.append(f"density fitting with {P['density fitting']}")
-        if P["vv10"] == "off":
+        if P["vv10"].startswith("off"):
             options.append("no VV10")
+        elif P["vv10 in response"] == "off":
+            options.append("no VV10 in the FERF response")
         if P["dispersion"] not in ("none", ""):
             options.append(f"{P['dispersion']} dispersion")
         if P["ferf response"] != "coupled":
@@ -166,7 +168,10 @@ class InteractionEda(seamm.Node):
             "xc": str(P["functional"]).lower(),
             "basis": str(P["basis"]).lower(),
             "auxbasis": None if auxbasis in ("no", "none", "") else auxbasis,
-            "nlc": False if P["vv10"] == "off" else None,
+            "nlc": False if P["vv10"].startswith("off") else None,
+            "response_nlc": (
+                P["vv10 in response"] != "off" or P["vv10"].startswith("off")
+            ),
             "disp": None if dispersion.lower() in ("none", "no", "") else dispersion,
             "ferf": P["ferf response"],
             "svd_threshold": float(P["svd threshold"]),

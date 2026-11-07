@@ -18,6 +18,7 @@ METHOD = (
     "basis",
     "density fitting",
     "vv10",
+    "vv10 in response",
     "dispersion",
     "ferf response",
     "svd threshold",
@@ -148,7 +149,7 @@ class TkInteractionEda(seamm.TkNode):
             self[key] = P[key].widget(self["fragments frame"])
 
         # Re-lay out when a choice changes which other settings apply
-        for key in ("fragments", "calculations"):
+        for key in ("vv10", "fragments", "calculations"):
             self[key].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
             self[key].combobox.bind("<Return>", self.reset_dialog)
             self[key].combobox.bind("<FocusOut>", self.reset_dialog)
@@ -171,8 +172,14 @@ class TkInteractionEda(seamm.TkNode):
         self["method frame"].grid(row=0, column=0, sticky=tk.EW, pady=5)
         self["fragments frame"].grid(row=1, column=0, sticky=tk.EW, pady=5)
 
+        # VV10 in the response only matters when the functional keeps VV10
+        method = [
+            key
+            for key in METHOD
+            if not (key == "vv10 in response" and self["vv10"].get().startswith("off"))
+        ]
         widgets = []
-        for row, key in enumerate(METHOD):
+        for row, key in enumerate(method):
             self[key].grid(row=row, column=0, sticky=tk.EW)
             widgets.append(self[key])
         sw.align_labels(widgets, sticky=tk.E)

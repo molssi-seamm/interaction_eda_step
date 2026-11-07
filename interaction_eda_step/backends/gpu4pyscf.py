@@ -21,6 +21,7 @@ DEFAULTS = {
     "disp": None,
     "svd_threshold": 1.0e-4,
     "ferf": "coupled",
+    "response_nlc": True,
     "verbose": 3,
 }
 
@@ -153,6 +154,7 @@ class GPU4PySCF(Backend):
             f"basis={s['basis']}",
             f"auxbasis={s['auxbasis'] or 'none'}",
             f"nlc={'default' if s['nlc'] is None else s['nlc']}",
+            f"response_nlc={'on' if s['response_nlc'] else 'off'}",
             f"disp={s['disp'] or 'none'}",
             f"ferf={s['ferf']}",
             f"svd_threshold={s['svd_threshold']:g}",

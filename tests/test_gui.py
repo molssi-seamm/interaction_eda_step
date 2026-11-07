@@ -53,3 +53,11 @@ def test_dialog_layouts(tk_node):
         tk_node.reset_dialog()
         shown = tk_node["triples cutoff"].grid_info() != {}
         assert shown == ("triples" in calculations)
+
+    assert tk_node["vv10 in response"].grid_info() != {}
+    tk_node["vv10"].set("off (whole functional)")
+    tk_node.reset_dialog()
+    assert tk_node["vv10 in response"].grid_info() == {}
+    tk_node["vv10"].set("as in the functional")
+    tk_node.reset_dialog()
+    assert tk_node["vv10 in response"].grid_info() != {}

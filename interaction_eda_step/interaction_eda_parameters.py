@@ -124,13 +124,29 @@ class InteractionEdaParameters(seamm.Parameters):
             "default": "as in the functional",
             "kind": "enumeration",
             "default_units": "",
-            "enumeration": ("as in the functional", "off"),
+            "enumeration": ("as in the functional", "off (whole functional)"),
             "format_string": "s",
             "description": "VV10 nonlocal correlation:",
             "help_text": (
                 "Whether to keep the VV10 nonlocal correlation that a -V functional "
-                "includes. 'off' removes it, e.g. for wB97X-V with D4 dispersion "
-                "(Najibi and Goerigk's wB97X-D4)."
+                "includes. 'off (whole functional)' removes it everywhere, which is "
+                "a different functional with different energies, e.g. wB97X-V with "
+                "D4 dispersion (Najibi and Goerigk's wB97X-D4)."
+            ),
+        },
+        "vv10 in response": {
+            "default": "on",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": ("on", "off"),
+            "format_string": "s",
+            "description": "VV10 in the FERF response:",
+            "help_text": (
+                "Whether the FERF response kernel includes VV10. 'off' drops it from "
+                "the response only; the SCF and SCF-MI energies keep the full "
+                "functional. This matches codes without a VV10 response kernel "
+                "(Psi4); on shell A it moved energy between polarization and charge "
+                "transfer by at most 0.0014 kJ/mol."
             ),
         },
         "dispersion": {
