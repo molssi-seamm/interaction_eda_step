@@ -161,11 +161,14 @@ class InteractionEda(seamm.Node):
         options = []
         if P["density fitting"] != "no":
             options.append(f"density fitting with {P['density fitting']}")
-        if P["vv10"].startswith("off"):
+        applies = self.parameters.applicable(P)
+        if applies["vv10"] and P["vv10"].startswith("off"):
             options.append("no VV10")
-        elif P["vv10 in response"] == "off":
+        elif applies["vv10 in response"] and P["vv10 in response"] == "off":
             options.append("no VV10 in the FERF response")
-        if P["dispersion"] not in ("none", ""):
+        elif P["backend"] == "Psi4" and str(P["functional"]).lower().endswith("-v"):
+            options.append("no VV10 in the FERF response")
+        if applies["dispersion"] and P["dispersion"] not in ("none", ""):
             options.append(f"{P['dispersion']} dispersion")
         if P["ferf response"] != "coupled":
             options.append(f"{P['ferf response']} FERF response")
@@ -179,22 +182,34 @@ class InteractionEda(seamm.Node):
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
 
     def backend_settings(self, P):
-        """The backend's settings from the parameters."""
+        """The backend's settings from the parameters.
+
+        Settings that do not apply to the chosen backend (see the parameters'
+        rules) are left out, so the backend's own defaults hold, e.g. no VV10 in
+        Psi4's response kernel.
+        """
+        applies = self.parameters.applicable(P)
         auxbasis = P["density fitting"]
-        dispersion = str(P["dispersion"]).strip()
-        return {
+        settings = {
             "xc": str(P["functional"]).lower(),
             "basis": str(P["basis"]).lower(),
             "auxbasis": None if auxbasis in ("no", "none", "") else auxbasis,
-            "nlc": False if P["vv10"].startswith("off") else None,
-            "response_nlc": (
-                P["vv10 in response"] != "off" or P["vv10"].startswith("off")
-            ),
-            "disp": None if dispersion.lower() in ("none", "no", "") else dispersion,
             "ferf": P["ferf response"],
             "svd_threshold": float(P["svd threshold"]),
-            "allow_low_fp64": P["low fp64 gpus"] == "allow",
         }
+        vv10_off = applies["vv10"] and P["vv10"].startswith("off")
+        if applies["vv10"]:
+            settings["nlc"] = False if vv10_off else None
+        if applies["vv10 in response"] or vv10_off:
+            settings["response_nlc"] = P["vv10 in response"] != "off" or vv10_off
+        if applies["dispersion"]:
+            dispersion = str(P["dispersion"]).strip()
+            settings["disp"] = (
+                None if dispersion.lower() in ("none", "no", "") else dispersion
+            )
+        if applies["low fp64 gpus"]:
+            settings["allow_low_fp64"] = P["low fp64 gpus"] == "allow"
+        return settings
 
     def run(self):
         """Run the Interaction EDA step.

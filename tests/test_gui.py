@@ -63,3 +63,30 @@ def test_dialog_layouts(tk_node):
     tk_node["vv10"].set("as in the functional")
     tk_node.reset_dialog()
     assert tk_node["vv10 in response"].grid_info() != {}
+
+
+def test_dialog_psi4(tk_node):
+    """Psi4 hides the GPU, VV10 and dispersion settings and makes a meta-GGA's
+    FERF response uncoupled."""
+    tk_node.create_dialog()
+    tk_node["backend"].set("Psi4")
+    tk_node["functional"].set("wB97X-V")
+    tk_node.reset_dialog()
+    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+        assert tk_node[key].grid_info() == {}, key
+    assert tk_node["ferf response"].get() == "coupled"
+    assert list(tk_node["ferf response"].combobox.cget("values")) == [
+        "coupled",
+        "uncoupled",
+    ]
+
+    tk_node["functional"].set("wB97M-V")
+    tk_node.reset_dialog()
+    assert tk_node["ferf response"].get() == "uncoupled"
+    assert list(tk_node["ferf response"].combobox.cget("values")) == ["uncoupled"]
+
+    tk_node["backend"].set("GPU4PySCF")
+    tk_node.reset_dialog()
+    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+        assert tk_node[key].grid_info() != {}, key
+    assert len(tk_node["ferf response"].combobox.cget("values")) == 2
