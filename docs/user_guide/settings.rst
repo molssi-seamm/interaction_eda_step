@@ -11,8 +11,32 @@ response with a singular-value threshold of 10⁻⁴, and fine integration grids
 Method
 ======
 Code
-    The code that does the EDA. GPU4PySCF runs second-generation ALMO-EDA on a GPU (see
-    :ref:`eda-terms`).
+    The code that does the EDA. Both run second-generation ALMO-EDA (see
+    :ref:`eda-terms`) with the same algorithm and settings, and give the same terms.
+
+    GPU4PySCF
+        Runs on a GPU with good double-precision (FP64) throughput: A100, A30,
+        H100/H200, B200. It handles every functional, including meta-GGAs such as
+        ωB97M-V with the coupled response, and is much faster.
+    Psi4
+        Runs on CPUs, with the Psi4 step's environment (``psi4.ini``), so it needs no
+        GPU and no environment of its own. Psi4 has the exchange-correlation response
+        kernel only for LDA and GGA functionals without VV10, so:
+
+        * VV10 is always kept in the energies and always left out of the FERF
+          response (the settings for VV10 are not shown);
+        * meta-GGA functionals such as ωB97M-V or B97M-V use the uncoupled FERF
+          response, which the dialog sets. Uncoupled moves energy from polarization
+          into charge transfer -- +1.4 kJ/mol for Li⁺–EC at equilibrium, up to 6
+          kJ/mol at short range -- so these terms are not comparable with coupled
+          ones, while the frozen, polarized-plus-charge-transfer and total energies
+          are unchanged. For coupled meta-GGA results use GPU4PySCF;
+        * dispersion corrections are not available yet.
+
+        The cost is dominated by VV10 on the full grid, which grows with the square of
+        the number of atoms: a water dimer with ωB97X-V/def2-TZVPD takes about 1.5
+        minutes on 4 cores, a Li⁺–EC pair more than 15 minutes on 8. Hartree-Fock and
+        functionals without VV10 are several times faster.
 
 Functional
     The density functional, in PySCF's names (case does not matter), e.g. ``wB97M-V``,
@@ -37,10 +61,10 @@ VV10 in the FERF response
     only; the SCF and SCF-MI energies keep the full functional. This matches codes that
     have no VV10 response kernel, such as Psi4. For a Li⁺ shell it moved energy between
     polarization and charge transfer by at most 0.0014 kJ/mol, and does not change the
-    total. Shown only when VV10 is kept.
+    total. Shown only when VV10 is kept, with GPU4PySCF.
 
 Dispersion correction
-    An empirical correction added to the functional, in PySCF's names: ``d4``,
+    GPU4PySCF only. An empirical correction added to the functional, in PySCF's names: ``d4``,
     ``d3bj``, or a specific parameter set such as ``d4:wb97x``. It is part of the
     dispersion term; D4's three-body (ATM) part shows up in the ≥3-body dispersion.
 
@@ -48,8 +72,10 @@ FERF response
     ``coupled`` solves the coupled-perturbed equations for the fragments' response to
     electric fields (the default). ``uncoupled`` uses orbital-energy denominators
     without the exchange-correlation kernel, which is cheaper. Only the split between
-    polarization and charge transfer changes: by about 1 % of the polarization for a Li⁺
-    shell.
+    polarization and charge transfer changes: uncoupled moves energy from polarization
+    into charge transfer, +1.4 kJ/mol for Li⁺–EC at equilibrium and up to 6 kJ/mol at
+    short range with ωB97M-V, so uncoupled terms are not comparable with coupled ones.
+    With Psi4 a meta-GGA functional can only use ``uncoupled``.
 
 FERF singular-value threshold
     Response directions with singular values below this are dropped from the
@@ -71,7 +97,7 @@ Integration grid
     earlier) used the standard grids.
 
 GPUs with little FP64
-    ``refuse`` (the default) stops before any calculation if the GPU is one made mainly
+    GPU4PySCF only. ``refuse`` (the default) stops before any calculation if the GPU is one made mainly
     for single precision (T4, L4, L40S, A10, A40, RTX ...), where the EDA runs tens of
     times slower; the job ends with a message saying so. ``allow`` runs anyway, with a
     warning.

@@ -78,13 +78,15 @@ class InteractionEdaParameters(seamm.Parameters):
             "default": "GPU4PySCF",
             "kind": "enumeration",
             "default_units": "",
-            "enumeration": ("GPU4PySCF",),
+            "enumeration": ("GPU4PySCF", "Psi4"),
             "format_string": "s",
             "description": "Code:",
             "help_text": (
                 "The code that does the EDA. GPU4PySCF runs second-generation "
                 "ALMO-EDA on a GPU with good double precision (A100, A30, H100/H200, "
-                "B200)."
+                "B200). Psi4 runs the same EDA on CPUs, more slowly, for GGA and "
+                "hybrid functionals such as wB97X-V (meta-GGAs such as wB97M-V only "
+                "with the uncoupled FERF response) and Hartree-Fock."
             ),
         },
         "functional": {
