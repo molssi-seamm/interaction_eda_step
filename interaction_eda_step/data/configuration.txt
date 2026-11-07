@@ -1,0 +1,3 @@
+[interaction-eda-step]
+# The Interaction EDA step has no options here yet. How GPU4PySCF is run is in
+# gpu4pyscf.ini in the SEAMM installation's directory.

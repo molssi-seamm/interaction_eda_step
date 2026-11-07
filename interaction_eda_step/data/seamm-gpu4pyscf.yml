@@ -1,0 +1,12 @@
+name: seamm-gpu4pyscf
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  # GPU4PySCF is deliberately NOT listed here. `interaction-eda-step-installer`
+  # installs it with pip after creating the environment, choosing the CUDA build
+  # (gpu4pyscf-cuda12x or -cuda13x, with the matching cupy[ctk] and cuTENSOR)
+  # for the machine's NVIDIA driver, and pyscf-dispersion for D3/D4. The CUDA
+  # libraries come from NVIDIA's wheels, so no CUDA toolkit is needed. See
+  # interaction_eda_step/installer.py (BUILDS).

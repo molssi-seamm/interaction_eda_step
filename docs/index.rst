@@ -1,7 +1,12 @@
 Welcome to the documentation for the Interaction EDA SEAMM plug-in
 ==================================================================
 
-Interaction EDA <does what? replace this text>
+The Interaction EDA step splits the interaction energy between the molecules of a
+cluster into physically meaningful terms -- electrostatics, Pauli repulsion,
+dispersion, polarization and charge transfer -- with an energy decomposition analysis
+(EDA). It computes the whole cluster and its pairs (and optionally triples), and
+separates each term into its 2-body and many-body parts. The first release uses
+second-generation ALMO-EDA in GPU4PySCF, on a GPU.
 
 .. grid:: 1 1 2 2
 
@@ -41,7 +46,7 @@ Interaction EDA <does what? replace this text>
    .. grid-item-card:: API Reference
       :margin: 0 3 0 0
 
-      The API for the Geometry Analysis Step
+      The API for the Interaction EDA step
 
       .. button-link:: ./api/index.html
 	 :color: primary

@@ -1,145 +1,67 @@
 # -*- coding: utf-8 -*-
 
-"""This file contains metadata describing the results from InteractionEda"""
+"""Metadata describing the results of the Interaction EDA step.
+
+The results are the common EDA terms (see :mod:`interaction_eda_step.terms`) of
+the whole cluster, their 2-body part (the sum over the pairs), their exact
+≥3-body part (cluster - Σ pairs) and the truncated 3-body estimate from the
+triples that were computed. All energies are in kJ/mol.
+"""
+
+from .terms import COMMON_TERMS
 
 metadata = {}
 
-"""Description of the computational models for InteractionEda.
+PARTS = {
+    "": ("cluster", "of the whole cluster"),
+    " 2-body": ("2-body", "summed over all pairs of fragments"),
+    " ≥3-body": ("≥3-body", "exact many-body part: cluster minus the sum of pairs"),
+    " 3-body (triples)": (
+        "3-body (triples)",
+        "3-body increments summed over the triples computed; truncated, not the"
+        " ≥3-body total",
+    ),
+}
 
-Hamiltonians, approximations, and basis set or parameterizations,
-only if appropriate for this code. For example::
-
-    metadata["computational models"] = {
-        "Hartree-Fock": {
-            "models": {
-                "PM7": {
-                    "parameterizations": {
-                        "PM7": {
-                            "elements": "1-60,62-83",
-                            "periodic": True,
-                            "reactions": True,
-                            "optimization": True,
-                            "code": "mopac",
-                        },
-                        "PM7-TS": {
-                            "elements": "1-60,62-83",
-                            "periodic": True,
-                            "reactions": True,
-                            "optimization": False,
-                            "code": "mopac",
-                        },
-                    },
-                },
-            },
-        },
-    }
-"""
-# metadata["computational models"] = {
-# }
-
-"""Description of the InteractionEda keywords.
-
-(Only needed if this code uses keywords)
-
-Fields
-------
-description : str
-    A human readable description of the keyword.
-takes values : int (optional)
-    Number of values the keyword takes. If missing the keyword takes no values.
-default : str (optional)
-    The default value(s) if the keyword takes values.
-format : str (optional)
-    How the keyword is formatted in the MOPAC input.
-
-For example::
-    metadata["keywords"] = {
-        "0SCF": {
-            "description": "Read in data, then stop",
-        },
-        "ALT_A": {
-            "description": "In PDB files with alternative atoms, select atoms A",
-            "takes values": 1,
-            "default": "A",
-            "format": "{}={}",
-        },
-    }
-"""
-# metadata["keywords"] = {
-# }
-
-"""Properties that InteractionEda produces.
-`metadata["results"]` describes the results that this step can produce. It is a
-dictionary where the keys are the internal names of the results within this step, and
-the values are a dictionary describing the result. For example::
-
-    metadata["results"] = {
-        "total_energy": {
-            "calculation": [
-                "energy",
-                "optimization",
-            ],
-            "description": "The total energy",
+metadata["results"] = {}
+for _term in COMMON_TERMS:
+    for _suffix, (_part, _text) in PARTS.items():
+        _key = f"EDA {_term}{_suffix}"
+        metadata["results"][_key] = {
+            "description": f"The EDA {_term} interaction energy, {_text}",
             "dimensionality": "scalar",
-            "methods": [
-                "ccsd",
-                "ccsd(t)",
-                "dft",
-                "hf",
-            ],
-            "property": "total energy#Psi4#{model}",
             "type": "float",
-            "units": "E_h",
+            "units": "kJ/mol",
+            "format": ".3f",
+        }
+        if _suffix in ("", " ≥3-body"):
+            metadata["results"][_key][
+                "property"
+            ] = f"EDA {_term}{_suffix}#Interaction EDA#{{model}}"
+
+metadata["results"].update(
+    {
+        "EDA method": {
+            "description": "The EDA scheme, code and settings",
+            "dimensionality": "scalar",
+            "type": "string",
+        },
+        "EDA pairs": {
+            "description": "The EDA terms of each pair: {'i+j': {term: kJ/mol}}",
+            "dimensionality": "{n_pairs}",
+            "type": "json",
+            "units": "kJ/mol",
+        },
+        "EDA triples": {
+            "description": "The 3-body increments of each triple computed",
+            "dimensionality": "{n_triples}",
+            "type": "json",
+            "units": "kJ/mol",
+        },
+        "number of fragments": {
+            "description": "The number of fragments",
+            "dimensionality": "scalar",
+            "type": "integer",
         },
     }
-
-Fields
-______
-
-calculation : [str]
-    Optional metadata describing what subtype of the step produces this result.
-    The subtypes are completely arbitrary, but often they are types of calculations
-    which is why this is name `calculation`. To use this, the step or a substep
-    define `self._calculation` as a value. That value is used to select only the
-    results with that value in this field.
-
-description : str
-    A human-readable description of the result.
-
-dimensionality : str
-    The dimensions of the data. The value can be "scalar" or an array definition
-    of the form "[dim1, dim2,...]". Symmetric tringular matrices are denoted
-    "triangular[n,n]". The dimensions can be integers, other scalar
-    results, or standard parameters such as `n_atoms`. For example, '[3]',
-    [3, n_atoms], or "triangular[n_aos, n_aos]".
-
-methods : str
-    Optional metadata like the `calculation` data. `methods` provides a second
-    level of filtering, often used for the Hamiltionian for *ab initio* calculations
-    where some properties may or may not be calculated depending on the type of
-    theory.
-
-property : str
-    An optional definition of the property for storing this result. Must be one of
-    the standard properties defined either in SEAMM or in this steps property
-    metadata in `data/properties.csv`.
-
-type : str
-    The type of the data: string, integer, or float.
-
-units : str
-    Optional units for the result. If present, the value should be in these units.
-"""
-# metadata["results"] = {
-#     "total_energy": {
-#         "calculation": [
-#             "energy",
-#             "optimization",
-#         ],
-#         "description": "The total energy",
-#         "dimensionality": "scalar",
-#         "property": "total energy#InteractionEda#{model}",
-#         "type": "float",
-#         "units": "E_h",
-#     },
-# }
+)

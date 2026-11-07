@@ -1,0 +1,8 @@
+6
+Properties=species:S:1:pos:R:3 name="S22_water_dimer" fragments="donor:0:3;acceptor:3:6" fragment_charges="0,0" ref_CCSDT_CBS_kcal_mol=-4.97 ref_CCSDT_CBS_kJ_mol=-20.79
+O  -1.551007  -0.114520   0.000000
+H  -1.934259   0.762503   0.000000
+H  -0.599677   0.040712   0.000000
+O   1.350625   0.111469   0.000000
+H   1.680398  -0.373741  -0.758561
+H   1.680398  -0.373741   0.758561

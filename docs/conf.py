@@ -304,3 +304,7 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 # texinfo_no_detailmenu = False
+
+# Dataclass fields are documented by autodoc; render docstring 'Attributes' as
+# instance variables so they are not described twice.
+napoleon_use_ivar = True
