@@ -85,8 +85,8 @@ class InteractionEdaParameters(seamm.Parameters):
                 "The code that does the EDA. GPU4PySCF runs second-generation "
                 "ALMO-EDA on a GPU with good double precision (A100, A30, H100/H200, "
                 "B200). Psi4 runs the same EDA on CPUs, more slowly, for GGA and "
-                "hybrid functionals such as wB97X-V (meta-GGAs such as wB97M-V only "
-                "with the uncoupled FERF response) and Hartree-Fock."
+                "hybrid functionals such as wB97X-V (not meta-GGAs such as wB97M-V) "
+                "and Hartree-Fock."
             ),
         },
         "functional": {

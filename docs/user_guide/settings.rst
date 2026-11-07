@@ -25,12 +25,11 @@ Code
 
         * VV10 is always kept in the energies and always left out of the FERF
           response (the settings for VV10 are not shown);
-        * meta-GGA functionals such as ωB97M-V or B97M-V use the uncoupled FERF
-          response, which the dialog sets. Uncoupled moves energy from polarization
-          into charge transfer -- +1.4 kJ/mol for Li⁺–EC at equilibrium, up to 6
-          kJ/mol at short range -- so these terms are not comparable with coupled
-          ones, while the frozen, polarized-plus-charge-transfer and total energies
-          are unchanged. For coupled meta-GGA results use GPU4PySCF;
+        * meta-GGA functionals such as ωB97M-V or B97M-V are not available: the
+          uncoupled response would move energy from polarization into charge
+          transfer -- +1.4 kJ/mol for Li⁺–EC at equilibrium, up to 6 kJ/mol at short
+          range -- and the terms would not be comparable with coupled ones. Use
+          GPU4PySCF for them;
         * dispersion corrections are not available yet.
 
         The cost is dominated by VV10 on the full grid, which grows with the square of
@@ -75,7 +74,6 @@ FERF response
     polarization and charge transfer changes: uncoupled moves energy from polarization
     into charge transfer, +1.4 kJ/mol for Li⁺–EC at equilibrium and up to 6 kJ/mol at
     short range with ωB97M-V, so uncoupled terms are not comparable with coupled ones.
-    With Psi4 a meta-GGA functional can only use ``uncoupled``.
 
 FERF singular-value threshold
     Response directions with singular values below this are dropped from the
