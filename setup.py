@@ -50,6 +50,9 @@ setup(
     # Required packages, pulls from pip if needed; do not use for Conda
     # deployment
     install_requires=requirements,
+    # The run-path tests build a flowchart that reads the structure with the
+    # Read Structure step.
+    extras_require={'test': ['read-structure-step']},
 
     test_suite='tests',
 
