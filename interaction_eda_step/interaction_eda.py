@@ -397,7 +397,7 @@ class InteractionEda(seamm.Node):
             config=config,
             directory=self.directory,
             files=files,
-            return_files=[backend.results_file, "logs/*"],
+            return_files=[backend.results_file, "*.log"],
             in_situ=True,
             shell=True,
             ce=ce,

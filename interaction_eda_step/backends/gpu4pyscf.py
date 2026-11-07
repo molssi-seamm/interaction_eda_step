@@ -126,7 +126,18 @@ class GPU4PySCF(Backend):
         }
 
     def command(self):
-        return ["{code}", DRIVER, "input.json", "-o", self.results_file]
+        # The logs go in the step's directory, not a subdirectory: the executor's
+        # in-situ clean-up (seamm_exec 2026.11.5) cannot remove a new directory
+        # holding files it returns.
+        return [
+            "{code}",
+            DRIVER,
+            "input.json",
+            "-o",
+            self.results_file,
+            "--logdir",
+            ".",
+        ]
 
     def read_results(self, directory, calculations):
         records = read_jsonl(Path(directory) / self.results_file)

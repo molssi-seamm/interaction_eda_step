@@ -14,6 +14,7 @@ import importlib.resources
 import importlib.util
 import json
 import logging
+import os
 import platform
 
 import seamm_manager
@@ -289,6 +290,18 @@ class Installer(seamm_manager.InstallerBase):
             self.exe_config.set_value("local", key, None)
         self.exe_config.save()
 
+    def _exists(self, environment):
+        """Whether the Conda environment exists, given by name or by path.
+
+        ``conda env list`` names only the environments in its envs directories,
+        so an environment given by its path is found by its ``conda-meta``.
+        """
+        if os.path.isabs(os.path.expanduser(environment)):
+            return os.path.isdir(
+                os.path.join(os.path.expanduser(environment), "conda-meta")
+            )
+        return self.conda.exists(environment)
+
     # ------------------------------------------------------------------
     def install(self):
         """Create the environment and install GPU4PySCF for this machine."""
@@ -315,7 +328,7 @@ class Installer(seamm_manager.InstallerBase):
             )
             return
         environment = data.get("conda-environment") or self.environment
-        if self.conda.exists(environment):
+        if self._exists(environment):
             print(f"    Using the existing Conda environment '{environment}'.")
             if self._not_ours(environment):
                 print(
@@ -356,7 +369,7 @@ class Installer(seamm_manager.InstallerBase):
             )
             return
         environment = data.get("conda-environment") or self.environment
-        if not self.conda.exists(environment):
+        if not self._exists(environment):
             print(f"!   The Conda environment '{environment}' does not exist; install.")
             return
         if self._not_ours(environment):
@@ -383,7 +396,7 @@ class Installer(seamm_manager.InstallerBase):
         data = self.exe_config.get_values("local")
         if data.get("installation") == "conda":
             environment = data.get("conda-environment") or self.environment
-            if not self.conda.exists(environment):
+            if not self._exists(environment):
                 print(
                     f"!   The Conda environment '{environment}' in gpu4pyscf.ini does "
                     "not exist. Run 'interaction-eda-step-installer install'."

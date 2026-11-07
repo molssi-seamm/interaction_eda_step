@@ -25,7 +25,7 @@ SOURCE = Path(__file__).parents[1]
 
 FAKE = '''#!{python}
 """Stand-in for the GPU4PySCF environment's Python."""
-import json, sys
+import json, os, sys
 reference = {{}}
 for line in open({reference!r}):
     r = json.loads(line)
@@ -35,8 +35,13 @@ assert args[0] == "gpu4pyscf_eda.py", args
 data = json.load(open(args[1]))
 assert data["settings"]["xc"] == "wb97m-v", data["settings"]
 assert data["settings"]["auxbasis"] is None, data["settings"]
+# like the real driver: one log per calculation, in --logdir (default "logs")
+logdir = args[args.index("--logdir") + 1] if "--logdir" in args else "logs"
+os.makedirs(logdir, exist_ok=True)
 with open(args[args.index("-o") + 1], "a") as out:
     for calc in data["calculations"]:
+        with open(os.path.join(logdir, calc["id"] + ".log"), "w") as log:
+            log.write("fake log\\n")
         charges = [f["charge"] for f in calc["fragments"]]
         assert charges == [1 if f["label"].startswith("0:") else 0
                            for f in calc["fragments"]], calc["id"]
@@ -103,6 +108,8 @@ def test_shell_a(tmp_path):
     assert "ferf=coupled" in info["EDA_method"]
     assert "BSSE" in info["EDA_conventions"]
     assert frames.count("Properties=") == 11
+
+    assert (step / "0+1.log").exists() and (step / "0+1+2+3+4.log").exists()
 
     out = (step / "step.out").read_text()
     assert "≥3-body (exact)" in out and "ALMO-EDA2 interaction energies" in out

@@ -64,3 +64,14 @@ def test_assess():
     assert ok and "as expected" in lines[0]
     assert not installer.assess(login, have_driver=True)[0]
     assert not installer.assess(None)[0]
+
+
+def test_exists_by_path(tmp_path):
+    """An environment given by its path is found by its conda-meta."""
+    inst = installer.Installer.__new__(
+        installer.Installer
+    )  # no seamm-manager set-up needed
+    env = tmp_path / "env"
+    assert not inst._exists(str(env))
+    (env / "conda-meta").mkdir(parents=True)
+    assert inst._exists(str(env))
