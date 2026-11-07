@@ -99,6 +99,14 @@ class Backend:
         """A one-line description of the method, for labels and tables."""
         raise NotImplementedError
 
+    def configure(self, config):
+        """The ini section as the executor should use it (default: unchanged)."""
+        return config
+
+    def problems(self, settings):
+        """Why these settings cannot run with this backend; [] if they can."""
+        return []
+
     def citations(self, settings):
         """[(alias, bibtex, level, note)] to cite."""
         return []

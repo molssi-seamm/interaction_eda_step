@@ -218,6 +218,12 @@ class InteractionEda(seamm.Node):
         backend = BACKENDS[P["backend"]]()
         scheme = SCHEMES[backend.scheme]
         settings = backend.settings(self.backend_settings(P))
+        problems = backend.problems(settings)
+        if problems:
+            raise RuntimeError(
+                f"These settings cannot run with {backend.name}:\n  "
+                + "\n  ".join(problems)
+            )
 
         # The fragments and the calculations
         column = P["fragment column"] if P["fragments"] == "atom column" else None
@@ -385,7 +391,7 @@ class InteractionEda(seamm.Node):
                 f"[{executor_type}]\ninstallation = local\n"
                 "code = /path/to/env/bin/python"
             )
-        config = dict(full_config.items(executor_type))
+        config = backend.configure(dict(full_config.items(executor_type)))
         code = config.get("code", "")
         if config.get("installation", "local") == "local" and not (
             Path(code.split()[0]).expanduser().exists() if code else False
