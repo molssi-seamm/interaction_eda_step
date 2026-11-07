@@ -150,3 +150,23 @@ def test_low_fp64_names():
         "Tesla V100-PCIE-16GB",
     ):
         assert not driver.low_fp64(name), name
+
+
+def test_gpu_refusal():
+    """Low-FP64 GPUs are refused unless allowed; V100 and the data-centre GPUs run."""
+    driver = load_driver()
+    text = driver.gpu_refusal("NVIDIA L40S", {})
+    assert "nothing was run" in text and "'allow'" in text
+    assert driver.gpu_refusal("NVIDIA L40S", {"allow_low_fp64": True}) is None
+    for name in ("NVIDIA A100-SXM4-80GB", "NVIDIA A30", "Tesla V100-PCIE-16GB"):
+        assert driver.gpu_refusal(name, {}) is None
+
+
+def test_refusal_setting_reaches_the_driver():
+    backend = GPU4PySCF()
+    calcs = [Calculation((0, 1), li_ec_fragments())]
+    s = json.loads(backend.files(calcs, {})["input.json"])["settings"]
+    assert s["allow_low_fp64"] is False
+    s = json.loads(backend.files(calcs, {"allow_low_fp64": True})["input.json"])
+    assert s["settings"]["allow_low_fp64"] is True
+    assert "fp64" not in backend.method_string({"allow_low_fp64": True})

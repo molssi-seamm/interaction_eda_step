@@ -22,6 +22,7 @@ METHOD = (
     "dispersion",
     "ferf response",
     "svd threshold",
+    "low fp64 gpus",
 )
 #: The settings for the fragments and calculations.
 FRAGMENTS = ("fragments", "fragment column", "calculations", "triples cutoff")

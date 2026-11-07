@@ -193,6 +193,7 @@ class InteractionEda(seamm.Node):
             "disp": None if dispersion.lower() in ("none", "no", "") else dispersion,
             "ferf": P["ferf response"],
             "svd_threshold": float(P["svd threshold"]),
+            "allow_low_fp64": P["low fp64 gpus"] == "allow",
         }
 
     def run(self):
@@ -298,6 +299,13 @@ class InteractionEda(seamm.Node):
         if not energies:
             message = "All of the EDA calculations failed."
             stderr = Path(self.directory) / "stderr.txt"
+            refused = [
+                line[len("REFUSED: ") :]
+                for line in (stderr.read_text() if stderr.exists() else "").splitlines()
+                if line.startswith("REFUSED: ")
+            ]
+            if refused:
+                raise RuntimeError(refused[-1])
             if stderr.exists():
                 tail = stderr.read_text().strip().splitlines()[-5:]
                 if tail:

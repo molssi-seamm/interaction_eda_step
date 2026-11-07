@@ -113,3 +113,31 @@ def test_shell_a(tmp_path):
 
     out = (step / "step.out").read_text()
     assert "≥3-body (exact)" in out and "ALMO-EDA2 interaction energies" in out
+
+
+REFUSING = '''#!{python}
+"""Stand-in for the GPU4PySCF environment's Python on a low-FP64 GPU."""
+import sys
+print("REFUSED: The NVIDIA L40S has little double-precision (FP64) throughput, "
+      "so the EDA would be very slow: nothing was run.", file=sys.stderr)
+sys.exit(3)
+'''
+
+
+def test_low_fp64_gpu_refused(tmp_path):
+    sdf = tmp_path / "shellA.sdf"
+    text = (DATA / "shellA_dp000.sdf").read_text()
+    sdf.write_text(text.split("$$$$")[0] + "$$$$\n")
+    fake = tmp_path / "bin" / "python"
+    fake.parent.mkdir()
+    fake.write_text(REFUSING.format(python=sys.executable))
+    fake.chmod(0o755)
+    with pytest.raises(AssertionError) as e:
+        seamm_testing.run_spec(
+            tmp_path,
+            SPEC.format(sdf=sdf),
+            inis={"gpu4pyscf": {"installation": "local", "code": str(fake)}},
+            source=SOURCE,
+        )
+    assert "little double-precision (FP64)" in str(e.value)
+    assert "All of the EDA calculations failed" not in str(e.value)

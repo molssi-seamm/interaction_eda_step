@@ -45,6 +45,21 @@ def low_fp64(gpu):
     return LOW_FP64.search(gpu) is not None
 
 
+def gpu_refusal(gpu, settings):
+    """Why the calculations must not run on this GPU, or None if they may.
+
+    A GPU made for single precision runs ALMO-EDA tens of times slower than one
+    with full double precision, so the step refuses it unless told to allow it.
+    """
+    if not low_fp64(gpu) or settings.get("allow_low_fp64", False):
+        return None
+    return (
+        f"The {gpu} has little double-precision (FP64) throughput, so the EDA "
+        "would be very slow: nothing was run. Use a queue with A100, A30, "
+        "H100/H200, B200 or V100 GPUs, or set 'GPUs with little FP64' to 'allow'."
+    )
+
+
 class PeakGPUMemory:
     """Sample the device's used memory (all processes on it) in a thread."""
 
@@ -150,10 +165,14 @@ def main(argv=None):
     gpu = gpu.decode() if isinstance(gpu, bytes) else str(gpu)
     info = versions()
     print(f"GPU: {gpu}; {info}", flush=True)
+    refusal = gpu_refusal(gpu, settings)
+    if refusal is not None:
+        print(f"REFUSED: {refusal}", file=sys.stderr, flush=True)
+        return 3
     if low_fp64(gpu):
         print(
             f"WARNING: the {gpu} has little double-precision (FP64) throughput, so "
-            "this will be very slow. Use an A100, A30, H100/H200 or B200.",
+            "this will be very slow ('GPUs with little FP64' is 'allow').",
             flush=True,
         )
     os.makedirs(args.logdir, exist_ok=True)

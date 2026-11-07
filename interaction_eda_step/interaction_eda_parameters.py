@@ -190,6 +190,19 @@ class InteractionEdaParameters(seamm.Parameters):
                 "polarization space (GPU4PySCF's default, 1e-4, is the validated one)."
             ),
         },
+        "low fp64 gpus": {
+            "default": "refuse",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": ("refuse", "allow"),
+            "format_string": "s",
+            "description": "GPUs with little FP64:",
+            "help_text": (
+                "GPUs made for single precision (T4, L4, L40S, A10, A40, RTX ...) "
+                "run the EDA tens of times slower. 'refuse' stops before any "
+                "calculation on such a GPU; 'allow' runs anyway."
+            ),
+        },
         "fragments": {
             "default": "molecules",
             "kind": "enumeration",

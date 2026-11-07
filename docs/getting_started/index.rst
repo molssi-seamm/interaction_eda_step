@@ -12,51 +12,77 @@ up to date::
 
 or use the Manager's window.
 
-The EDA itself is done by GPU4PySCF_, which runs on an NVIDIA GPU and lives in its own
-Python environment. The step runs a small driver script with that environment's Python,
-so the environment needs GPU4PySCF and its dependencies but nothing from SEAMM.
+The EDA itself is done by GPU4PySCF_, which runs on an NVIDIA GPU under Linux and lives
+in its own conda environment, ``seamm-gpu4pyscf``. Installing the step creates it: the
+Manager runs the step's installer, which
+
+* installs GPU4PySCF 1.9.1 or later with CuPy, cuTENSOR, NVIDIA's CUDA libraries and
+  pyscf-dispersion (for D3/D4), choosing the CUDA build for the machine's NVIDIA driver,
+  which must support CUDA 12 or later;
+* checks that GPU4PySCF imports, has the second-generation ALMO-EDA and can use the GPU;
+* records the environment in ``gpu4pyscf.ini`` in the SEAMM installation's directory.
+
+On macOS nothing is installed: flowcharts with the step can be built there and run on a
+GPU machine. The installer can also be run by hand, e.g. to check a machine::
+
+  interaction-eda-step-installer install
+  interaction-eda-step-installer check
+  interaction-eda-step-installer update
+
+On a cluster, run it where the jobs will run or on a login node. A login node usually
+has no GPU, so the installer uses the CUDA 12 build and cannot test the GPU there; run
+``check`` on a GPU node to test it.
 
 The GPU
 -------
 The calculations are in double precision, so the GPU must have good double-precision
-(FP64) throughput: A100, A30, H100, H200 or B200. GPUs made mainly for single precision,
-such as the L40S and T4, are very slow for this. A 45-atom cluster of five molecules
-(ωB97M-V/def2-TZVPD) needs about 2.6 GB of GPU memory and 22 minutes on an A100, and
-each of its pairs about 2 minutes.
+(FP64) throughput: A100, A30, V100, H100, H200 or B200. The step has been validated on
+the A30 and A100. GPUs made mainly for single precision, such as the L40S, L4 and T4, are
+tens of times slower for this: the installer warns about them, and the step refuses to
+run on them unless its "GPUs with little FP64" setting is "allow". A 45-atom cluster of five molecules (ωB97M-V/def2-TZVPD) needs
+about 2.6 GB of GPU memory and 22 minutes on an A100, and each of its pairs about 2
+minutes.
 
 Run the step in a job on a GPU node: through a SEAMM queue that targets a GPU partition
 with FP64 (for example an A100 or A30 partition), or on a workstation with such a GPU.
 
-The GPU4PySCF environment
--------------------------
-Create a virtual environment with Python 3.11 or 3.12 and install GPU4PySCF for the
-CUDA version of the GPU's driver, e.g. for CUDA 12::
-
-  python -m venv ~/envs/gpu4pyscf
-  ~/envs/gpu4pyscf/bin/pip install "gpu4pyscf-cuda12x>=1.9" "cupy-cuda12x[ctk]" \
-      cutensor-cu12 pyscf-dispersion
-
-GPU4PySCF 1.9 or later is needed for the second-generation ALMO-EDA.
-``pyscf-dispersion`` is needed only for D3/D4 dispersion corrections. If importing
-GPU4PySCF fails with "Unable to load libcusolver", link the versioned library to the
-unversioned name in the environment's ``nvidia/cusolver/lib`` directory
-(``ln -s libcusolver.so.11 libcusolver.so``).
-
 Configuring the step: gpu4pyscf.ini
 -----------------------------------
-The step finds the environment through ``gpu4pyscf.ini`` in the SEAMM installation's
-directory (``~/SEAMM/gpu4pyscf.ini`` by default). The first run of the step creates it
-from the template below if it is missing; edit ``code`` to be the Python of the GPU4PySCF
-environment:
+The step finds GPU4PySCF through ``gpu4pyscf.ini`` in the SEAMM installation's
+directory (``~/SEAMM/gpu4pyscf.ini`` by default), which the installer writes:
 
 .. code-block:: ini
 
-    # How to run GPU4PySCF for the Interaction EDA step.
+    [local]
+    installation = conda
+    conda-environment = seamm-gpu4pyscf
+    code = python
+    cuda-build = auto
+
+``cuda-build`` forces a build of GPU4PySCF: ``cuda12x`` (the default, which also runs
+with CUDA 13 drivers) or ``cuda13x``.
+
+To use an environment of your own instead, with GPU4PySCF 1.9.1 or later::
+
+  python -m venv ~/envs/gpu4pyscf
+  ~/envs/gpu4pyscf/bin/pip install "gpu4pyscf-cuda12x>=1.9.1" "cupy-cuda12x[ctk]" \
+      cutensor-cu12 pyscf-dispersion
+
+point ``gpu4pyscf.ini`` at its Python, and the installer will leave it alone:
+
+.. code-block:: ini
+
     [local]
     installation = local
     code = /home/me/envs/gpu4pyscf/bin/python
 
-Each section is for one executor; ``local`` runs on the machine where the job runs.
+If importing GPU4PySCF then fails with "Unable to load libcusolver", link the versioned
+library to the unversioned name in the environment's ``nvidia/cusolver/lib`` directory
+(``ln -s libcusolver.so.11 libcusolver.so``); the installer does this for its own
+environment.
+
+Each section of ``gpu4pyscf.ini`` is for one executor; ``local`` runs on the machine
+where the job runs.
 
 A first calculation
 ===================

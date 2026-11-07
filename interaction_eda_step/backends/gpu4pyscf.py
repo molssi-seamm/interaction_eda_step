@@ -22,6 +22,7 @@ DEFAULTS = {
     "svd_threshold": 1.0e-4,
     "ferf": "coupled",
     "response_nlc": True,
+    "allow_low_fp64": False,
     "verbose": 3,
 }
 

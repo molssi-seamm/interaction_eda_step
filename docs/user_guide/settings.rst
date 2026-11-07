@@ -59,6 +59,12 @@ FERF singular-value threshold
     charge transfer for Li⁺–PF₆⁻. The step warns if the threshold is looser than
     10⁻⁴ and there is a cation.
 
+GPUs with little FP64
+    ``refuse`` (the default) stops before any calculation if the GPU is one made mainly
+    for single precision (T4, L4, L40S, A10, A40, RTX ...), where the EDA runs tens of
+    times slower; the job ends with a message saying so. ``allow`` runs anyway, with a
+    warning.
+
 Fragments and calculations
 ==========================
 Fragments

@@ -40,6 +40,8 @@ def test_dialog_layouts(tk_node):
     assert tk_node["fragment column"].grid_info() == {}
     assert tk_node["triples cutoff"].grid_info() == {}
     assert tk_node["functional"].grid_info() != {}
+    assert tk_node["low fp64 gpus"].grid_info() != {}
+    assert tk_node["low fp64 gpus"].get() == "refuse"
 
     tk_node["fragments"].set("atom column")
     tk_node.reset_dialog()
