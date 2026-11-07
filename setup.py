@@ -37,7 +37,7 @@ setup(
     # Which Python importable modules should be included when your package is
     # installed, handled automatically by setuptools. Use 'exclude' to prevent
     # some specific subpackage(s) from being added, if needed
-    packages=find_packages(include=['interaction_eda_step']),
+    packages=find_packages(include=['interaction_eda_step', 'interaction_eda_step.*']),
 
     # Optional include package data to ship with your package. Customize
     # MANIFEST.in if the general case does not suit your needs. Comment out

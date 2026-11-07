@@ -1,3 +1,8 @@
+molsystem
+numpy
 seamm
+seamm-exec
+seamm-mbe
 seamm-util
 seamm-widgets
+tabulate
