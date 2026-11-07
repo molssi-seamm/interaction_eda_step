@@ -10,4 +10,7 @@ import interaction_eda_step  # noqa: F401
 def test_construction():
     """Just create an object and test its type."""
     result = interaction_eda_step.InteractionEda()
-    assert str(type(result)) == "<class 'interaction_eda_step.interaction_eda.InteractionEda'>"
+    assert (
+        str(type(result))
+        == "<class 'interaction_eda_step.interaction_eda.InteractionEda'>"
+    )

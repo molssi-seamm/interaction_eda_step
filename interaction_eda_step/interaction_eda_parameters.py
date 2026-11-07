@@ -70,7 +70,7 @@ class InteractionEdaParameters(seamm.Parameters):
 
     See Also
     --------
-    InteractionEda, TkInteractionEda, InteractionEda InteractionEdaParameters, Interaction EDAStep
+    InteractionEda, TkInteractionEda, InteractionEdaParameters, InteractionEdaStep
     """
 
     parameters = {

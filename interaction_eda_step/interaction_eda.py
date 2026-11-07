@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Non-graphical part of the Interaction EDA step in a SEAMM flowchart
-"""
+"""Non-graphical part of the Interaction EDA step in a SEAMM flowchart"""
 
 import logging
 from pathlib import Path
@@ -60,11 +59,7 @@ class InteractionEda(seamm.Node):
     """
 
     def __init__(
-        self,
-        flowchart=None,
-        title="Interaction EDA",
-        extension=None,
-        logger=logger
+        self, flowchart=None, title="Interaction EDA", extension=None, logger=logger
     ):
         """A step for Interaction EDA in a SEAMM flowchart.
 
