@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c224919a" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/interaction_eda_step';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="interaction_eda_step.backends package" href="interaction_eda_step.backends.html" />
+    <link rel="prev" title="interaction_eda_step" href="modules.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2026.11.7" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/SEAMM logo.png" class="logo__image only-light" alt=""/>
+    <img src="../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Interaction EDA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../developer_guide/index.html">
+    Developer Documentation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API Documentation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../authors.html">
+    Development Team
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../history.html">
+    History
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
+    Main SEAMM documentation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
+    SEAMM Documentation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi.org">
+    MolSSI
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/geometry_analysis_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../developer_guide/index.html">
+    Developer Documentation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    API Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../authors.html">
+    Development Team
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../history.html">
+    History
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+    Main SEAMM documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+    SEAMM Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi.org">
+    MolSSI
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/geometry_analysis_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="modules.html">interaction_eda_step</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a aria-current="page" class="current reference internal" href="#">interaction_eda_step package</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html">interaction_eda_step.backends package</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">API Documentation</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="modules.html" class="nav-link">interaction_eda_step</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">interaction_eda_step package</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="interaction-eda-step-package">
+<h1>interaction_eda_step package<a class="headerlink" href="#interaction-eda-step-package" title="Link to this heading">#</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="interaction_eda_step.backends.html">interaction_eda_step.backends package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interaction_eda_step.backends.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interaction_eda_step.backends.html#module-interaction_eda_step.backends.base">interaction_eda_step.backends.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend"><code class="docutils literal notranslate"><span class="pre">Backend</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.citations"><code class="docutils literal notranslate"><span class="pre">Backend.citations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.command"><code class="docutils literal notranslate"><span class="pre">Backend.command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.device"><code class="docutils literal notranslate"><span class="pre">Backend.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.files"><code class="docutils literal notranslate"><span class="pre">Backend.files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.ini"><code class="docutils literal notranslate"><span class="pre">Backend.ini</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.max_fragments"><code class="docutils literal notranslate"><span class="pre">Backend.max_fragments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.method_string"><code class="docutils literal notranslate"><span class="pre">Backend.method_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.name"><code class="docutils literal notranslate"><span class="pre">Backend.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.options"><code class="docutils literal notranslate"><span class="pre">Backend.options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.read_results"><code class="docutils literal notranslate"><span class="pre">Backend.read_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.results_file"><code class="docutils literal notranslate"><span class="pre">Backend.results_file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.scheme"><code class="docutils literal notranslate"><span class="pre">Backend.scheme</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Calculation"><code class="docutils literal notranslate"><span class="pre">Calculation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Calculation.fragments"><code class="docutils literal notranslate"><span class="pre">Calculation.fragments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Calculation.id"><code class="docutils literal notranslate"><span class="pre">Calculation.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Calculation.key"><code class="docutils literal notranslate"><span class="pre">Calculation.key</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Result.data"><code class="docutils literal notranslate"><span class="pre">Result.data</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Result.energies"><code class="docutils literal notranslate"><span class="pre">Result.energies</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Result.error"><code class="docutils literal notranslate"><span class="pre">Result.error</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.Result.key"><code class="docutils literal notranslate"><span class="pre">Result.key</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.base.read_jsonl"><code class="docutils literal notranslate"><span class="pre">read_jsonl()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="interaction_eda_step.backends.html#module-interaction_eda_step.backends.gpu4pyscf">interaction_eda_step.backends.gpu4pyscf module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.citations"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.citations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.command"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.device"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.device</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.files"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.ini"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.ini</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.max_fragments"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.max_fragments</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.method_string"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.method_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.name"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.options"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.read_results"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.read_results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.scheme"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.scheme</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.settings"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.settings()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="interaction_eda_step.backends.html#module-interaction_eda_step.backends">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="interaction_eda_step.backends.html#interaction_eda_step.backends.BACKENDS"><code class="docutils literal notranslate"><span class="pre">BACKENDS</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+</section>
+<section id="module-interaction_eda_step.fragments">
+<span id="interaction-eda-step-fragments-module"></span><h2>interaction_eda_step.fragments module<a class="headerlink" href="#module-interaction_eda_step.fragments" title="Link to this heading">#</a></h2>
+<p>The fragments of a structure for EDA.</p>
+<p>By default each molecule of the configuration is a fragment. The molecules
+come from the bonds, and their charges from the atoms’ formal charges or, for
+known molecules (water, carbonates, Li⁺, BF₄⁻, PF₆⁻, monatomic ions), from
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">seamm_mbe</span></code>’s catalog, which also checks that every fragment has a
+sensible number of electrons. Alternatively an integer atom column (e.g.
+“fragment”) assigns the atoms to fragments, with charges summed from the
+formal charges.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.fragments.</span></span><span class="sig-name descname"><span class="pre">Fragment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atoms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coordinates</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multiplicity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/fragments.html#Fragment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.fragments.Fragment" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>One fragment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em>) – 0-based.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – e.g. “Li+”, “EC”, or the formula.</p></li>
+<li><p><strong>atoms</strong> (<em>[</em><em>int</em><em>]</em>) – 0-based atom indices in the configuration, ascending.</p></li>
+<li><p><strong>symbols</strong> (<em>[</em><em>str</em><em>]</em>)</p></li>
+<li><p><strong>coordinates</strong> (<em>numpy.ndarray</em>) – (n, 3) Cartesian, Å.</p></li>
+<li><p><strong>charge</strong> (<em>int</em>)</p></li>
+<li><p><strong>multiplicity</strong> (<em>int</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.atoms">
+<span class="sig-name descname"><span class="pre">atoms</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.atoms" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.charge">
+<span class="sig-name descname"><span class="pre">charge</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.charge" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.coordinates">
+<span class="sig-name descname"><span class="pre">coordinates</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ndarray</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.coordinates" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.index">
+<span class="sig-name descname"><span class="pre">index</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.index" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.label">
+<span class="sig-name descname"><span class="pre">label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/fragments.html#Fragment.label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.label" title="Link to this definition">#</a></dt>
+<dd><p>A short label, e.g. ‘0:Li+’.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.multiplicity">
+<span class="sig-name descname"><span class="pre">multiplicity</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.multiplicity" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.n_electrons">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">n_electrons</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.n_electrons" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.Fragment.symbols">
+<span class="sig-name descname"><span class="pre">symbols</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></span><a class="headerlink" href="#interaction_eda_step.fragments.Fragment.symbols" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.FragmentError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.fragments.</span></span><span class="sig-name descname"><span class="pre">FragmentError</span></span><a class="reference internal" href="../_modules/interaction_eda_step/fragments.html#FragmentError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.fragments.FragmentError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>The fragments cannot be made from the structure.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.from_configuration">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.fragments.</span></span><span class="sig-name descname"><span class="pre">from_configuration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configuration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/fragments.html#from_configuration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.fragments.from_configuration" title="Link to this definition">#</a></dt>
+<dd><p>The fragments of a configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>configuration</strong> (<em>molsystem._Configuration</em>) – A cluster (periodicity 0).</p></li>
+<li><p><strong>column</strong> (<em>str</em><em> or </em><em>None</em>) – An integer atom column assigning the atoms to fragments; None to use
+the molecules.</p></li>
+<li><p><strong>charges</strong> (<em>{str: int}</em><em> or </em><em>None</em>) – Charges by molecule type (molecules) or by fragment number as a string
+(column), overriding the formal charges and the catalog.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>[<a class="reference internal" href="#interaction_eda_step.fragments.Fragment" title="interaction_eda_step.fragments.Fragment">Fragment</a>]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.min_distance">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.fragments.</span></span><span class="sig-name descname"><span class="pre">min_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/fragments.html#min_distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.fragments.min_distance" title="Link to this definition">#</a></dt>
+<dd><p>The shortest atom-atom distance between two fragments, Å.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.fragments.triples_within">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.fragments.</span></span><span class="sig-name descname"><span class="pre">triples_within</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/fragments.html#triples_within"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.fragments.triples_within" title="Link to this definition">#</a></dt>
+<dd><p>The triples whose three pairs are all within <code class="docutils literal notranslate"><span class="pre">cutoff</span></code> (Å, shortest
+atom-atom distance); all triples when <code class="docutils literal notranslate"><span class="pre">cutoff</span></code> is None.</p>
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.installer">
+<span id="interaction-eda-step-installer-module"></span><h2>interaction_eda_step.installer module<a class="headerlink" href="#module-interaction_eda_step.installer" title="Link to this heading">#</a></h2>
+<p>Installer for the Interaction EDA plug-in.</p>
+<p>The GPU4PySCF backend runs in its own conda environment, <code class="docutils literal notranslate"><span class="pre">seamm-gpu4pyscf</span></code> by
+default, which this installer creates and registers in <code class="docutils literal notranslate"><span class="pre">gpu4pyscf.ini</span></code>. The
+environment holds Python 3.12 from conda-forge and, from PyPI, GPU4PySCF with
+CuPy, cuTENSOR and the CUDA libraries for the machine’s NVIDIA driver, plus
+pyscf-dispersion for D3/D4. It needs Linux and an NVIDIA GPU with good double
+precision; on macOS nothing is installed.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.BUILDS">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">BUILDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'cuda12x':</span> <span class="pre">('gpu4pyscf-cuda12x&gt;=1.9.1',</span> <span class="pre">'cupy-cuda12x[ctk]',</span> <span class="pre">'cutensor-cu12',</span> <span class="pre">'pyscf-dispersion'),</span> <span class="pre">'cuda13x':</span> <span class="pre">('gpu4pyscf-cuda13x&gt;=1.9.1',</span> <span class="pre">'cupy-cuda13x[ctk]',</span> <span class="pre">'cutensor-cu13',</span> <span class="pre">'pyscf-dispersion')}</span></span><a class="headerlink" href="#interaction_eda_step.installer.BUILDS" title="Link to this definition">#</a></dt>
+<dd><p>The pip requirements for each CUDA build. cuda12x is the validated one
+(ARC, 2026-11-07: gpu4pyscf 1.9.1, cupy 14.2, cuTENSOR 2.8, CUDA 12.9).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.Installer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">Installer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Logger</span> <span class="pre">interaction_eda_step.installer</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#Installer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.Installer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">InstallerBase</span></code></p>
+<p>Handle the installation of GPU4PySCF for the Interaction EDA step.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">install</span></code> creates the conda environment <code class="docutils literal notranslate"><span class="pre">seamm-gpu4pyscf</span></code> (Python
+3.12) and installs GPU4PySCF in it for the machine’s NVIDIA driver, then
+checks that it imports and can use the GPU, and writes <code class="docutils literal notranslate"><span class="pre">gpu4pyscf.ini</span></code>.
+<code class="docutils literal notranslate"><span class="pre">cuda-build</span></code> in <code class="docutils literal notranslate"><span class="pre">gpu4pyscf.ini</span></code> (or <code class="docutils literal notranslate"><span class="pre">--cuda-build</span></code>) forces a build,
+e.g. on a cluster login node without a GPU.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> upgrades GPU4PySCF and its CUDA libraries in that environment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">check</span></code> and <code class="docutils literal notranslate"><span class="pre">show</span></code> say what is installed and whether it works.</p></li>
+</ol>
+<p>An environment named in <code class="docutils literal notranslate"><span class="pre">gpu4pyscf.ini</span></code> that SEAMM did not create, or an
+<code class="docutils literal notranslate"><span class="pre">installation</span> <span class="pre">=</span> <span class="pre">local</span></code> Python, is never changed.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.Installer.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#Installer.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.Installer.check" title="Link to this definition">#</a></dt>
+<dd><p>Check that gpu4pyscf.ini points at a working GPU4PySCF.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.Installer.exe_version">
+<span class="sig-name descname"><span class="pre">exe_version</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#Installer.exe_version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.Installer.exe_version" title="Link to this definition">#</a></dt>
+<dd><p>The version of GPU4PySCF in its environment.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.Installer.install">
+<span class="sig-name descname"><span class="pre">install</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#Installer.install"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.Installer.install" title="Link to this definition">#</a></dt>
+<dd><p>Create the environment and install GPU4PySCF for this machine.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.Installer.setup_parser">
+<span class="sig-name descname"><span class="pre">setup_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#Installer.setup_parser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.Installer.setup_parser" title="Link to this definition">#</a></dt>
+<dd><p>Parse the command line into the options.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.Installer.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#Installer.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.Installer.update" title="Link to this definition">#</a></dt>
+<dd><p>Upgrade GPU4PySCF and its CUDA libraries in the environment.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.LINK_CUSOLVER">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">LINK_CUSOLVER</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\nimport</span> <span class="pre">glob,</span> <span class="pre">json,</span> <span class="pre">os,</span> <span class="pre">re,</span> <span class="pre">site\nmade</span> <span class="pre">=</span> <span class="pre">[]\nfor</span> <span class="pre">sp</span> <span class="pre">in</span> <span class="pre">site.getsitepackages():\n</span>&#160;&#160;&#160; <span class="pre">for</span> <span class="pre">lib</span> <span class="pre">in</span> <span class="pre">glob.glob(os.path.join(sp,</span> <span class="pre">&quot;nvidia&quot;,</span> <span class="pre">&quot;**&quot;,</span> <span class="pre">&quot;libcusolver.so.*&quot;),\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">recursive=True):\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">not</span> <span class="pre">re.search(r&quot;libcusolver\\.so\\.\\d+$&quot;,</span> <span class="pre">lib):\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">continue\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">link</span> <span class="pre">=</span> <span class="pre">os.path.join(os.path.dirname(lib),</span> <span class="pre">&quot;libcusolver.so&quot;)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">if</span> <span class="pre">not</span> <span class="pre">os.path.lexists(link):\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">os.symlink(os.path.basename(lib),</span> <span class="pre">link)\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">made.append(link)\nprint(&quot;LINKED&quot;</span> <span class="pre">+</span> <span class="pre">json.dumps(made))\n'</span></span><a class="headerlink" href="#interaction_eda_step.installer.LINK_CUSOLVER" title="Link to this definition">#</a></dt>
+<dd><p>Links the unversioned libcusolver.so to the versioned library in the NVIDIA
+wheels. GPU4PySCF loads it by the bare name, which the wheels do not provide
+(“Unable to load libcusolver”).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.MINIMUM_GPU4PYSCF">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">MINIMUM_GPU4PYSCF</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'1.9.1'</span></span><a class="headerlink" href="#interaction_eda_step.installer.MINIMUM_GPU4PYSCF" title="Link to this definition">#</a></dt>
+<dd><p>The GPU4PySCF version the step was validated with; ALMO-EDA2 needs 1.9.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.PROBE">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">PROBE</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\nimport</span> <span class="pre">json\nout</span> <span class="pre">=</span> <span class="pre">{}\ntry:\n</span>&#160;&#160;&#160; <span class="pre">import</span> <span class="pre">cupy\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;cupy&quot;]</span> <span class="pre">=</span> <span class="pre">cupy.__version__\n</span>&#160;&#160;&#160; <span class="pre">n</span> <span class="pre">=</span> <span class="pre">cupy.cuda.runtime.getDeviceCount()\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;gpus&quot;]</span> <span class="pre">=</span> <span class="pre">[\n</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">cupy.cuda.runtime.getDeviceProperties(i)[&quot;name&quot;].decode()</span> <span class="pre">for</span> <span class="pre">i</span> <span class="pre">in</span> <span class="pre">range(n)\n</span>&#160;&#160;&#160; <span class="pre">]\n</span>&#160;&#160;&#160; <span class="pre">a</span> <span class="pre">=</span> <span class="pre">cupy.arange(10,</span> <span class="pre">dtype=cupy.float64)\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;gpu_ok&quot;]</span> <span class="pre">=</span> <span class="pre">float((a</span> <span class="pre">*</span> <span class="pre">a).sum())</span> <span class="pre">==</span> <span class="pre">285.0\nexcept</span> <span class="pre">Exception</span> <span class="pre">as</span> <span class="pre">e:\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;gpu_error&quot;]</span> <span class="pre">=</span> <span class="pre">f&quot;{type(e).__name__}:</span> <span class="pre">{e}&quot;\ntry:\n</span>&#160;&#160;&#160; <span class="pre">import</span> <span class="pre">pyscf\n</span>&#160;&#160;&#160; <span class="pre">import</span> <span class="pre">gpu4pyscf\n</span>&#160;&#160;&#160; <span class="pre">from</span> <span class="pre">gpu4pyscf.properties</span> <span class="pre">import</span> <span class="pre">eda\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;gpu4pyscf&quot;]</span> <span class="pre">=</span> <span class="pre">gpu4pyscf.__version__\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;pyscf&quot;]</span> <span class="pre">=</span> <span class="pre">pyscf.__version__\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;almo_eda2&quot;]</span> <span class="pre">=</span> <span class="pre">hasattr(eda,</span> <span class="pre">&quot;eval_ALMO_EDA_2_energies&quot;)\nexcept</span> <span class="pre">Exception</span> <span class="pre">as</span> <span class="pre">e:\n</span>&#160;&#160;&#160; <span class="pre">out[&quot;import_error&quot;]</span> <span class="pre">=</span> <span class="pre">f&quot;{type(e).__name__}:</span> <span class="pre">{e}&quot;\nprint(&quot;PROBE&quot;</span> <span class="pre">+</span> <span class="pre">json.dumps(out))\n'</span></span><a class="headerlink" href="#interaction_eda_step.installer.PROBE" title="Link to this definition">#</a></dt>
+<dd><p>Imports GPU4PySCF and, if there is a GPU, does a small calculation on it.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.assess">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">assess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">have_driver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#assess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.assess" title="Link to this definition">#</a></dt>
+<dd><p>Lines describing a probe of the environment, and whether it is usable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>probe</strong> (<em>dict</em><em> or </em><em>None</em>) – From <a class="reference internal" href="#interaction_eda_step.installer.PROBE" title="interaction_eda_step.installer.PROBE"><code class="xref py py-data docutils literal notranslate"><span class="pre">PROBE</span></code></a>.</p></li>
+<li><p><strong>have_driver</strong> (<em>bool</em>) – Whether this machine has an NVIDIA driver. Without one, failing to import
+CuPy or GPU4PySCF is expected and is not an error.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(bool, [str])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.choose_build">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">choose_build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">forced</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">driver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'detect'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#choose_build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.choose_build" title="Link to this definition">#</a></dt>
+<dd><p>Which CUDA build of GPU4PySCF to install.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>forced</strong> (<em>str</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">cuda12x</span></code> or <code class="docutils literal notranslate"><span class="pre">cuda13x</span></code> from <code class="docutils literal notranslate"><span class="pre">gpu4pyscf.ini</span></code> or the command line;
+<code class="docutils literal notranslate"><span class="pre">auto</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> or None to decide from the driver.</p></li>
+<li><p><strong>system</strong> (<em>str</em><em>, </em><em>optional</em>) – <code class="docutils literal notranslate"><span class="pre">platform.system()</span></code>; for tests.</p></li>
+<li><p><strong>driver</strong> (<em>(</em><em>int</em><em>, </em><em>int</em><em>) or </em><em>None</em><em> or </em><em>&quot;detect&quot;</em>) – The driver’s CUDA version; <code class="docutils literal notranslate"><span class="pre">&quot;detect&quot;</span></code> runs nvidia-smi.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The build, or None if GPU4PySCF cannot be installed here, and why.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(str or None, str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.low_fp64">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">low_fp64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#low_fp64"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.low_fp64" title="Link to this definition">#</a></dt>
+<dd><p>Whether a GPU has poor double precision, using the driver’s own test.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.installer.parse">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.installer.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/installer.html#parse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.installer.parse" title="Link to this definition">#</a></dt>
+<dd><p>The JSON (or repr) after <code class="docutils literal notranslate"><span class="pre">tag</span></code> in a script’s output, or None.</p>
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.interaction_eda">
+<span id="interaction-eda-step-interaction-eda-module"></span><h2>interaction_eda_step.interaction_eda module<a class="headerlink" href="#module-interaction_eda_step.interaction_eda" title="Link to this heading">#</a></h2>
+<p>Non-graphical part of the Interaction EDA step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.interaction_eda.</span></span><span class="sig-name descname"><span class="pre">InteractionEda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Interaction</span> <span class="pre">EDA'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Logger</span> <span class="pre">interaction_eda_step.interaction_eda</span> <span class="pre">(WARNING)&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+<p>The non-graphical part of a Interaction EDA step in a flowchart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parser</strong> (<em>configargparse.ArgParser</em>) – The parser object.</p></li>
+<li><p><strong>options</strong> (<em>tuple</em>) – It contains a two item tuple containing the populated namespace and the
+list of remaining argument strings.</p></li>
+<li><p><strong>subflowchart</strong> (<em>seamm.Flowchart</em>) – A SEAMM Flowchart object that represents a subflowchart, if needed.</p></li>
+<li><p><strong>parameters</strong> (<a class="reference internal" href="#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters" title="interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters"><em>InteractionEdaParameters</em></a>) – The control parameters for Interaction EDA.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkInteractionEda</span></code>, <a class="reference internal" href="#interaction_eda_step.interaction_eda.InteractionEda" title="interaction_eda_step.interaction_eda.InteractionEda"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEda</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEdaParameters</span></code></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.backend_settings">
+<span class="sig-name descname"><span class="pre">backend_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.backend_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.backend_settings" title="Link to this definition">#</a></dt>
+<dd><p>The backend’s settings from the parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.description_text">
+<span class="sig-name descname"><span class="pre">description_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.description_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.description_text" title="Link to this definition">#</a></dt>
+<dd><p>Create the text description of what this step will do.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>P</strong> (<em>dict</em>) – An optional dictionary of the current values of the control
+parameters.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A description of the current step.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.git_revision">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">git_revision</span></span><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.git_revision" title="Link to this definition">#</a></dt>
+<dd><p>The git version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.print_fragments">
+<span class="sig-name descname"><span class="pre">print_fragments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fragments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.print_fragments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.print_fragments" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.print_results">
+<span class="sig-name descname"><span class="pre">print_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.print_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.print_results" title="Link to this definition">#</a></dt>
+<dd><p>Print the many-body table and the pairs, by term.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.run" title="Link to this definition">#</a></dt>
+<dd><p>Run the Interaction EDA step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The next node object in the flowchart.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>seamm.Node</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.run_backend">
+<span class="sig-name descname"><span class="pre">run_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.run_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.run_backend" title="Link to this definition">#</a></dt>
+<dd><p>Run the backend through the executor, with its ini file.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.version">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.version" title="Link to this definition">#</a></dt>
+<dd><p>The semantic version of this module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.write_extxyz">
+<span class="sig-name descname"><span class="pre">write_extxyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.write_extxyz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.write_extxyz" title="Link to this definition">#</a></dt>
+<dd><p>One frame per computed set of fragments, with the EDA terms as
+labels <code class="docutils literal notranslate"><span class="pre">EDA_&lt;scheme&gt;_&lt;term&gt;</span></code> (kJ/mol); the cluster’s frame also has
+the many-body parts.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.write_json">
+<span class="sig-name descname"><span class="pre">write_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.write_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.write_json" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.svd_warning">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.interaction_eda.</span></span><span class="sig-name descname"><span class="pre">svd_warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#svd_warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.svd_warning" title="Link to this definition">#</a></dt>
+<dd><p>A warning when the FERF SVD threshold is looser than 1e-4 with a cation.</p>
+<p>The polarization/charge-transfer split for Li+-PF6- moved 0.062 kJ/mol between
+1e-4 and 1e-3; at 1e-4 it is converged to 1e-8.</p>
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.interaction_eda_parameters">
+<span id="interaction-eda-step-interaction-eda-parameters-module"></span><h2>interaction_eda_step.interaction_eda_parameters module<a class="headerlink" href="#module-interaction_eda_step.interaction_eda_parameters" title="Link to this heading">#</a></h2>
+<p>Control parameters for the Interaction EDA step in a SEAMM flowchart</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.interaction_eda_parameters.</span></span><span class="sig-name descname"><span class="pre">InteractionEdaParameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda_parameters.html#InteractionEdaParameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></p>
+<p>The control parameters for Interaction EDA.</p>
+<p>You need to replace the “time” entry in dictionary below these comments with the
+definitions of parameters to control this step. The keys are parameters for the
+current plugin,the values are dictionaries as outlined below.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"time"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"default"</span><span class="p">:</span> <span class="mf">100.0</span><span class="p">,</span>
+        <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"float"</span><span class="p">,</span>
+        <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">"ps"</span><span class="p">,</span>
+        <span class="s2">"enumeration"</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(),</span>
+        <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">".1f"</span><span class="p">,</span>
+        <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Simulation time:"</span><span class="p">,</span>
+        <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"The time to simulate in the dynamics run."</span><span class="p">)</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<dl>
+<dt>parameters<span class="classifier">{str: {str: str}}</span></dt><dd><p>A dictionary containing the parameters for the current step.
+Each key of the dictionary is a dictionary that contains the
+the following keys:</p>
+</dd>
+<dt>parameters[“default”] :</dt><dd><p>The default value of the parameter, used to reset it.</p>
+</dd>
+<dt>parameters[“kind”]<span class="classifier">enum()</span></dt><dd><p>Specifies the kind of a variable. One of  “integer”, “float”, “string”,
+“boolean”, or “enum”</p>
+<p>While the “kind” of a variable might be a numeric value, it may still have
+enumerated custom values meaningful to the user. For instance, if the parameter
+is a convergence criterion for an optimizer, custom values like “normal”,
+“precise”, etc, might be adequate. In addition, any parameter can be set to a
+variable of expression, indicated by having “$” as the first character in the
+field. For example, $OPTIMIZER_CONV.</p>
+</dd>
+<dt>parameters[“default_units”]<span class="classifier">str</span></dt><dd><p>The default units, used for resetting the value.</p>
+</dd>
+<dt>parameters[“enumeration”]<span class="classifier">tuple</span></dt><dd><p>A tuple of enumerated values.</p>
+</dd>
+<dt>parameters[“format_string”]<span class="classifier">str</span></dt><dd><p>A format string for “pretty” output.</p>
+</dd>
+<dt>parameters[“description”]<span class="classifier">str</span></dt><dd><p>A short string used as a prompt in the GUI.</p>
+</dd>
+<dt>parameters[“help_text”]<span class="classifier">str</span></dt><dd><p>A longer string to display as help for the user.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEda</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">TkInteractionEda</span></code>, <a class="reference internal" href="#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters" title="interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEdaParameters</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEdaStep</span></code></p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'backend':</span> <span class="pre">{'default':</span> <span class="pre">'GPU4PySCF',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Code:',</span> <span class="pre">'enumeration':</span> <span class="pre">('GPU4PySCF',),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">code</span> <span class="pre">that</span> <span class="pre">does</span> <span class="pre">the</span> <span class="pre">EDA.</span> <span class="pre">GPU4PySCF</span> <span class="pre">runs</span> <span class="pre">second-generation</span> <span class="pre">ALMO-EDA</span> <span class="pre">on</span> <span class="pre">a</span> <span class="pre">GPU</span> <span class="pre">with</span> <span class="pre">good</span> <span class="pre">double</span> <span class="pre">precision</span> <span class="pre">(A100,</span> <span class="pre">A30,</span> <span class="pre">H100/H200,</span> <span class="pre">B200).',</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'basis':</span> <span class="pre">{'default':</span> <span class="pre">'def2-TZVPD',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Basis</span> <span class="pre">set:',</span> <span class="pre">'enumeration':</span> <span class="pre">('def2-TZVPD',</span> <span class="pre">'def2-TZVPPD',</span> <span class="pre">'def2-SVPD',</span> <span class="pre">'def2-QZVPPD'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;The</span> <span class="pre">orbital</span> <span class="pre">basis</span> <span class="pre">set,</span> <span class="pre">in</span> <span class="pre">PySCF's</span> <span class="pre">names.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'calculations':</span> <span class="pre">{'default':</span> <span class="pre">'cluster</span> <span class="pre">and</span> <span class="pre">pairs',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Calculations:',</span> <span class="pre">'enumeration':</span> <span class="pre">('cluster</span> <span class="pre">and</span> <span class="pre">pairs',</span> <span class="pre">'cluster,</span> <span class="pre">pairs</span> <span class="pre">and</span> <span class="pre">triples',</span> <span class="pre">'cluster',</span> <span class="pre">'pairs'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'Which</span> <span class="pre">sets</span> <span class="pre">of</span> <span class="pre">fragments</span> <span class="pre">to</span> <span class="pre">compute.</span> <span class="pre">The</span> <span class="pre">cluster</span> <span class="pre">and</span> <span class="pre">all</span> <span class="pre">pairs</span> <span class="pre">give</span> <span class="pre">the</span> <span class="pre">exact</span> <span class="pre">≥3-body</span> <span class="pre">part</span> <span class="pre">of</span> <span class="pre">each</span> <span class="pre">term;</span> <span class="pre">triples</span> <span class="pre">add</span> <span class="pre">the</span> <span class="pre">3-body</span> <span class="pre">increments,</span> <span class="pre">a</span> <span class="pre">truncated</span> <span class="pre">estimate.',</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'density</span> <span class="pre">fitting':</span> <span class="pre">{'default':</span> <span class="pre">'no',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Density</span> <span class="pre">fitting:',</span> <span class="pre">'enumeration':</span> <span class="pre">('no',</span> <span class="pre">'def2-universal-jkfit'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;'no'</span> <span class="pre">for</span> <span class="pre">exact</span> <span class="pre">integrals</span> <span class="pre">(the</span> <span class="pre">validated</span> <span class="pre">default),</span> <span class="pre">or</span> <span class="pre">the</span> <span class="pre">auxiliary</span> <span class="pre">basis</span> <span class="pre">for</span> <span class="pre">density</span> <span class="pre">fitting.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'dispersion':</span> <span class="pre">{'default':</span> <span class="pre">'none',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Dispersion</span> <span class="pre">correction:',</span> <span class="pre">'enumeration':</span> <span class="pre">('none',</span> <span class="pre">'d4',</span> <span class="pre">'d3bj'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;An</span> <span class="pre">empirical</span> <span class="pre">dispersion</span> <span class="pre">correction</span> <span class="pre">added</span> <span class="pre">to</span> <span class="pre">the</span> <span class="pre">functional,</span> <span class="pre">in</span> <span class="pre">PySCF's</span> <span class="pre">names</span> <span class="pre">(e.g.</span> <span class="pre">'d4',</span> <span class="pre">or</span> <span class="pre">'d4:wb97x'</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">parameter</span> <span class="pre">set).</span> <span class="pre">It</span> <span class="pre">is</span> <span class="pre">included</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">dispersion</span> <span class="pre">term;</span> <span class="pre">D4's</span> <span class="pre">three-body</span> <span class="pre">(ATM)</span> <span class="pre">part</span> <span class="pre">shows</span> <span class="pre">up</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">≥3-body</span> <span class="pre">dispersion.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'ferf</span> <span class="pre">response':</span> <span class="pre">{'default':</span> <span class="pre">'coupled',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'FERF</span> <span class="pre">response:',</span> <span class="pre">'enumeration':</span> <span class="pre">('coupled',</span> <span class="pre">'uncoupled'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;How</span> <span class="pre">the</span> <span class="pre">fragment</span> <span class="pre">electric-field</span> <span class="pre">response</span> <span class="pre">functions</span> <span class="pre">(FERF-DQ)</span> <span class="pre">that</span> <span class="pre">define</span> <span class="pre">the</span> <span class="pre">polarization</span> <span class="pre">space</span> <span class="pre">are</span> <span class="pre">made:</span> <span class="pre">'coupled'</span> <span class="pre">solves</span> <span class="pre">the</span> <span class="pre">coupled-perturbed</span> <span class="pre">equations</span> <span class="pre">(the</span> <span class="pre">validated</span> <span class="pre">default);</span> <span class="pre">'uncoupled'</span> <span class="pre">uses</span> <span class="pre">orbital-energy</span> <span class="pre">denominators</span> <span class="pre">without</span> <span class="pre">the</span> <span class="pre">XC</span> <span class="pre">kernel.</span> <span class="pre">Only</span> <span class="pre">the</span> <span class="pre">split</span> <span class="pre">between</span> <span class="pre">polarization</span> <span class="pre">and</span> <span class="pre">charge</span> <span class="pre">transfer</span> <span class="pre">changes.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'fragment</span> <span class="pre">column':</span> <span class="pre">{'default':</span> <span class="pre">'fragment',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Atom</span> <span class="pre">column:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;The</span> <span class="pre">integer</span> <span class="pre">atom</span> <span class="pre">column</span> <span class="pre">giving</span> <span class="pre">each</span> <span class="pre">atom's</span> <span class="pre">fragment.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'fragments':</span> <span class="pre">{'default':</span> <span class="pre">'molecules',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Fragments:',</span> <span class="pre">'enumeration':</span> <span class="pre">('molecules',</span> <span class="pre">'atom</span> <span class="pre">column'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">'Each</span> <span class="pre">molecule</span> <span class="pre">(bonded</span> <span class="pre">group</span> <span class="pre">of</span> <span class="pre">atoms)</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">fragment,</span> <span class="pre">with</span> <span class="pre">its</span> <span class="pre">charge</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">formal</span> <span class="pre">charges</span> <span class="pre">or</span> <span class="pre">the</span> <span class="pre">known</span> <span class="pre">ions;</span> <span class="pre">or</span> <span class="pre">an</span> <span class="pre">integer</span> <span class="pre">atom</span> <span class="pre">column</span> <span class="pre">assigns</span> <span class="pre">the</span> <span class="pre">atoms</span> <span class="pre">to</span> <span class="pre">fragments.',</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'functional':</span> <span class="pre">{'default':</span> <span class="pre">'wB97M-V',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'Functional:',</span> <span class="pre">'enumeration':</span> <span class="pre">('wB97M-V',</span> <span class="pre">'wB97X-V',</span> <span class="pre">'B97M-V',</span> <span class="pre">'wB97X-D3BJ',</span> <span class="pre">'B3LYP'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;The</span> <span class="pre">density</span> <span class="pre">functional,</span> <span class="pre">in</span> <span class="pre">PySCF's</span> <span class="pre">names</span> <span class="pre">(case</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">matter).</span> <span class="pre">wB97M-V/def2-TZVPD</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">validated</span> <span class="pre">default.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'string'},</span> <span class="pre">'low</span> <span class="pre">fp64</span> <span class="pre">gpus':</span> <span class="pre">{'default':</span> <span class="pre">'refuse',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'GPUs</span> <span class="pre">with</span> <span class="pre">little</span> <span class="pre">FP64:',</span> <span class="pre">'enumeration':</span> <span class="pre">('refuse',</span> <span class="pre">'allow'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;GPUs</span> <span class="pre">made</span> <span class="pre">for</span> <span class="pre">single</span> <span class="pre">precision</span> <span class="pre">(T4,</span> <span class="pre">L4,</span> <span class="pre">L40S,</span> <span class="pre">A10,</span> <span class="pre">A40,</span> <span class="pre">RTX</span> <span class="pre">...)</span> <span class="pre">run</span> <span class="pre">the</span> <span class="pre">EDA</span> <span class="pre">tens</span> <span class="pre">of</span> <span class="pre">times</span> <span class="pre">slower.</span> <span class="pre">'refuse'</span> <span class="pre">stops</span> <span class="pre">before</span> <span class="pre">any</span> <span class="pre">calculation</span> <span class="pre">on</span> <span class="pre">such</span> <span class="pre">a</span> <span class="pre">GPU;</span> <span class="pre">'allow'</span> <span class="pre">runs</span> <span class="pre">anyway.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'results':</span> <span class="pre">{'default':</span> <span class="pre">{},</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'results',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'',</span> <span class="pre">'help_text':</span> <span class="pre">'The</span> <span class="pre">results</span> <span class="pre">to</span> <span class="pre">save</span> <span class="pre">to</span> <span class="pre">variables</span> <span class="pre">or</span> <span class="pre">in</span> <span class="pre">tables.',</span> <span class="pre">'kind':</span> <span class="pre">'dictionary'},</span> <span class="pre">'svd</span> <span class="pre">threshold':</span> <span class="pre">{'default':</span> <span class="pre">0.0001,</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'FERF</span> <span class="pre">singular-value</span> <span class="pre">threshold:',</span> <span class="pre">'enumeration':</span> <span class="pre">(),</span> <span class="pre">'format_string':</span> <span class="pre">'.1e',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Virtual</span> <span class="pre">singular</span> <span class="pre">values</span> <span class="pre">below</span> <span class="pre">this</span> <span class="pre">are</span> <span class="pre">dropped</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">polarization</span> <span class="pre">space</span> <span class="pre">(GPU4PySCF's</span> <span class="pre">default,</span> <span class="pre">1e-4,</span> <span class="pre">is</span> <span class="pre">the</span> <span class="pre">validated</span> <span class="pre">one).&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'triples</span> <span class="pre">cutoff':</span> <span class="pre">{'default':</span> <span class="pre">'all',</span> <span class="pre">'default_units':</span> <span class="pre">'Å',</span> <span class="pre">'description':</span> <span class="pre">'Triples</span> <span class="pre">within:',</span> <span class="pre">'enumeration':</span> <span class="pre">('all',),</span> <span class="pre">'format_string':</span> <span class="pre">'.2f',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Use</span> <span class="pre">only</span> <span class="pre">the</span> <span class="pre">triples</span> <span class="pre">whose</span> <span class="pre">three</span> <span class="pre">pairs</span> <span class="pre">are</span> <span class="pre">all</span> <span class="pre">within</span> <span class="pre">this</span> <span class="pre">distance</span> <span class="pre">(shortest</span> <span class="pre">atom-atom</span> <span class="pre">distance),</span> <span class="pre">or</span> <span class="pre">'all'.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'float'},</span> <span class="pre">'vv10':</span> <span class="pre">{'default':</span> <span class="pre">'as</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">functional',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'VV10</span> <span class="pre">nonlocal</span> <span class="pre">correlation:',</span> <span class="pre">'enumeration':</span> <span class="pre">('as</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">functional',</span> <span class="pre">'off</span> <span class="pre">(whole</span> <span class="pre">functional)'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Whether</span> <span class="pre">to</span> <span class="pre">keep</span> <span class="pre">the</span> <span class="pre">VV10</span> <span class="pre">nonlocal</span> <span class="pre">correlation</span> <span class="pre">that</span> <span class="pre">a</span> <span class="pre">-V</span> <span class="pre">functional</span> <span class="pre">includes.</span> <span class="pre">'off</span> <span class="pre">(whole</span> <span class="pre">functional)'</span> <span class="pre">removes</span> <span class="pre">it</span> <span class="pre">everywhere,</span> <span class="pre">which</span> <span class="pre">is</span> <span class="pre">a</span> <span class="pre">different</span> <span class="pre">functional</span> <span class="pre">with</span> <span class="pre">different</span> <span class="pre">energies,</span> <span class="pre">e.g.</span> <span class="pre">wB97X-V</span> <span class="pre">with</span> <span class="pre">D4</span> <span class="pre">dispersion</span> <span class="pre">(Najibi</span> <span class="pre">and</span> <span class="pre">Goerigk's</span> <span class="pre">wB97X-D4).&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'},</span> <span class="pre">'vv10</span> <span class="pre">in</span> <span class="pre">response':</span> <span class="pre">{'default':</span> <span class="pre">'on',</span> <span class="pre">'default_units':</span> <span class="pre">'',</span> <span class="pre">'description':</span> <span class="pre">'VV10</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">FERF</span> <span class="pre">response:',</span> <span class="pre">'enumeration':</span> <span class="pre">('on',</span> <span class="pre">'off'),</span> <span class="pre">'format_string':</span> <span class="pre">'s',</span> <span class="pre">'help_text':</span> <span class="pre">&quot;Whether</span> <span class="pre">the</span> <span class="pre">FERF</span> <span class="pre">response</span> <span class="pre">kernel</span> <span class="pre">includes</span> <span class="pre">VV10.</span> <span class="pre">'off'</span> <span class="pre">drops</span> <span class="pre">it</span> <span class="pre">from</span> <span class="pre">the</span> <span class="pre">response</span> <span class="pre">only;</span> <span class="pre">the</span> <span class="pre">SCF</span> <span class="pre">and</span> <span class="pre">SCF-MI</span> <span class="pre">energies</span> <span class="pre">keep</span> <span class="pre">the</span> <span class="pre">full</span> <span class="pre">functional.</span> <span class="pre">This</span> <span class="pre">matches</span> <span class="pre">codes</span> <span class="pre">without</span> <span class="pre">a</span> <span class="pre">VV10</span> <span class="pre">response</span> <span class="pre">kernel</span> <span class="pre">(Psi4);</span> <span class="pre">on</span> <span class="pre">shell</span> <span class="pre">A</span> <span class="pre">it</span> <span class="pre">moved</span> <span class="pre">energy</span> <span class="pre">between</span> <span class="pre">polarization</span> <span class="pre">and</span> <span class="pre">charge</span> <span class="pre">transfer</span> <span class="pre">by</span> <span class="pre">at</span> <span class="pre">most</span> <span class="pre">0.0014</span> <span class="pre">kJ/mol.&quot;,</span> <span class="pre">'kind':</span> <span class="pre">'enumeration'}}</span></span><a class="headerlink" href="#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters.parameters" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.interaction_eda_step">
+<span id="interaction-eda-step-interaction-eda-step-module"></span><h2>interaction_eda_step.interaction_eda_step module<a class="headerlink" href="#module-interaction_eda_step.interaction_eda_step" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_step.InteractionEdaStep">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.interaction_eda_step.</span></span><span class="sig-name descname"><span class="pre">InteractionEdaStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda_step.html#InteractionEdaStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Helper class needed for the stevedore integration.</p>
+<p>This must provide a <cite>description()</cite> method that returns a dict containing a
+description of this node, and <cite>create_node()</cite> and <cite>create_tk_node()</cite> methods
+for creating the graphical and non-graphical nodes.</p>
+<p>The dictionary for the description is the class variable just below these
+comments. The felds are as follows:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>my_description<span class="classifier">{str, str}</span></dt><dd><p>A human-readable description of this step. It can be
+several lines long, and needs to be clear to non-expert users.
+It contains the following keys: description, group, name.</p>
+</dd>
+<dt>my_description[“description”]<span class="classifier">tuple</span></dt><dd><p>A description of the Interaction EDA step. It must be
+clear to non-experts.</p>
+</dd>
+<dt>my_description[“group”]<span class="classifier">str</span></dt><dd><p>Which group in the menus to put this step. If the group does
+not exist it will be created. Common groups are “Building”,
+“Control”, “Custom”, “Data”, and “Simulations”.</p>
+</dd>
+<dt>my_description[“name”]<span class="classifier">str</span></dt><dd><p>The name of this step, to be displayed in the menus.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_step.InteractionEdaStep.create_node">
+<span class="sig-name descname"><span class="pre">create_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda_step.html#InteractionEdaStep.create_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.create_node" title="Link to this definition">#</a></dt>
+<dd><p>Create and return the new node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flowchart</strong> (<em>seamm.Node</em>) – A non-graphical SEAMM node</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyword arguments</em>) – Various keyword arguments such as title, namespace or
+extension representing the title displayed in the flowchart,
+the namespace for the plugins of a subflowchart and
+the extension, respectively.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#interaction_eda_step.interaction_eda.InteractionEda" title="interaction_eda_step.interaction_eda.InteractionEda">InteractionEda</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_step.InteractionEdaStep.create_tk_node">
+<span class="sig-name descname"><span class="pre">create_tk_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda_step.html#InteractionEdaStep.create_tk_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.create_tk_node" title="Link to this definition">#</a></dt>
+<dd><p>Create and return the graphical Tk node object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>canvas</strong> (<em>tk.Canvas</em>) – The Tk Canvas widget</p></li>
+<li><p><strong>**kwargs</strong> (<em>keyword arguments</em>) – Various keyword arguments such as tk_flowchart, node, x, y, w, h
+representing a graphical flowchart object, a non-graphical node for
+a step, and dimensions of the graphical node.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda" title="interaction_eda_step.tk_interaction_eda.TkInteractionEda">TkInteractionEda</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_step.InteractionEdaStep.description">
+<span class="sig-name descname"><span class="pre">description</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda_step.html#InteractionEdaStep.description"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.description" title="Link to this definition">#</a></dt>
+<dd><p>Return a description of what this step does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>description</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict(str, str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda_step.InteractionEdaStep.my_description">
+<span class="sig-name descname"><span class="pre">my_description</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'description':</span> <span class="pre">'An</span> <span class="pre">interface</span> <span class="pre">for</span> <span class="pre">Interaction</span> <span class="pre">EDA',</span> <span class="pre">'group':</span> <span class="pre">'Simulations',</span> <span class="pre">'name':</span> <span class="pre">'Interaction</span> <span class="pre">EDA'}</span></span><a class="headerlink" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.my_description" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.manybody">
+<span id="interaction-eda-step-manybody-module"></span><h2>interaction_eda_step.manybody module<a class="headerlink" href="#module-interaction_eda_step.manybody" title="Link to this heading">#</a></h2>
+<p>Many-body bookkeeping of EDA interaction energies, term by term.</p>
+<p>Every EDA number is an <em>interaction</em> energy of a set of fragments, relative to
+the same fragments alone at the same geometry, so single fragments contribute
+nothing. For the fragments i, j, k, … of a cluster:</p>
+<ul class="simple">
+<li><p>the 2-body part of a term is the sum over the pairs, E(ij);</p></li>
+<li><p><strong>≥3-body (exact)</strong> = E(cluster) - Σ pairs E(ij). It needs the cluster and
+every pair, and it is exact;</p></li>
+<li><p>the 3-body increment of a triple is, by inclusion–exclusion,
+ΔE(ijk) = E(ijk) - E(ij) - E(ik) - E(jk). Summed over the triples that were
+computed (e.g. those within a cutoff) it is the <strong>3-body (triples,
+truncated)</strong> estimate. It is a truncated sum and must not be read as the
+≥3-body total; with all triples, the difference between the two is the
+≥4-body part.</p></li>
+</ul>
+<p>Fragment sets are tuples of 0-based fragment indices in ascending order.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.manybody.</span></span><span class="sig-name descname"><span class="pre">ManyBody</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_fragments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cluster</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triples</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sum_pairs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ge3_exact</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">three_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sum_three_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_triples_total</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/manybody.html#ManyBody"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The many-body analysis of one structure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_fragments</strong> (<em>int</em>)</p></li>
+<li><p><strong>terms</strong> (<em>(</em><em>str</em><em>, </em><em>...</em><em>)</em>) – The terms analyzed, in order.</p></li>
+<li><p><strong>cluster</strong> (<em>{str: float}</em><em> or </em><em>None</em>) – The whole cluster’s terms.</p></li>
+<li><p><strong>pairs</strong> (<em>{</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em><em>: {str: float}}</em>)</p></li>
+<li><p><strong>triples</strong> (<em>{</em><em>(</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>)</em><em>: {str: float}}</em>) – The triples’ own interaction energies.</p></li>
+<li><p><strong>sum_pairs</strong> (<em>{str: float}</em><em> or </em><em>None</em>) – Σ over all pairs; None unless every pair is present.</p></li>
+<li><p><strong>ge3_exact</strong> (<em>{str: float}</em><em> or </em><em>None</em>) – cluster - Σ pairs; None unless the cluster and every pair are present.</p></li>
+<li><p><strong>three_body</strong> (<em>{</em><em>(</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>)</em><em>: {str: float}}</em>) – The 3-body increment of each triple whose pairs are present.</p></li>
+<li><p><strong>sum_three_body</strong> (<em>{str: float}</em><em> or </em><em>None</em>) – Σ of the 3-body increments over the triples computed (truncated).</p></li>
+<li><p><strong>n_triples_total</strong> (<em>int</em>) – How many triples the cluster has, to show how truncated the sum is.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.all_pairs">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">all_pairs</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.all_pairs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.cluster">
+<span class="sig-name descname"><span class="pre">cluster</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.cluster" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.ge3_exact">
+<span class="sig-name descname"><span class="pre">ge3_exact</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.ge3_exact" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.n_fragments">
+<span class="sig-name descname"><span class="pre">n_fragments</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.n_fragments" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.n_triples_total">
+<span class="sig-name descname"><span class="pre">n_triples_total</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.n_triples_total" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.pairs">
+<span class="sig-name descname"><span class="pre">pairs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.pairs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.sum_pairs">
+<span class="sig-name descname"><span class="pre">sum_pairs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.sum_pairs" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.sum_three_body">
+<span class="sig-name descname"><span class="pre">sum_three_body</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.sum_three_body" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.terms">
+<span class="sig-name descname"><span class="pre">terms</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.terms" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.three_body">
+<span class="sig-name descname"><span class="pre">three_body</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.three_body" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBody.triples">
+<span class="sig-name descname"><span class="pre">triples</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#interaction_eda_step.manybody.ManyBody.triples" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.ManyBodyError">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.manybody.</span></span><span class="sig-name descname"><span class="pre">ManyBodyError</span></span><a class="reference internal" href="../_modules/interaction_eda_step/manybody.html#ManyBodyError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.manybody.ManyBodyError" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>Results needed for a many-body term are missing.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.analyze">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.manybody.</span></span><span class="sig-name descname"><span class="pre">analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/manybody.html#analyze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.manybody.analyze" title="Link to this definition">#</a></dt>
+<dd><p>Do the many-body bookkeeping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>results</strong> (<em>{tuple</em><em>(</em><em>int</em><em>, </em><em>...</em><em>)</em><em>: {str: float}}</em>) – The terms (kJ/mol) of each computed set of fragments, keyed by the
+ascending fragment indices. The whole cluster’s key is
+<code class="docutils literal notranslate"><span class="pre">tuple(range(n_fragments))</span></code>.</p></li>
+<li><p><strong>n_fragments</strong> (<em>int</em>) – The number of fragments in the cluster.</p></li>
+<li><p><strong>terms</strong> (<em>[</em><em>str</em><em>] or </em><em>None</em>) – The terms to analyze; default those common to all results, in the
+order of the first result.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#interaction_eda_step.manybody.ManyBody" title="interaction_eda_step.manybody.ManyBody">ManyBody</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.manybody.fragment_sets">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.manybody.</span></span><span class="sig-name descname"><span class="pre">fragment_sets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_fragments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('cluster',</span> <span class="pre">'pairs')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">triples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/manybody.html#fragment_sets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.manybody.fragment_sets" title="Link to this definition">#</a></dt>
+<dd><p>The sets of fragments to compute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_fragments</strong> (<em>int</em>)</p></li>
+<li><p><strong>sets</strong> (<em>[</em><em>str</em><em>]</em>) – Any of “cluster”, “pairs” and “triples”.</p></li>
+<li><p><strong>triples</strong> (<em>[</em><em>(</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>)</em><em>] or </em><em>None</em>) – The triples to use when “triples” is asked for; default all of them.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Each set once, the cluster first, then pairs and triples in order.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[tuple(int, …)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.metadata">
+<span id="interaction-eda-step-metadata-module"></span><h2>interaction_eda_step.metadata module<a class="headerlink" href="#module-interaction_eda_step.metadata" title="Link to this heading">#</a></h2>
+<p>Metadata describing the results of the Interaction EDA step.</p>
+<p>The results are the common EDA terms (see <a class="reference internal" href="#module-interaction_eda_step.terms" title="interaction_eda_step.terms"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interaction_eda_step.terms</span></code></a>) of
+the whole cluster, their 2-body part (the sum over the pairs), their exact
+≥3-body part (cluster - Σ pairs) and the truncated 3-body estimate from the
+triples that were computed. All energies are in kJ/mol.</p>
+</section>
+<section id="module-interaction_eda_step.substep">
+<span id="interaction-eda-step-substep-module"></span><h2>interaction_eda_step.substep module<a class="headerlink" href="#module-interaction_eda_step.substep" title="Link to this heading">#</a></h2>
+<p>Base class for substeps in the Interaction EDA step.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.substep.</span></span><span class="sig-name descname"><span class="pre">Substep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'no</span> <span class="pre">title'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;Logger</span> <span class="pre">interaction_eda_step.substep</span> <span class="pre">(WARNING)&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/substep.html#Substep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.substep.Substep" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code></p>
+<p>A base class for substeps in the Interaction EDA subflowchart.</p>
+<p>The top-level InteractionEda step iterates over the substeps
+of its subflowchart and calls each substep’s <cite>run()</cite> method. Each substep
+is responsible for preparing its own input, invoking Interaction EDA,
+analyzing its output, and storing its results.</p>
+<p>This base class provides:</p>
+<ul class="simple">
+<li><p><cite>is_runable</cite> - whether the top-level loop should call <cite>run()</cite> on this
+substep. Override to return False for substeps that only contribute
+input (e.g., an Initialization step) rather than invoking the code.</p></li>
+<li><p><cite>input_only</cite> - a flag for “write input but don’t run” mode, useful for
+debugging and testing.</p></li>
+<li><p><cite>options</cite> / <cite>global_options</cite> - delegated to the parent step so that
+command-line options reach substeps uniformly.</p></li>
+<li><p><cite>header</cite> - a printable header for this section of step.out.</p></li>
+<li><p><cite>version</cite> / <cite>git_revision</cite> - delegated to the plug-in package so that
+every substep reports the plug-in’s version, not seamm.Node’s.</p></li>
+</ul>
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.git_revision">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">git_revision</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.git_revision" title="Link to this definition">#</a></dt>
+<dd><p>The git revision of the interaction_eda_step package.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.global_options">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">global_options</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.global_options" title="Link to this definition">#</a></dt>
+<dd><p>The global SEAMM options, delegated to the parent step.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.header">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">header</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.header" title="Link to this definition">#</a></dt>
+<dd><p>A printable header for this section of output.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.input_only">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">input_only</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.input_only" title="Link to this definition">#</a></dt>
+<dd><p>Whether to write the input only, not run Interaction EDA.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.is_runable">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_runable</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.is_runable" title="Link to this definition">#</a></dt>
+<dd><p>Whether this substep should be run by the top-level loop.</p>
+<p>Override to return False for substeps that only contribute input
+(e.g., an Initialization step) rather than invoking
+Interaction EDA themselves.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.options">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">options</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.options" title="Link to this definition">#</a></dt>
+<dd><p>The Interaction EDA options, delegated to the parent step.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="interaction_eda_step.substep.Substep.version">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#interaction_eda_step.substep.Substep.version" title="Link to this definition">#</a></dt>
+<dd><p>The semantic version of the interaction_eda_step package.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.terms">
+<span id="interaction-eda-step-terms-module"></span><h2>interaction_eda_step.terms module<a class="headerlink" href="#module-interaction_eda_step.terms" title="Link to this heading">#</a></h2>
+<p>The energy terms of each EDA scheme, and how they map onto common terms.</p>
+<p>Each scheme keeps its own (“native”) terms, with the names the code uses. A few
+<em>common</em> terms let results from different schemes be put side by side, but only
+where the physics really is the same:</p>
+<ul class="simple">
+<li><p>SAPT’s induction contains both polarization and charge transfer, so it maps to
+ALMO’s polarization <strong>plus</strong> charge transfer (“induction” here). Only schemes
+that split induction apart (ALMO-EDA) fill “polarization” and “charge
+transfer”; SAPT never does. Treating SAPT induction as polarization is the
+lumping that hides charge-transfer problems, e.g. for Li⁺.</p></li>
+<li><p>“frozen” is ALMO’s frozen term (electrostatics + Pauli + dispersion). SAPT has
+no such term and leaves it empty.</p></li>
+<li><p>SAPT’s electrostatics is the Coulomb interaction of the isolated monomers’
+densities, which is ALMO’s <em>classical</em> electrostatic term (Q-Chem’s CLS ELEC).
+ALMO’s own “electrostatic” and “pauli” come from an orthogonal decomposition of
+the frozen wavefunction (Horn, Mao and Head-Gordon 2016; Q-Chem’s ELEC and
+PAULI) and are not comparable with SAPT: for PF6⁻–EC each differs from SAPT by
+36 kJ/mol. So the common “electrostatics” is the classical term and the common
+“Pauli” is frozen − classical electrostatic − dispersion (Q-Chem’s MOD PAULI),
+within 2 kJ/mol of SAPT exchange. frozen = electrostatics + Pauli + dispersion
+holds in both sets, and the common ≥3-body electrostatics is exactly 0.</p></li>
+</ul>
+<p>All energies are in kJ/mol.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.terms.</span></span><span class="sig-name descname"><span class="pre">Scheme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">common</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">identities</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pairwise_additive</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_fragments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">()</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/terms.html#Scheme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.terms.Scheme" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An EDA scheme: its native terms, identities, and common-term map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – e.g. “ALMO-EDA2”.</p></li>
+<li><p><strong>terms</strong> (<em>(</em><em>str</em><em>, </em><em>...</em><em>)</em>) – The native terms, in the code’s names and print order.</p></li>
+<li><p><strong>common</strong> (<em>{str:</em><em> (</em><em>str</em><em>, </em><em>...</em><em>)</em><em>}</em>) – Each common term as the sum of native terms; a name starting with “-”
+is subtracted.</p></li>
+<li><p><strong>identities</strong> (<em>(</em><em>(</em><em>str</em><em>, </em><em>(</em><em>str</em><em>, </em><em>...</em><em>)</em><em>)</em><em>, </em><em>...</em><em>)</em>) – Native term = sum of other native terms, which hold exactly.</p></li>
+<li><p><strong>pairwise_additive</strong> (<em>(</em><em>str</em><em>, </em><em>...</em><em>)</em>) – Native terms that are exactly pairwise additive (no ≥3-body part).</p></li>
+<li><p><strong>max_fragments</strong> (<em>int</em><em> or </em><em>None</em>) – The most fragments one calculation can have; None for no limit.</p></li>
+<li><p><strong>notes</strong> (<em>(</em><em>str</em><em>, </em><em>...</em><em>)</em>) – What the terms mean, for the output and the extxyz labels.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/terms.html#Scheme.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.terms.Scheme.check" title="Link to this definition">#</a></dt>
+<dd><p>The identities that do not hold, as (term, value, sum of parts).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>energies</strong> (<em>{str: float}</em>) – Native terms, kJ/mol.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – kJ/mol.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty when everything is consistent.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>[(str, float, float)]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.common">
+<span class="sig-name descname"><span class="pre">common</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.common" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.identities">
+<span class="sig-name descname"><span class="pre">identities</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.identities" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.max_fragments">
+<span class="sig-name descname"><span class="pre">max_fragments</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.max_fragments" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.name">
+<span class="sig-name descname"><span class="pre">name</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.notes">
+<span class="sig-name descname"><span class="pre">notes</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.notes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.pairwise_additive">
+<span class="sig-name descname"><span class="pre">pairwise_additive</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">()</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.pairwise_additive" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.terms">
+<span class="sig-name descname"><span class="pre">terms</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#interaction_eda_step.terms.Scheme.terms" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.terms.Scheme.to_common">
+<span class="sig-name descname"><span class="pre">to_common</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/terms.html#Scheme.to_common"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.terms.Scheme.to_common" title="Link to this definition">#</a></dt>
+<dd><p>The common terms of one result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>energies</strong> (<em>{str: float}</em>) – Native terms, kJ/mol.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>{str</strong> – The common terms this scheme defines.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float}</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step.tk_interaction_eda">
+<span id="interaction-eda-step-tk-interaction-eda-module"></span><h2>interaction_eda_step.tk_interaction_eda module<a class="headerlink" href="#module-interaction_eda_step.tk_interaction_eda" title="Link to this heading">#</a></h2>
+<p>The graphical part of a Interaction EDA step</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.tk_interaction_eda.FRAGMENTS">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.tk_interaction_eda.</span></span><span class="sig-name descname"><span class="pre">FRAGMENTS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('fragments',</span> <span class="pre">'fragment</span> <span class="pre">column',</span> <span class="pre">'calculations',</span> <span class="pre">'triples</span> <span class="pre">cutoff')</span></span><a class="headerlink" href="#interaction_eda_step.tk_interaction_eda.FRAGMENTS" title="Link to this definition">#</a></dt>
+<dd><p>The settings for the fragments and calculations.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.tk_interaction_eda.METHOD">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.tk_interaction_eda.</span></span><span class="sig-name descname"><span class="pre">METHOD</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('backend',</span> <span class="pre">'functional',</span> <span class="pre">'basis',</span> <span class="pre">'density</span> <span class="pre">fitting',</span> <span class="pre">'vv10',</span> <span class="pre">'vv10</span> <span class="pre">in</span> <span class="pre">response',</span> <span class="pre">'dispersion',</span> <span class="pre">'ferf</span> <span class="pre">response',</span> <span class="pre">'svd</span> <span class="pre">threshold',</span> <span class="pre">'low</span> <span class="pre">fp64</span> <span class="pre">gpus')</span></span><a class="headerlink" href="#interaction_eda_step.tk_interaction_eda.METHOD" title="Link to this definition">#</a></dt>
+<dd><p>The settings of the method, in display order.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interaction_eda_step.tk_interaction_eda.TkInteractionEda">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.tk_interaction_eda.</span></span><span class="sig-name descname"><span class="pre">TkInteractionEda</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tk_flowchart</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/tk_interaction_eda.html#TkInteractionEda"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TkNode</span></code></p>
+<p>The graphical part of a Interaction EDA step in a flowchart.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tk_flowchart</strong> (<em>TkFlowchart = None</em>) – The flowchart that we belong to.</p></li>
+<li><p><strong>node</strong> (<em>Node = None</em>) – The corresponding node of the non-graphical flowchart</p></li>
+<li><p><strong>namespace</strong> (<em>str</em>) – The namespace of the current step.</p></li>
+<li><p><strong>tk_subflowchart</strong> (<em>TkFlowchart</em>) – A graphical Flowchart representing a subflowchart</p></li>
+<li><p><strong>canvas</strong> (<em>tkCanvas = None</em>) – The Tk Canvas to draw on</p></li>
+<li><p><strong>dialog</strong> (<em>Dialog</em>) – The Pmw dialog object</p></li>
+<li><p><strong>x</strong> (<em>int = None</em>) – The x-coordinate of the center of the picture of the node</p></li>
+<li><p><strong>y</strong> (<em>int = None</em>) – The y-coordinate of the center of the picture of the node</p></li>
+<li><p><strong>w</strong> (<em>int = 200</em>) – The width in pixels of the picture of the node</p></li>
+<li><p><strong>h</strong> (<em>int = 50</em>) – The height in pixels of the picture of the node</p></li>
+<li><p><strong>self</strong><strong>[</strong><strong>widget</strong><strong>]</strong> (<em>dict</em>) – A dictionary of tk widgets built using the information
+contained in Interaction EDA_parameters.py</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEda</span></code>, <a class="reference internal" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda" title="interaction_eda_step.tk_interaction_eda.TkInteractionEda"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkInteractionEda</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEdaParameters</span></code></p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.tk_interaction_eda.TkInteractionEda.create_dialog">
+<span class="sig-name descname"><span class="pre">create_dialog</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/tk_interaction_eda.html#TkInteractionEda.create_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.create_dialog" title="Link to this definition">#</a></dt>
+<dd><p>Create the dialog. A set of widgets will be chosen by default
+based on what is specified in the Interaction EDA_parameters
+module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.reset_dialog" title="interaction_eda_step.tk_interaction_eda.TkInteractionEda.reset_dialog"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkInteractionEda.reset_dialog</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.tk_interaction_eda.TkInteractionEda.reset_dialog">
+<span class="sig-name descname"><span class="pre">reset_dialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/tk_interaction_eda.html#TkInteractionEda.reset_dialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.reset_dialog" title="Link to this definition">#</a></dt>
+<dd><p>Lay out the widgets, showing only the settings that apply.</p>
+<p>The atom column applies only when the fragments come from an atom
+column, and the triples cutoff only when triples are computed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.tk_interaction_eda.TkInteractionEda.right_click">
+<span class="sig-name descname"><span class="pre">right_click</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/tk_interaction_eda.html#TkInteractionEda.right_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.right_click" title="Link to this definition">#</a></dt>
+<dd><p>Handles the right click event on the node.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>Tk Event</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkInteractionEda.edit</span></code></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interaction_eda_step">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-interaction_eda_step" title="Link to this heading">#</a></h2>
+<p>interaction_eda_step
+A SEAMM plug-in for Interaction EDA</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="modules.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">interaction_eda_step</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="interaction_eda_step.backends.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">interaction_eda_step.backends package</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subpackages">Subpackages</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.fragments">interaction_eda_step.fragments module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment"><code class="docutils literal notranslate"><span class="pre">Fragment</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.atoms"><code class="docutils literal notranslate"><span class="pre">Fragment.atoms</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.charge"><code class="docutils literal notranslate"><span class="pre">Fragment.charge</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.coordinates"><code class="docutils literal notranslate"><span class="pre">Fragment.coordinates</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.index"><code class="docutils literal notranslate"><span class="pre">Fragment.index</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.label"><code class="docutils literal notranslate"><span class="pre">Fragment.label()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.multiplicity"><code class="docutils literal notranslate"><span class="pre">Fragment.multiplicity</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.n_electrons"><code class="docutils literal notranslate"><span class="pre">Fragment.n_electrons</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.name"><code class="docutils literal notranslate"><span class="pre">Fragment.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.Fragment.symbols"><code class="docutils literal notranslate"><span class="pre">Fragment.symbols</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.FragmentError"><code class="docutils literal notranslate"><span class="pre">FragmentError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.from_configuration"><code class="docutils literal notranslate"><span class="pre">from_configuration()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.min_distance"><code class="docutils literal notranslate"><span class="pre">min_distance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.fragments.triples_within"><code class="docutils literal notranslate"><span class="pre">triples_within()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.installer">interaction_eda_step.installer module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.BUILDS"><code class="docutils literal notranslate"><span class="pre">BUILDS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.Installer"><code class="docutils literal notranslate"><span class="pre">Installer</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.Installer.check"><code class="docutils literal notranslate"><span class="pre">Installer.check()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.Installer.exe_version"><code class="docutils literal notranslate"><span class="pre">Installer.exe_version()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.Installer.install"><code class="docutils literal notranslate"><span class="pre">Installer.install()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.Installer.setup_parser"><code class="docutils literal notranslate"><span class="pre">Installer.setup_parser()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.Installer.update"><code class="docutils literal notranslate"><span class="pre">Installer.update()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.LINK_CUSOLVER"><code class="docutils literal notranslate"><span class="pre">LINK_CUSOLVER</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.MINIMUM_GPU4PYSCF"><code class="docutils literal notranslate"><span class="pre">MINIMUM_GPU4PYSCF</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.PROBE"><code class="docutils literal notranslate"><span class="pre">PROBE</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.assess"><code class="docutils literal notranslate"><span class="pre">assess()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.choose_build"><code class="docutils literal notranslate"><span class="pre">choose_build()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.low_fp64"><code class="docutils literal notranslate"><span class="pre">low_fp64()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.installer.parse"><code class="docutils literal notranslate"><span class="pre">parse()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.interaction_eda">interaction_eda_step.interaction_eda module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda"><code class="docutils literal notranslate"><span class="pre">InteractionEda</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.backend_settings"><code class="docutils literal notranslate"><span class="pre">InteractionEda.backend_settings()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.description_text"><code class="docutils literal notranslate"><span class="pre">InteractionEda.description_text()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.git_revision"><code class="docutils literal notranslate"><span class="pre">InteractionEda.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.print_fragments"><code class="docutils literal notranslate"><span class="pre">InteractionEda.print_fragments()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.print_results"><code class="docutils literal notranslate"><span class="pre">InteractionEda.print_results()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.run"><code class="docutils literal notranslate"><span class="pre">InteractionEda.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.run_backend"><code class="docutils literal notranslate"><span class="pre">InteractionEda.run_backend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.version"><code class="docutils literal notranslate"><span class="pre">InteractionEda.version</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.write_extxyz"><code class="docutils literal notranslate"><span class="pre">InteractionEda.write_extxyz()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.write_json"><code class="docutils literal notranslate"><span class="pre">InteractionEda.write_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.svd_warning"><code class="docutils literal notranslate"><span class="pre">svd_warning()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.interaction_eda_parameters">interaction_eda_step.interaction_eda_parameters module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters"><code class="docutils literal notranslate"><span class="pre">InteractionEdaParameters</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters.parameters"><code class="docutils literal notranslate"><span class="pre">InteractionEdaParameters.parameters</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.interaction_eda_step">interaction_eda_step.interaction_eda_step module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep"><code class="docutils literal notranslate"><span class="pre">InteractionEdaStep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.create_node"><code class="docutils literal notranslate"><span class="pre">InteractionEdaStep.create_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.create_tk_node"><code class="docutils literal notranslate"><span class="pre">InteractionEdaStep.create_tk_node()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.description"><code class="docutils literal notranslate"><span class="pre">InteractionEdaStep.description()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda_step.InteractionEdaStep.my_description"><code class="docutils literal notranslate"><span class="pre">InteractionEdaStep.my_description</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.manybody">interaction_eda_step.manybody module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody"><code class="docutils literal notranslate"><span class="pre">ManyBody</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.all_pairs"><code class="docutils literal notranslate"><span class="pre">ManyBody.all_pairs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.cluster"><code class="docutils literal notranslate"><span class="pre">ManyBody.cluster</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.ge3_exact"><code class="docutils literal notranslate"><span class="pre">ManyBody.ge3_exact</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.n_fragments"><code class="docutils literal notranslate"><span class="pre">ManyBody.n_fragments</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.n_triples_total"><code class="docutils literal notranslate"><span class="pre">ManyBody.n_triples_total</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.pairs"><code class="docutils literal notranslate"><span class="pre">ManyBody.pairs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.sum_pairs"><code class="docutils literal notranslate"><span class="pre">ManyBody.sum_pairs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.sum_three_body"><code class="docutils literal notranslate"><span class="pre">ManyBody.sum_three_body</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.terms"><code class="docutils literal notranslate"><span class="pre">ManyBody.terms</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.three_body"><code class="docutils literal notranslate"><span class="pre">ManyBody.three_body</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBody.triples"><code class="docutils literal notranslate"><span class="pre">ManyBody.triples</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.ManyBodyError"><code class="docutils literal notranslate"><span class="pre">ManyBodyError</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.analyze"><code class="docutils literal notranslate"><span class="pre">analyze()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.manybody.fragment_sets"><code class="docutils literal notranslate"><span class="pre">fragment_sets()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.metadata">interaction_eda_step.metadata module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.substep">interaction_eda_step.substep module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep"><code class="docutils literal notranslate"><span class="pre">Substep</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.git_revision"><code class="docutils literal notranslate"><span class="pre">Substep.git_revision</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.global_options"><code class="docutils literal notranslate"><span class="pre">Substep.global_options</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.header"><code class="docutils literal notranslate"><span class="pre">Substep.header</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.input_only"><code class="docutils literal notranslate"><span class="pre">Substep.input_only</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.is_runable"><code class="docutils literal notranslate"><span class="pre">Substep.is_runable</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.options"><code class="docutils literal notranslate"><span class="pre">Substep.options</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.substep.Substep.version"><code class="docutils literal notranslate"><span class="pre">Substep.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.terms">interaction_eda_step.terms module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme"><code class="docutils literal notranslate"><span class="pre">Scheme</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.check"><code class="docutils literal notranslate"><span class="pre">Scheme.check()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.common"><code class="docutils literal notranslate"><span class="pre">Scheme.common</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.identities"><code class="docutils literal notranslate"><span class="pre">Scheme.identities</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.max_fragments"><code class="docutils literal notranslate"><span class="pre">Scheme.max_fragments</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.name"><code class="docutils literal notranslate"><span class="pre">Scheme.name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.notes"><code class="docutils literal notranslate"><span class="pre">Scheme.notes</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.pairwise_additive"><code class="docutils literal notranslate"><span class="pre">Scheme.pairwise_additive</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.terms"><code class="docutils literal notranslate"><span class="pre">Scheme.terms</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.terms.Scheme.to_common"><code class="docutils literal notranslate"><span class="pre">Scheme.to_common()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.tk_interaction_eda">interaction_eda_step.tk_interaction_eda module</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.tk_interaction_eda.FRAGMENTS"><code class="docutils literal notranslate"><span class="pre">FRAGMENTS</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.tk_interaction_eda.METHOD"><code class="docutils literal notranslate"><span class="pre">METHOD</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda"><code class="docutils literal notranslate"><span class="pre">TkInteractionEda</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.create_dialog"><code class="docutils literal notranslate"><span class="pre">TkInteractionEda.create_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.reset_dialog"><code class="docutils literal notranslate"><span class="pre">TkInteractionEda.reset_dialog()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.tk_interaction_eda.TkInteractionEda.right_click"><code class="docutils literal notranslate"><span class="pre">TkInteractionEda.right_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step">Module contents</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/api/interaction_eda_step.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

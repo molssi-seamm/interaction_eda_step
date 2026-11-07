@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interaction_eda_step.terms &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/interaction_eda_step/terms';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2026.11.7" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/SEAMM logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Interaction EDA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer_guide/index.html">
+    Developer Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Documentation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../authors.html">
+    Development Team
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../history.html">
+    History
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
+    Main SEAMM documentation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
+    SEAMM Documentation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi.org">
+    MolSSI
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/geometry_analysis_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer_guide/index.html">
+    Developer Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../authors.html">
+    Development Team
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../history.html">
+    History
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+    Main SEAMM documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+    SEAMM Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi.org">
+    MolSSI
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/geometry_analysis_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">interaction_eda_step.terms</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for interaction_eda_step.terms</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">"""The energy terms of each EDA scheme, and how they map onto common terms.</span>
+
+<span class="sd">Each scheme keeps its own ("native") terms, with the names the code uses. A few</span>
+<span class="sd">*common* terms let results from different schemes be put side by side, but only</span>
+<span class="sd">where the physics really is the same:</span>
+
+<span class="sd">* SAPT's induction contains both polarization and charge transfer, so it maps to</span>
+<span class="sd">  ALMO's polarization **plus** charge transfer ("induction" here). Only schemes</span>
+<span class="sd">  that split induction apart (ALMO-EDA) fill "polarization" and "charge</span>
+<span class="sd">  transfer"; SAPT never does. Treating SAPT induction as polarization is the</span>
+<span class="sd">  lumping that hides charge-transfer problems, e.g. for Li⁺.</span>
+<span class="sd">* "frozen" is ALMO's frozen term (electrostatics + Pauli + dispersion). SAPT has</span>
+<span class="sd">  no such term and leaves it empty.</span>
+<span class="sd">* SAPT's electrostatics is the Coulomb interaction of the isolated monomers'</span>
+<span class="sd">  densities, which is ALMO's *classical* electrostatic term (Q-Chem's CLS ELEC).</span>
+<span class="sd">  ALMO's own "electrostatic" and "pauli" come from an orthogonal decomposition of</span>
+<span class="sd">  the frozen wavefunction (Horn, Mao and Head-Gordon 2016; Q-Chem's ELEC and</span>
+<span class="sd">  PAULI) and are not comparable with SAPT: for PF6⁻–EC each differs from SAPT by</span>
+<span class="sd">  36 kJ/mol. So the common "electrostatics" is the classical term and the common</span>
+<span class="sd">  "Pauli" is frozen − classical electrostatic − dispersion (Q-Chem's MOD PAULI),</span>
+<span class="sd">  within 2 kJ/mol of SAPT exchange. frozen = electrostatics + Pauli + dispersion</span>
+<span class="sd">  holds in both sets, and the common ≥3-body electrostatics is exactly 0.</span>
+
+<span class="sd">All energies are in kJ/mol.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="n">COMMON_TERMS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"electrostatics"</span><span class="p">,</span>
+    <span class="s2">"Pauli"</span><span class="p">,</span>
+    <span class="s2">"dispersion"</span><span class="p">,</span>
+    <span class="s2">"frozen"</span><span class="p">,</span>
+    <span class="s2">"polarization"</span><span class="p">,</span>
+    <span class="s2">"charge transfer"</span><span class="p">,</span>
+    <span class="s2">"induction"</span><span class="p">,</span>
+    <span class="s2">"total"</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Scheme">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.terms.Scheme">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Scheme</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""An EDA scheme: its native terms, identities, and common-term map.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        e.g. "ALMO-EDA2".</span>
+<span class="sd">    terms : (str, ...)</span>
+<span class="sd">        The native terms, in the code's names and print order.</span>
+<span class="sd">    common : {str: (str, ...)}</span>
+<span class="sd">        Each common term as the sum of native terms; a name starting with "-"</span>
+<span class="sd">        is subtracted.</span>
+<span class="sd">    identities : ((str, (str, ...)), ...)</span>
+<span class="sd">        Native term = sum of other native terms, which hold exactly.</span>
+<span class="sd">    pairwise_additive : (str, ...)</span>
+<span class="sd">        Native terms that are exactly pairwise additive (no ≥3-body part).</span>
+<span class="sd">    max_fragments : int or None</span>
+<span class="sd">        The most fragments one calculation can have; None for no limit.</span>
+<span class="sd">    notes : (str, ...)</span>
+<span class="sd">        What the terms mean, for the output and the extxyz labels.</span>
+<span class="sd">    """</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">terms</span><span class="p">:</span> <span class="nb">tuple</span>
+    <span class="n">common</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">identities</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">pairwise_additive</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">max_fragments</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">notes</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="Scheme.to_common">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.terms.Scheme.to_common">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">to_common</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energies</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The common terms of one result.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        energies : {str: float}</span>
+<span class="sd">            Native terms, kJ/mol.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        {str: float}</span>
+<span class="sd">            The common terms this scheme defines.</span>
+<span class="sd">        """</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">signed</span> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"-"</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">p</span> <span class="ow">in</span> <span class="n">energies</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">signed</span><span class="p">):</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sign</span> <span class="o">*</span> <span class="n">energies</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">sign</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">signed</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="Scheme.check">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.terms.Scheme.check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0e-6</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The identities that do not hold, as (term, value, sum of parts).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        energies : {str: float}</span>
+<span class="sd">            Native terms, kJ/mol.</span>
+<span class="sd">        tolerance : float</span>
+<span class="sd">            kJ/mol.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        [(str, float, float)]</span>
+<span class="sd">            Empty when everything is consistent.</span>
+<span class="sd">        """</span>
+        <span class="n">bad</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parts</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">identities</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">energies</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">p</span> <span class="ow">in</span> <span class="n">energies</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">):</span>
+                <span class="n">total</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">energies</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">energies</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">-</span> <span class="n">total</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">:</span>
+                    <span class="n">bad</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">energies</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">total</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">bad</span></div>
+</div>
+
+
+
+<span class="n">ALMO_EDA2</span> <span class="o">=</span> <span class="n">Scheme</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"ALMO-EDA2"</span><span class="p">,</span>
+    <span class="n">terms</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">"electrostatic"</span><span class="p">,</span>
+        <span class="s2">"classical electrostatic"</span><span class="p">,</span>
+        <span class="s2">"pauli"</span><span class="p">,</span>
+        <span class="s2">"dispersion"</span><span class="p">,</span>
+        <span class="s2">"frozen"</span><span class="p">,</span>
+        <span class="s2">"polarization"</span><span class="p">,</span>
+        <span class="s2">"charge transfer"</span><span class="p">,</span>
+        <span class="s2">"total"</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">common</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"electrostatics"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"classical electrostatic"</span><span class="p">,),</span>
+        <span class="s2">"Pauli"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"frozen"</span><span class="p">,</span> <span class="s2">"-classical electrostatic"</span><span class="p">,</span> <span class="s2">"-dispersion"</span><span class="p">),</span>
+        <span class="s2">"dispersion"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"dispersion"</span><span class="p">,),</span>
+        <span class="s2">"frozen"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"frozen"</span><span class="p">,),</span>
+        <span class="s2">"polarization"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"polarization"</span><span class="p">,),</span>
+        <span class="s2">"charge transfer"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"charge transfer"</span><span class="p">,),</span>
+        <span class="s2">"induction"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"polarization"</span><span class="p">,</span> <span class="s2">"charge transfer"</span><span class="p">),</span>
+        <span class="s2">"total"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"total"</span><span class="p">,),</span>
+    <span class="p">},</span>
+    <span class="n">identities</span><span class="o">=</span><span class="p">(</span>
+        <span class="p">(</span><span class="s2">"frozen"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"electrostatic"</span><span class="p">,</span> <span class="s2">"pauli"</span><span class="p">,</span> <span class="s2">"dispersion"</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">"total"</span><span class="p">,</span> <span class="p">(</span><span class="s2">"frozen"</span><span class="p">,</span> <span class="s2">"polarization"</span><span class="p">,</span> <span class="s2">"charge transfer"</span><span class="p">)),</span>
+    <span class="p">),</span>
+    <span class="n">pairwise_additive</span><span class="o">=</span><span class="p">(</span><span class="s2">"classical electrostatic"</span><span class="p">,),</span>
+    <span class="n">notes</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">"Second-generation ALMO-EDA (Horn and Head-Gordon): frozen = electrostatic"</span>
+        <span class="s2">" + Pauli + dispersion; polarization from fragment electric-response"</span>
+        <span class="s2">" functions (FERF); charge transfer is the rest of the SCF relaxation."</span><span class="p">,</span>
+        <span class="s2">"The fragments are at their geometry in the cluster: there is no"</span>
+        <span class="s2">" preparation (distortion) term."</span><span class="p">,</span>
+        <span class="s2">"Charge transfer carries the basis-set superposition error; polarization"</span>
+        <span class="s2">" does not."</span><span class="p">,</span>
+        <span class="s2">"Dispersion is defined against a dispersion-free partner functional (HF)."</span>
+        <span class="s2">" With a -D3/-D4 functional it also contains the empirical dispersion,"</span>
+        <span class="s2">" including the D4 three-body (ATM) term, which then appears in the"</span>
+        <span class="s2">" ≥3-body dispersion."</span><span class="p">,</span>
+        <span class="s2">"Two electrostatic terms: 'classical electrostatic' (Q-Chem CLS ELEC) is the"</span>
+        <span class="s2">" Coulomb interaction of the isolated fragments' densities, comparable to"</span>
+        <span class="s2">" SAPT electrostatics and pairwise additive; 'electrostatic' and 'pauli'"</span>
+        <span class="s2">" (Q-Chem ELEC, PAULI) come from the orthogonal decomposition of the frozen"</span>
+        <span class="s2">" wavefunction (Horn, Mao and Head-Gordon 2016) and are NOT comparable to"</span>
+        <span class="s2">" SAPT."</span><span class="p">,</span>
+        <span class="s2">"The common terms use the SAPT-comparable pair: electrostatics = classical"</span>
+        <span class="s2">" electrostatic; Pauli = frozen - classical electrostatic - dispersion"</span>
+        <span class="s2">" (Q-Chem MOD PAULI). frozen = electrostatics + Pauli + dispersion holds"</span>
+        <span class="s2">" in both sets; the common &gt;=3-body electrostatics is exactly 0."</span><span class="p">,</span>
+        <span class="s2">"'induction' = polarization + charge transfer, comparable to SAPT"</span>
+        <span class="s2">" induction."</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">SCHEMES</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ALMO_EDA2</span><span class="p">,)}</span>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
