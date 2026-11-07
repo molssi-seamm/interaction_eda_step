@@ -16,6 +16,9 @@ charge transfer (+1.4 kJ/mol for Li+-EC at equilibrium, up to 6 at short range) 
 is not comparable with coupled results. Frozen and total energies are unaffected.
 """
 
+import os
+from pathlib import Path
+
 from .gpu4pyscf import BIBTEX, GPU4PySCF
 
 DEFAULTS = {
@@ -67,10 +70,18 @@ class Psi4(GPU4PySCF):
         """The ini section, to run the driver with the environment's Python.
 
         psi4.ini's ``code`` starts the psi4 program; the driver is a Python script
-        that imports Psi4, so it runs with ``python`` in the same environment.
+        that imports Psi4, so it runs with ``python`` in the same environment: the
+        one beside the program when ``code`` gives its path, otherwise the first
+        on the PATH (e.g. after the ini's conda environment is activated).
         """
         config = dict(config)
-        config["code"] = "python"
+        code = config.get("code", "").split()
+        if code and os.path.isabs(code[0]):
+            # A path to the psi4 program: the environment's python is beside it
+            config["code"] = str(Path(code[0]).with_name("python"))
+        else:
+            # Found on the PATH, e.g. once a conda environment is activated
+            config["code"] = "python"
         return config
 
     def command(self):

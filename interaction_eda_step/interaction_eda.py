@@ -395,6 +395,12 @@ class InteractionEda(seamm.Node):
         ini_path = ini_dir / backend.ini
         if not ini_path.exists():
             resources = importlib.resources.files("interaction_eda_step") / "data"
+            if not (resources / backend.ini).is_file():
+                raise RuntimeError(
+                    f"{backend.name} needs {ini_path}, which its own SEAMM step "
+                    f"installs: install the {backend.name} step "
+                    f"({backend.name.lower()}-step) and its code."
+                )
             ini_path.write_text((resources / backend.ini).read_text())
             self.logger.info(f"Wrote a default {ini_path}")
         full_config = configparser.ConfigParser()
