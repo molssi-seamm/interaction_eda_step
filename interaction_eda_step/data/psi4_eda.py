@@ -191,6 +191,25 @@ def block_conjugate_gradient(matvec, B, precond, tol, max_iter=200):
 # ---------------------------------------------------------------------------
 # Psi4 pieces
 # ---------------------------------------------------------------------------
+def jk_algorithm(fragments, settings):
+    """PK (in core) when the integrals fit comfortably in memory, else DIRECT.
+
+    Both are exact. PK keeps the integrals in memory, so the many Fock builds of
+    the EDA are fast; it must never go out of core, because its disk files
+    collide with the SCFs' (psi4.core.clean() removes them), so anything that
+    might not fit is integral-direct. With an auxiliary basis: MEM_DF.
+    """
+    if settings.get("auxbasis"):
+        return "MEM_DF"
+    basis = psi4.core.BasisSet.build(
+        molecule(fragments), "ORBITAL", settings.get("basis", "def2-tzvpd")
+    )
+    n = basis.nbf()
+    pk_bytes = 8.0 * (n * (n + 1) / 2) ** 2 / 2  # one triangle of pairs
+    # The full system's engine and Psi4's own SCF each hold one copy
+    return "PK" if 3 * pk_bytes < psi4.get_memory() else "DIRECT"
+
+
 def method_name(xc):
     return "hf" if xc is None or xc.lower() in ("hf", "scf") else xc.lower()
 
@@ -307,20 +326,25 @@ class Engine:
         """
         left = [Cv @ x for x in X]
         J, K, wK = self.jk_build(left, [Co] * len(left))
+        fxc = [None] * len(X)
+        if Vx is not None:
+            # One pass over the grid for all the fields
+            dm1s, rets = [], []
+            for L in left:
+                D = L @ Co.T
+                dm1s.append(psi4.core.Matrix.from_array(2 * (D + D.T)))
+                rets.append(psi4.core.Matrix(self.nbf, self.nbf))
+            Vx.compute_Vx(dm1s, rets)
+            fxc = [np.asarray(r) for r in rets]
         out = []
-        for k, x in enumerate(X):
-            D = left[k] @ Co.T
-            dm1 = 2 * (D + D.T)
+        for k in range(len(X)):
             v = 4 * J[k]
-            Kt = 2 * (K[k] + K[k].T)
             if self.alpha:
-                v -= 0.5 * self.alpha * Kt
+                v -= 0.5 * self.alpha * 2 * (K[k] + K[k].T)
             if self.lrc:
                 v -= 0.5 * self.beta * 2 * (wK[k] + wK[k].T)
-            if Vx is not None:
-                ret = psi4.core.Matrix(self.nbf, self.nbf)
-                Vx.compute_Vx([psi4.core.Matrix.from_array(dm1)], [ret])
-                v += np.asarray(ret)
+            if fxc[k] is not None:
+                v += fxc[k]
             out.append(Cv.T @ v @ Co)
         return np.array(out)
 
@@ -601,9 +625,7 @@ def eda(fragments, settings, log):
         raise NotImplementedError("nlc: false (VV10 off in the whole functional)")
     if settings.get("disp"):
         raise NotImplementedError("dispersion corrections (disp)")
-    # Integral-direct JK for the EDA's own builds: exact like PK, but with no disk
-    # files to collide with the SCFs' (psi4.core.clean() removes those).
-    jk_type = "DIRECT" if not settings.get("auxbasis") else "MEM_DF"
+    jk_type = jk_algorithm(fragments, settings)
     n = len(fragments)
     if n < 2:
         raise ValueError("ALMO-EDA needs at least two fragments")
@@ -766,7 +788,7 @@ def main(argv=None):
     psi4.set_memory(f"{float(settings.get('memory_gb') or 4)} GB")
     options = {
         "basis": settings.get("basis", "def2-tzvpd"),
-        # Integral-direct, as the EDA's own JK builds: exact, no disk files
+        # Set per calculation to match the EDA's JK algorithm (jk_algorithm)
         "scf_type": "direct" if not settings.get("auxbasis") else "mem_df",
         "e_convergence": CONV_TOL,
         "d_convergence": 1.0e-8,
@@ -805,6 +827,9 @@ def main(argv=None):
                     fragments = calc["fragments"]
                     for i, f in enumerate(fragments):
                         Fragment(f, i)
+                    jk = jk_algorithm(fragments, settings)
+                    psi4.set_options({"scf_type": jk.lower()})
+                    log(f"Integrals: {jk}")
                     terms, energies, nbf = eda(fragments, settings, log)
                     record["eda_kJ_mol"] = {k: float(v) for k, v in terms.items()}
                     record["energies_hartree"] = [float(e) for e in energies]
