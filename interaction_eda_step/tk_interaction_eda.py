@@ -4,11 +4,26 @@
 
 import pprint  # noqa: F401
 import tkinter as tk  # noqa: F401
+import tkinter.ttk as ttk
 
 import interaction_eda_step  # noqa: F401
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_widgets as sw
+
+#: The settings of the method, in display order.
+METHOD = (
+    "backend",
+    "functional",
+    "basis",
+    "density fitting",
+    "vv10",
+    "dispersion",
+    "ferf response",
+    "svd threshold",
+)
+#: The settings for the fragments and calculations.
+FRAGMENTS = ("fragments", "fragment column", "calculations", "triples cutoff")
 
 
 class TkInteractionEda(seamm.TkNode):
@@ -115,75 +130,73 @@ class TkInteractionEda(seamm.TkNode):
         """
 
         frame = super().create_dialog(title="Interaction EDA")
-        # Shortcut for parameters
         P = self.node.parameters
 
-        # Then create the widgets
-        for key in P:
-            if key[0] != "_" and key not in (
-                "results",
-                "extra keywords",
-                "create tables",
-            ):
-                self[key] = P[key].widget(frame)
+        self["method frame"] = ttk.LabelFrame(
+            frame, borderwidth=4, relief="sunken", text="Method", labelanchor="n"
+        )
+        self["fragments frame"] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief="sunken",
+            text="Fragments and calculations",
+            labelanchor="n",
+        )
+        for key in METHOD:
+            self[key] = P[key].widget(self["method frame"])
+        for key in FRAGMENTS:
+            self[key] = P[key].widget(self["fragments frame"])
 
-        # and lay them out
+        # Re-lay out when a choice changes which other settings apply
+        for key in ("fragments", "calculations"):
+            self[key].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
+            self[key].combobox.bind("<Return>", self.reset_dialog)
+            self[key].combobox.bind("<FocusOut>", self.reset_dialog)
+
         self.reset_dialog()
 
     def reset_dialog(self, widget=None):
-        """Layout the widgets in the dialog.
+        """Lay out the widgets, showing only the settings that apply.
 
-        The widgets are chosen by default from the information in
-        Interaction EDA_parameter.
-
-        This function simply lays them out row by row with
-        aligned labels. You may wish a more complicated layout that
-        is controlled by values of some of the control parameters.
-        If so, edit or override this method
-
-        Parameters
-        ----------
-        widget : Tk Widget = None
-
-        Returns
-        -------
-        None
-
-        See Also
-        --------
-        TkInteractionEda.create_dialog
+        The atom column applies only when the fragments come from an atom
+        column, and the triples cutoff only when triples are computed.
         """
-
-        # Remove any widgets previously packed
         frame = self["frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
+        for key in ("method frame", "fragments frame"):
+            for slave in self[key].grid_slaves():
+                slave.grid_forget()
 
-        # Shortcut for parameters
-        P = self.node.parameters
+        self["method frame"].grid(row=0, column=0, sticky=tk.EW, pady=5)
+        self["fragments frame"].grid(row=1, column=0, sticky=tk.EW, pady=5)
 
-        # keep track of the row in a variable, so that the layout is flexible
-        # if e.g. rows are skipped to control such as "method" here
-        row = 0
         widgets = []
-        for key in P:
-            if key[0] != "_" and key not in (
-                "results",
-                "extra keywords",
-                "create tables",
-            ):
-                self[key].grid(row=row, column=0, sticky=tk.EW)
-                widgets.append(self[key])
-                row += 1
-
-        # Align the labels
+        for row, key in enumerate(METHOD):
+            self[key].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self[key])
         sw.align_labels(widgets, sticky=tk.E)
 
-        # Setup the results if there are any
+        fragments = self["fragments"].get()
+        calculations = self["calculations"].get()
+        keys = ["fragments"]
+        if fragments == "atom column":
+            keys.append("fragment column")
+        keys.append("calculations")
+        if "triples" in calculations:
+            keys.append("triples cutoff")
+        widgets = []
+        for row, key in enumerate(keys):
+            self[key].grid(row=row, column=0, sticky=tk.EW)
+            widgets.append(self[key])
+        sw.align_labels(widgets, sticky=tk.E)
+
+        frame.columnconfigure(0, weight=1)
+
         have_results = (
             "results" in self.node.metadata and len(self.node.metadata["results"]) > 0
         )
-        if have_results and "results" in P:
+        if have_results and "results" in self.node.parameters:
             self.setup_results()
 
     def right_click(self, event):
