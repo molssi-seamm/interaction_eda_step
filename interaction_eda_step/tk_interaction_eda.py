@@ -165,7 +165,7 @@ class TkInteractionEda(seamm.TkNode):
         (:class:`InteractionEdaParameters`), which the flowchart tools use too:
         e.g. the atom column only for fragments from an atom column, the triples
         cutoff only with triples, and with Psi4 no GPU, VV10 or dispersion
-        settings and only the uncoupled FERF response for a meta-GGA.
+        settings and no meta-GGA functionals (a meta-GGA becomes wB97X-V).
         """
         P = self.node.parameters
         frame = self["frame"]
@@ -178,14 +178,11 @@ class TkInteractionEda(seamm.TkNode):
         self["method frame"].grid(row=0, column=0, sticky=tk.EW, pady=5)
         self["fragments frame"].grid(row=1, column=0, sticky=tk.EW, pady=5)
 
-        # Narrow the FERF response to what the backend and functional allow
+        # Offer only the functionals the backend can run; Psi4 has no meta-GGAs
         values = self._widget_values()
-        allowed = P.choices("ferf response", values)
-        if allowed is None:
-            allowed = P["ferf response"].enumeration
-        self["ferf response"].combobox.configure(values=list(allowed))
-        for key, value in P.implied(values).items():
-            self[key].set(value)
+        self["functional"].combobox.configure(values=P.functional_suggestions(values))
+        if P._psi4_meta(values):
+            self["functional"].set(P.psi4_default_functional)
         values = self._widget_values()
 
         for frame_key, keys in (

@@ -10,10 +10,10 @@ of its own.
 
 Psi4 has the exchange-correlation response kernel only for LDA and GGA functionals
 without VV10. So the coupled FERF response needs a functional such as wB97X-V with
-VV10 left out of the kernel (``response_nlc`` false, the default here); meta-GGAs
-such as wB97M-V need the uncoupled response, which moves energy from polarization to
-charge transfer (+1.4 kJ/mol for Li+-EC at equilibrium, up to 6 at short range) and
-is not comparable with coupled results. Frozen and total energies are unaffected.
+VV10 left out of the kernel (``response_nlc`` false, the default here). Meta-GGAs
+such as wB97M-V are refused (Paul, 2026-11-07): the uncoupled response would move
+energy from polarization to charge transfer (+1.4 kJ/mol for Li+-EC at equilibrium,
+up to 6 at short range) and not be comparable with GPU4PySCF's coupled terms.
 """
 
 import os
@@ -91,10 +91,11 @@ class Psi4(GPU4PySCF):
         """Why these settings cannot run with Psi4, or [] if they can."""
         s = self.settings(settings)
         out = []
-        if s["ferf"] == "coupled" and is_meta(s["xc"]):
+        if is_meta(s["xc"]):
             out.append(
-                f"Psi4 has no response kernel for meta-GGA functionals such as "
-                f"{s['xc']}: use the uncoupled FERF response, or GPU4PySCF."
+                f"Psi4 cannot run meta-GGA functionals such as {s['xc']} (it has no "
+                "response kernel for them): use a GGA or hybrid functional such as "
+                "wB97X-V, or GPU4PySCF."
             )
         if s["ferf"] == "coupled" and str(s["xc"]).lower().endswith("-v"):
             if s["response_nlc"]:

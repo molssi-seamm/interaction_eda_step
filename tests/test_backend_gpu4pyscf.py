@@ -203,9 +203,9 @@ def test_psi4_backend_problems():
 
     backend = Psi4()
     assert backend.problems({}) == []
-    assert backend.problems({"xc": "wb97m-v", "ferf": "uncoupled"}) == []
-    (text,) = backend.problems({"xc": "wb97m-v"})
-    assert "meta-GGA" in text
+    for ferf in ("coupled", "uncoupled"):
+        (text,) = backend.problems({"xc": "wb97m-v", "ferf": ferf})
+        assert "meta-GGA" in text
     (text,) = backend.problems({"xc": "wb97x-v", "response_nlc": True})
     assert "VV10 response kernel" in text
     assert backend.problems({"xc": "hf"}) == []

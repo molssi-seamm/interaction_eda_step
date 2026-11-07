@@ -41,20 +41,22 @@ def test_rules_psi4():
     for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
         assert not applies[key], key
         assert P.not_applicable_reason(key, values)
-    assert P.choices("ferf response", values) is None
-    assert P.implied(values) == {}
-
-    # A meta-GGA needs the uncoupled response; coupled is a problem
-    P, values = _values(backend="Psi4", functional="wB97M-V")
-    assert P.choices("ferf response", values) == ("uncoupled",)
-    assert P.implied(values) == {"ferf response": "uncoupled"}
-    assert P.problems(values)
-    values["ferf response"] = "uncoupled"
     assert P.problems(values) == []
+    suggestions = P.functional_suggestions(values)
+    assert "wB97X-V" in suggestions and "B3LYP" in suggestions
+    assert "wB97M-V" not in suggestions and "B97M-V" not in suggestions
 
-    # A variable functional is only known at run time
+    # Meta-GGAs are refused with Psi4, whatever the FERF response
+    for ferf in ("coupled", "uncoupled"):
+        P, values = _values(backend="Psi4", functional="wB97M-V", ferf_response=ferf)
+        assert any("meta-GGA" in p for p in P.problems(values))
+
+    # ... but fine with GPU4PySCF, and a variable is only known at run time
+    P, values = _values(functional="wB97M-V")
+    assert P.problems(values) == []
+    assert "wB97M-V" in P.functional_suggestions(values)
     P, values = _values(backend="Psi4", functional="$xc")
-    assert P.choices("ferf response", values) is None
+    assert P.problems(values) == []
 
 
 def test_backend_settings():

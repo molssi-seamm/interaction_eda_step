@@ -39,10 +39,10 @@ Psi4 1.11 has the exchange-correlation response kernel (``compute_Vx``) only for
 LDA and GGA functionals without VV10. So the coupled FERF response needs a
 non-meta functional, with VV10 left out of the kernel (``response_nlc: false``);
 the SCF, SCF-MI and frozen energies always keep the full functional. Meta-GGAs
-(e.g. wB97M-V) need ``ferf: uncoupled``, which moves energy from polarization to
-charge transfer (+1.4 kJ/mol for Li+-EC at equilibrium) and is not comparable to
-coupled results. Closed-shell fragments only; ``nlc: false`` and ``disp`` are not
-supported yet.
+(e.g. wB97M-V) are refused: the uncoupled response would move energy from
+polarization to charge transfer (+1.4 kJ/mol for Li+-EC at equilibrium) and not be
+comparable to coupled results. Closed-shell fragments only; ``nlc: false`` and
+``disp`` are not supported yet.
 
 Each calculation appends one JSON line to the results file, in the same form as
 ``gpu4pyscf_eda.py``: the terms in kJ/mol, the energies in hartree, the wall time
@@ -625,6 +625,10 @@ def eda(fragments, settings, log):
         raise NotImplementedError("nlc: false (VV10 off in the whole functional)")
     if settings.get("disp"):
         raise NotImplementedError("dispersion corrections (disp)")
+    if build_superfunctional(xc).is_meta():
+        raise NotImplementedError(
+            f"meta-GGA functionals such as {xc}: Psi4 has no response kernel for them"
+        )
     jk_type = jk_algorithm(fragments, settings)
     n = len(fragments)
     if n < 2:

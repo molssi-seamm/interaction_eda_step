@@ -181,9 +181,7 @@ class InteractionEdaParameters(seamm.Parameters):
                 "split between polarization and charge transfer changes: uncoupled "
                 "moves energy from polarization into charge transfer (+1.4 kJ/mol "
                 "for Li+-EC at equilibrium, up to 6 at short range), so its terms "
-                "are not comparable with coupled ones. Psi4 has no response kernel "
-                "for meta-GGA functionals (wB97M-V, B97M-V, ...), so with Psi4 they "
-                "use the uncoupled response."
+                "are not comparable with coupled ones."
             ),
         },
         "svd threshold": {
@@ -282,8 +280,12 @@ class InteractionEdaParameters(seamm.Parameters):
     # The "applies_when" conditions above hide what a backend does not offer:
     # Psi4 runs on CPUs, always keeps a -V functional's VV10, has no VV10 in the
     # response kernel and no dispersion corrections yet. Here: Psi4 has no
-    # response kernel for meta-GGAs, so their FERF response must be uncoupled.
+    # response kernel for meta-GGAs, so it does not offer them at all (Paul,
+    # 2026-11-07: refuse, rather than switch to the uncoupled response).
     # -------------------------------------------------------------------------
+
+    #: The functional the dialog switches to when Psi4 cannot run the chosen one.
+    psi4_default_functional = "wB97X-V"
 
     @staticmethod
     def _psi4_meta(values):
@@ -296,21 +298,28 @@ class InteractionEdaParameters(seamm.Parameters):
             return False
         return is_meta(functional)
 
-    def choices(self, key, values=None):
-        """Psi4 offers only the uncoupled FERF response for meta-GGAs."""
-        if values is None:
-            values = self.current_values()
-        if key == "ferf response" and self._psi4_meta(values):
-            return ("uncoupled",)
-        return super().choices(key, values)
+    def functional_suggestions(self, values=None):
+        """The functionals to offer in the dialog: no meta-GGAs with Psi4."""
+        from .backends.psi4 import is_meta
 
-    def implied(self, values=None):
-        """A meta-GGA in Psi4 implies the uncoupled FERF response."""
         if values is None:
             values = self.current_values()
-        result = {}
+        suggestions = list(self["functional"].enumeration)
+        if values.get("backend") == "Psi4":
+            suggestions = [f for f in suggestions if not is_meta(f)]
+        return suggestions
+
+    def problems(self, values=None):
+        """The base checks, and a meta-GGA functional with Psi4."""
+        if values is None:
+            values = self.current_values()
+        result = super().problems(values)
         if self._psi4_meta(values):
-            result["ferf response"] = "uncoupled"
+            result.append(
+                f"Psi4 cannot run meta-GGA functionals such as "
+                f"{values.get('functional')} (it has no response kernel for them): "
+                "use a GGA or hybrid functional such as wB97X-V, or GPU4PySCF."
+            )
         return result
 
     def not_applicable_reason(self, key, values=None):
