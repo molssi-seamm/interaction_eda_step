@@ -118,3 +118,23 @@ def test_rerun_replaces_failure(tmp_path):
     )
     results = GPU4PySCF().read_results(tmp_path, [Calculation((0, 1), [])])
     assert results[(0, 1)].energies == {"total": -2.0}
+
+
+def test_low_fp64_names():
+    driver = load_driver()
+    for name in (
+        "Tesla T4",
+        "NVIDIA L40S",
+        "NVIDIA L4",
+        "NVIDIA A10",
+        "NVIDIA RTX A6000",
+    ):
+        assert driver.low_fp64(name), name
+    for name in (
+        "NVIDIA A100-SXM4-80GB",
+        "NVIDIA A30",
+        "NVIDIA H200",
+        "NVIDIA B200",
+        "Tesla V100-PCIE-16GB",
+    ):
+        assert not driver.low_fp64(name), name

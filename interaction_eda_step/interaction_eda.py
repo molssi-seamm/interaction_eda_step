@@ -272,7 +272,15 @@ class InteractionEda(seamm.Node):
                     f"but its parts sum to {total:.6f} kJ/mol"
                 )
         if not energies:
-            raise RuntimeError("All of the EDA calculations failed.")
+            message = "All of the EDA calculations failed."
+            stderr = Path(self.directory) / "stderr.txt"
+            if stderr.exists():
+                tail = stderr.read_text().strip().splitlines()[-5:]
+                if tail:
+                    message += " The end of the code's error output:\n" + "\n".join(
+                        tail
+                    )
+            raise RuntimeError(message)
 
         mb = manybody.analyze(energies, n, scheme.terms)
         method = backend.method_string(settings)

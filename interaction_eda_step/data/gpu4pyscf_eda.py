@@ -29,10 +29,20 @@ import argparse
 import functools
 import json
 import os
+import re
 import sys
 import threading
 import time
 import traceback
+
+# GPUs made for single precision: FP64 at 1/32-1/64 of FP32 (whole words, so
+# that "A10" does not match "A100").
+LOW_FP64 = re.compile(r"\b(T4|L4|L40S?|A10|A16|A40|RTX|GEFORCE)\b", re.IGNORECASE)
+
+
+def low_fp64(gpu):
+    """Whether the GPU, by name, has little double-precision throughput."""
+    return LOW_FP64.search(gpu) is not None
 
 
 class PeakGPUMemory:
@@ -140,6 +150,12 @@ def main(argv=None):
     gpu = gpu.decode() if isinstance(gpu, bytes) else str(gpu)
     info = versions()
     print(f"GPU: {gpu}; {info}", flush=True)
+    if low_fp64(gpu):
+        print(
+            f"WARNING: the {gpu} has little double-precision (FP64) throughput, so "
+            "this will be very slow. Use an A100, A30, H100/H200 or B200.",
+            flush=True,
+        )
     os.makedirs(args.logdir, exist_ok=True)
     skip = done_ids(args.output)
 
