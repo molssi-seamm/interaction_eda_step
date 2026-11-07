@@ -1,6 +1,7 @@
 molsystem
 numpy
 seamm
+seamm-manager>=2026.10.5.1
 seamm-exec
 seamm-mbe
 seamm-util

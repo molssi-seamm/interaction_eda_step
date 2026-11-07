@@ -85,5 +85,8 @@ setup(
         'org.molssi.seamm.tk': [
             'Interaction EDA = interaction_eda_step:InteractionEdaStep',
         ],
+        'console_scripts': [
+            'interaction-eda-step-installer=interaction_eda_step.__main__:run',
+        ],
     }
 )
