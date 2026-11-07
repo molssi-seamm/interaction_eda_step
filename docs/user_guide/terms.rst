@@ -14,10 +14,13 @@ frozen
     divided into three parts:
 
     electrostatic
-        The interaction of the fragments' frozen charge densities, including their
-        overlap (charge penetration).
+        The permanent electrostatics of the fragments' densities after an orthogonal
+        decomposition of the frozen wavefunction [Horn2016b]_ (Q-Chem's ``ELEC``). It
+        is more attractive than the classical electrostatics below, by as much as
+        30 kJ/mol for an anion in contact with a solvent molecule.
     Pauli
-        The repulsion from antisymmetrizing the fragments' occupied orbitals.
+        The repulsion from antisymmetrizing the fragments' occupied orbitals, in the
+        same orthogonal decomposition: frozen − electrostatic − dispersion.
     dispersion
         Defined against a dispersion-free partner functional (Hartree--Fock exchange).
         With a functional that adds an empirical correction (-D3, -D4) it also contains
@@ -38,9 +41,11 @@ total
     step checks them.
 
 classical electrostatic
-    The electrostatic interaction of the fragments' frozen densities as point-free
-    classical charge distributions. It is exactly pairwise additive, so its many-body
-    part is zero, which is a useful check.
+    The Coulomb interaction of the isolated fragments' charge densities and nuclei,
+    including charge penetration (Q-Chem's ``CLS ELEC``). This is what SAPT calls
+    electrostatics: for Li⁺–PF₆⁻ and PF₆⁻–EC it agrees with SAPT2+/aug-cc-pVDZ to
+    1.6 kJ/mol. It is exactly pairwise additive, so its many-body part is zero, which
+    is a useful check.
 
 Conventions
 -----------
@@ -55,17 +60,42 @@ Common terms
 To compare schemes, the step also gives a few *common* terms, used only where the
 physics really is the same:
 
-======================  ===============================  =============================
-Common term             ALMO-EDA                         SAPT
-======================  ===============================  =============================
-electrostatics          electrostatic                    electrostatics
-Pauli                   Pauli                            exchange
-dispersion              dispersion                       dispersion
-polarization            polarization                     --
-charge transfer         charge transfer                  --
-induction               polarization + charge transfer   induction
-total                   total                            total
-======================  ===============================  =============================
+======================  ===========================================  ================
+Common term             ALMO-EDA                                     SAPT
+======================  ===========================================  ================
+electrostatics          classical electrostatic                      electrostatics
+Pauli                   frozen − classical electrostatic − disp.     exchange
+dispersion              dispersion                                   dispersion
+frozen                  frozen                                       --
+polarization            polarization                                 --
+charge transfer         charge transfer                              --
+induction               polarization + charge transfer               induction
+total                   total                                        total
+======================  ===========================================  ================
+
+**ALMO-EDA has two electrostatic terms, and only the classical one is comparable with
+SAPT.**
+
+* SAPT's electrostatics is the Coulomb interaction of the isolated monomers' densities,
+  which is ALMO's *classical electrostatic* term (Q-Chem's ``CLS ELEC``). The common
+  Pauli term is what is left of the frozen term, frozen − classical electrostatic −
+  dispersion (Q-Chem's ``MOD PAULI``).
+* ALMO's own *electrostatic* and *Pauli* terms come from the orthogonal decomposition
+  of the frozen wavefunction [Horn2016b]_ (Q-Chem's ``ELEC`` and ``PAULI``). They are
+  not comparable with SAPT.
+
+For PF₆⁻–EC (ωB97M-V/def2-TZVPD against SAPT2+/aug-cc-pVDZ):
+
+* the classical electrostatics is within 1.6 kJ/mol of SAPT's electrostatics, and the
+  common Pauli term within 1.7 kJ/mol of SAPT's exchange;
+* the orthogonal-decomposition terms are each 36 kJ/mol away.
+
+Both pairs add up to the same thing: frozen = electrostatics + Pauli + dispersion holds
+in both. The step keeps the native terms under their own names as well.
+
+Because the classical electrostatics is pairwise additive, the common ≥3-body
+electrostatics is exactly zero. The many-body part of the frozen term, other than
+dispersion, then appears entirely in the common Pauli term.
 
 **SAPT induction contains both polarization and charge transfer**, so it corresponds to
 ALMO's polarization *plus* charge transfer, here called *induction*. Comparing SAPT

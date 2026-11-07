@@ -13,6 +13,15 @@ where the physics really is the same:
   lumping that hides charge-transfer problems, e.g. for Li⁺.
 * "frozen" is ALMO's frozen term (electrostatics + Pauli + dispersion). SAPT has
   no such term and leaves it empty.
+* SAPT's electrostatics is the Coulomb interaction of the isolated monomers'
+  densities, which is ALMO's *classical* electrostatic term (Q-Chem's CLS ELEC).
+  ALMO's own "electrostatic" and "pauli" come from an orthogonal decomposition of
+  the frozen wavefunction (Horn, Mao and Head-Gordon 2016; Q-Chem's ELEC and
+  PAULI) and are not comparable with SAPT: for PF6⁻–EC each differs from SAPT by
+  36 kJ/mol. So the common "electrostatics" is the classical term and the common
+  "Pauli" is frozen − classical electrostatic − dispersion (Q-Chem's MOD PAULI),
+  within 2 kJ/mol of SAPT exchange. frozen = electrostatics + Pauli + dispersion
+  holds in both sets, and the common ≥3-body electrostatics is exactly 0.
 
 All energies are in kJ/mol.
 """
@@ -42,7 +51,8 @@ class Scheme:
     terms : (str, ...)
         The native terms, in the code's names and print order.
     common : {str: (str, ...)}
-        Each common term as the sum of native terms.
+        Each common term as the sum of native terms; a name starting with "-"
+        is subtracted.
     identities : ((str, (str, ...)), ...)
         Native term = sum of other native terms, which hold exactly.
     pairwise_additive : (str, ...)
@@ -76,8 +86,9 @@ class Scheme:
         """
         out = {}
         for name, parts in self.common.items():
-            if all(p in energies for p in parts):
-                out[name] = sum(energies[p] for p in parts)
+            signed = [(-1, p[1:]) if p.startswith("-") else (1, p) for p in parts]
+            if all(p in energies for _, p in signed):
+                out[name] = sum(sign * energies[p] for sign, p in signed)
         return out
 
     def check(self, energies, tolerance=1.0e-6):
@@ -117,8 +128,8 @@ ALMO_EDA2 = Scheme(
         "total",
     ),
     common={
-        "electrostatics": ("electrostatic",),
-        "Pauli": ("pauli",),
+        "electrostatics": ("classical electrostatic",),
+        "Pauli": ("frozen", "-classical electrostatic", "-dispersion"),
         "dispersion": ("dispersion",),
         "frozen": ("frozen",),
         "polarization": ("polarization",),
@@ -143,9 +154,18 @@ ALMO_EDA2 = Scheme(
         " With a -D3/-D4 functional it also contains the empirical dispersion,"
         " including the D4 three-body (ATM) term, which then appears in the"
         " ≥3-body dispersion.",
-        "Classical electrostatic is the interaction of the frozen fragment charge"
-        " densities; it is pairwise additive. 'induction' = polarization + charge"
-        " transfer, comparable to SAPT induction.",
+        "Two electrostatic terms: 'classical electrostatic' (Q-Chem CLS ELEC) is the"
+        " Coulomb interaction of the isolated fragments' densities, comparable to"
+        " SAPT electrostatics and pairwise additive; 'electrostatic' and 'pauli'"
+        " (Q-Chem ELEC, PAULI) come from the orthogonal decomposition of the frozen"
+        " wavefunction (Horn, Mao and Head-Gordon 2016) and are NOT comparable to"
+        " SAPT.",
+        "The common terms use the SAPT-comparable pair: electrostatics = classical"
+        " electrostatic; Pauli = frozen - classical electrostatic - dispersion"
+        " (Q-Chem MOD PAULI). frozen = electrostatics + Pauli + dispersion holds"
+        " in both sets; the common >=3-body electrostatics is exactly 0.",
+        "'induction' = polarization + charge transfer, comparable to SAPT"
+        " induction.",
     ),
 )
 

@@ -6,9 +6,10 @@ Output
 
 Printed output
 ==============
-The step prints the fragments with their charges, a table of every term for the whole
-cluster with its 2-body, ≥3-body (exact) and, if computed, 3-body (triples) parts, a
-table of the pairs, and the conventions the numbers follow.
+The step prints the fragments with their charges, a table of every native and common
+term for the whole cluster with its 2-body, ≥3-body (exact) and, if computed, 3-body
+(triples) parts, a table of the pairs' common terms, and the conventions the numbers
+follow.
 
 Results
 =======
@@ -21,7 +22,9 @@ Results that can be put in variables or tables, all in kJ/mol:
 * ``EDA method``: the scheme, code and settings.
 
 ``<term>`` is one of the common terms (see :ref:`eda-terms`): electrostatics, Pauli,
-dispersion, frozen, polarization, charge transfer, induction, total. The cluster's terms
+dispersion, frozen, polarization, charge transfer, induction, total. Electrostatics is
+the classical electrostatics and Pauli is frozen − classical electrostatics −
+dispersion, the pair comparable with SAPT. The cluster's terms
 and their ≥3-body parts are also stored as properties of the configuration, named for the
 method, e.g. ``EDA total#Interaction EDA#ALMO-EDA2/wB97M-V/def2-TZVPD``.
 
@@ -32,7 +35,10 @@ triples), with the atoms' fragment and fragment charge as columns, and these key
 
 * ``EDA_ALMOEDA2_<term>``: the set's own terms in the scheme's names
   (``electrostatic``, ``classical_electrostatic``, ``pauli``, ``dispersion``,
-  ``frozen``, ``polarization``, ``charge_transfer``, ``total``) and ``induction``;
+  ``frozen``, ``polarization``, ``charge_transfer``, ``total``) and ``induction``.
+  ``electrostatic`` and ``pauli`` are the orthogonal-decomposition pair, which is not
+  comparable with SAPT; the SAPT-comparable pair is ``classical_electrostatic`` and
+  frozen − classical_electrostatic − dispersion;
 * on the cluster's frame, ``..._<term>_2body``, ``..._<term>_ge3body_exact`` and, with
   triples, ``..._<term>_3body_triples`` (truncated);
 * on each triple's frame, ``..._<term>_3body``, its 3-body increment;
@@ -40,8 +46,8 @@ triples), with the atoms' fragment and fragment charge as columns, and these key
   basis=def2-tzvpd;auxbasis=none;nlc=default;response_nlc=on;disp=none;ferf=coupled;
   svd_threshold=0.0001``;
 * ``EDA_conventions``: the units, the geometry convention (no distortion term), that
-  charge transfer carries the BSSE, what induction is, and which many-body sum is
-  truncated.
+  charge transfer carries the BSSE, what induction is, which electrostatic and Pauli
+  terms are comparable with SAPT, and which many-body sum is truncated.
 
 eda.json
 ========

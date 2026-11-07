@@ -68,8 +68,30 @@ def test_common_terms():
     assert common["induction"] == pytest.approx(
         e["polarization"] + e["charge transfer"]
     )
-    assert common["Pauli"] == e["pauli"]
+    # the SAPT-comparable pair: classical electrostatics and modified Pauli
+    assert common["electrostatics"] == e["classical electrostatic"]
+    assert common["Pauli"] == pytest.approx(
+        e["frozen"] - e["classical electrostatic"] - e["dispersion"]
+    )
+    assert common["frozen"] == pytest.approx(
+        common["electrostatics"] + common["Pauli"] + common["dispersion"]
+    )
     assert set(common) == set(terms.COMMON_TERMS)
+
+
+def test_common_many_body():
+    """Shell A's common >=3-body parts: electrostatics exactly 0, and the frozen
+    term's nonadditivity all in Pauli (science's numbers, 2026-11-07)."""
+    mb = manybody.analyze(shell_a(), 5, terms.ALMO_EDA2.terms)
+    ge3 = terms.ALMO_EDA2.to_common(mb.ge3_exact)
+    assert ge3["electrostatics"] == pytest.approx(0.0, abs=1.0e-6)
+    # frozen - classical (0) - dispersion = -1.083 - 4.598
+    assert ge3["Pauli"] == pytest.approx(-5.681, abs=1.5e-3)
+    # = native electrostatic + pauli, 32.392 - 38.072
+    native = mb.ge3_exact["electrostatic"] + mb.ge3_exact["pauli"]
+    assert ge3["Pauli"] == pytest.approx(native, abs=1.0e-6)
+    for name in ("frozen", "dispersion", "polarization", "charge transfer", "total"):
+        assert ge3[name] == pytest.approx(REFERENCE[name][2], abs=1.5e-3)
 
 
 def test_three_body_inclusion_exclusion():

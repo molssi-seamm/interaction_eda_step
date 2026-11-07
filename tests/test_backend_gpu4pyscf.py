@@ -120,6 +120,18 @@ def test_rerun_replaces_failure(tmp_path):
     assert results[(0, 1)].energies == {"total": -2.0}
 
 
+def test_svd_warning():
+    from interaction_eda_step.interaction_eda import svd_warning
+
+    frags = li_ec_fragments()
+    assert svd_warning({"svd_threshold": 1.0e-4}, frags) is None
+    assert svd_warning({"svd_threshold": 1.0e-5}, frags) is None
+    text = svd_warning({"svd_threshold": 1.0e-3}, frags)
+    assert "0:Li+" in text and "1e-4" in text
+    neutral = [frags[1], Fragment(2, "H2O", [4], ["O"], np.zeros((1, 3)))]
+    assert svd_warning({"svd_threshold": 1.0e-3}, neutral) is None
+
+
 def test_low_fp64_names():
     driver = load_driver()
     for name in (

@@ -37,4 +37,5 @@ For a Li⁺ ion with its first solvation shell (Li⁺, 2 EC, 2 DMC; ωB97M-V/def
 ≥3-body part of the total is +171 kJ/mol, against a 2-body sum of -667 kJ/mol. Almost
 all of it is polarization (+160 kJ/mol): the solvent molecules polarize each other less
 in the cluster than the Li⁺ polarizes each of them alone. Classical electrostatics has
-no ≥3-body part, as it must.
+no ≥3-body part, as it must, so the frozen term's -1.1 kJ/mol is +4.6 kJ/mol of
+dispersion and -5.7 kJ/mol of (common) Pauli.

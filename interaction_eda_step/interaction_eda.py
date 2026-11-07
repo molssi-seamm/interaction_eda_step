@@ -44,6 +44,24 @@ if path.exists():
     molsystem.add_properties_from_file(csv_file)
 
 
+def svd_warning(settings, fragments):
+    """A warning when the FERF SVD threshold is looser than 1e-4 with a cation.
+
+    The polarization/charge-transfer split for Li+-PF6- moved 0.062 kJ/mol between
+    1e-4 and 1e-3; at 1e-4 it is converged to 1e-8.
+    """
+    threshold = settings.get("svd_threshold")
+    cations = [f.label() for f in fragments if f.charge > 0]
+    if threshold is not None and threshold > 1.0e-4 and cations:
+        return (
+            f"The FERF singular-value threshold {threshold:g} is looser than 1e-4 "
+            f"and there are cations ({', '.join(cations)}): the split between "
+            "polarization and charge transfer may not be converged (0.06 kJ/mol "
+            "for Li+-PF6- at 1e-3). Use 1e-4 or tighter."
+        )
+    return None
+
+
 class InteractionEda(seamm.Node):
     """
     The non-graphical part of a Interaction EDA step in a flowchart.
@@ -227,6 +245,12 @@ class InteractionEda(seamm.Node):
         calculations = [Calculation(k, [fragments[i] for i in k]) for k in keys]
 
         self.print_fragments(fragments)
+        warning = svd_warning(settings, fragments)
+        if warning:
+            self.logger.warning(warning)
+            printer.normal(
+                __("Warning: " + warning + "\n", indent=self.indent + 4 * " ")
+            )
         printer.normal(
             __(
                 f"There are {len(calculations)} EDA calculations: "
@@ -403,7 +427,11 @@ class InteractionEda(seamm.Node):
     def print_results(self, mb, scheme, fragments):
         """Print the many-body table and the pairs, by term."""
         indent = self.indent + 4 * " "
-        terms = list(scheme.terms) + ["induction"]
+        terms = list(scheme.terms) + [t for t in scheme.common if t not in scheme.terms]
+        labels = {t: t for t in scheme.terms}
+        labels.update(
+            {t: f"{t} (common)" for t in scheme.common if t not in scheme.terms}
+        )
 
         def values(d):
             if d is None:
@@ -422,7 +450,7 @@ class InteractionEda(seamm.Node):
                 )
             )
         columns = [(name, d) for name, d in columns if d is not None]
-        rows = [[t] + [d.get(t) for _, d in columns] for t in terms]
+        rows = [[labels[t]] + [d.get(t) for _, d in columns] for t in terms]
         text = tabulate(
             rows,
             headers=["Term (kJ/mol)"] + [name for name, _ in columns],
@@ -434,20 +462,22 @@ class InteractionEda(seamm.Node):
         printer.normal("")
 
         if mb.pairs:
+            # The common (SAPT-comparable) terms
             short = {
-                "electrostatic": "elst",
-                "pauli": "Pauli",
+                "electrostatics": "elst",
+                "Pauli": "Pauli",
                 "dispersion": "disp",
                 "polarization": "pol",
                 "charge transfer": "CT",
                 "total": "total",
             }
-            short = {t: h for t, h in short.items() if t in mb.terms}
             rows = []
             for (i, j), d in sorted(mb.pairs.items()):
+                common = scheme.to_common(d)
+                short = {t: h for t, h in short.items() if t in common}
                 rows.append(
                     [f"{i}+{j}", f"{fragments[i].name}-{fragments[j].name}"]
-                    + [d[t] for t in short]
+                    + [common[t] for t in short]
                 )
             text = tabulate(
                 rows,
@@ -455,7 +485,13 @@ class InteractionEda(seamm.Node):
                 tablefmt="rounded_outline",
                 floatfmt=".3f",
             )
-            printer.normal(__("The pairs (kJ/mol):\n", indent=indent))
+            printer.normal(
+                __(
+                    "The pairs (common terms, kJ/mol; elst is the classical "
+                    "electrostatics):\n",
+                    indent=indent,
+                )
+            )
             printer.normal(__(text, indent=indent + 4 * " ", wrap=False, dedent=False))
             printer.normal("")
 
@@ -493,8 +529,13 @@ class InteractionEda(seamm.Node):
         conventions = (
             "kJ/mol; fragments at the cluster geometry (no distortion term); "
             "charge transfer carries the BSSE; induction = polarization + charge "
-            "transfer; ge3body_exact = cluster - sum of pairs; 3body_triples is "
-            "truncated to the triples computed"
+            "transfer; classical_electrostatic (Q-Chem CLS ELEC) is SAPT-comparable "
+            "electrostatics, electrostatic and pauli (Q-Chem ELEC, PAULI; Horn, Mao "
+            "and Head-Gordon 2016) are the orthogonal decomposition and are not "
+            "SAPT-comparable; SAPT-comparable Pauli = frozen - "
+            "classical_electrostatic - dispersion (Q-Chem MOD PAULI); frozen = "
+            "elst + Pauli + disp in both sets; ge3body_exact = cluster - sum of "
+            "pairs; 3body_triples is truncated to the triples computed"
         )
         frames = []
         sets = []

@@ -54,7 +54,10 @@ FERF response
 FERF singular-value threshold
     Response directions with singular values below this are dropped from the
     polarization space. Like the response, it affects only the polarization/charge
-    transfer split.
+    transfer split. 10⁻⁴ is converged: for Li⁺–PF₆⁻ and PF₆⁻–EC, 10⁻⁵ changes the
+    split by less than 10⁻⁸ kJ/mol, while 10⁻³ moves 0.06 kJ/mol from polarization to
+    charge transfer for Li⁺–PF₆⁻. The step warns if the threshold is looser than
+    10⁻⁴ and there is a cation.
 
 Fragments and calculations
 ==========================
