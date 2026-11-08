@@ -558,9 +558,9 @@ class InteractionEda(seamm.Node):
 
     def write_extxyz(self, path, fragments, mb, scheme, method, results=None):
         """One frame per computed set of fragments, with the EDA terms as
-        labels ``EDA_<scheme>_<term>`` (kJ/mol); the cluster's frame also has
-        the many-body parts, and each frame says where it was computed
-        (``EDA_platform``)."""
+        labels ``EDA_<scheme>_<term>`` (kJ/mol), plus ``EDA_<scheme>_mod_pauli``,
+        the SAPT-comparable Pauli; the cluster's frame also has the many-body
+        parts, and each frame says where it was computed (``EDA_platform``)."""
         tag = "EDA_" + scheme.name.replace("-", "")
 
         def key(term):
@@ -575,6 +575,10 @@ class InteractionEda(seamm.Node):
             for term in list(scheme.terms) + ["induction"]:
                 if term in full:
                     out[key(term) + suffix] = full[term]
+            # The SAPT-comparable Pauli (Q-Chem MOD PAULI = frozen - classical
+            # electrostatic - dispersion); 'pauli' is the orthogonal one
+            if "Pauli" in full:
+                out[key("mod pauli") + suffix] = full["Pauli"]
             return out
 
         conventions = (
@@ -583,8 +587,8 @@ class InteractionEda(seamm.Node):
             "transfer; classical_electrostatic (Q-Chem CLS ELEC) is SAPT-comparable "
             "electrostatics, electrostatic and pauli (Q-Chem ELEC, PAULI; Horn, Mao "
             "and Head-Gordon 2016) are the orthogonal decomposition and are not "
-            "SAPT-comparable; SAPT-comparable Pauli = frozen - "
-            "classical_electrostatic - dispersion (Q-Chem MOD PAULI); frozen = "
+            "SAPT-comparable; mod_pauli = frozen - classical_electrostatic - "
+            "dispersion (Q-Chem MOD PAULI) is the SAPT-comparable Pauli; frozen = "
             "elst + Pauli + disp in both sets; ge3body_exact = cluster - sum of "
             "pairs; 3body_triples is truncated to the triples computed"
         )

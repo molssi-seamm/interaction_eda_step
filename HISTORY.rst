@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.11.8 -- The SAPT-comparable Pauli term in the extxyz, and where each EDA ran
+    * eda.extxyz now has ``EDA_ALMOEDA2_mod_pauli``, the SAPT-comparable Pauli
+      repulsion (Q-Chem's MOD PAULI: frozen - classical electrostatic - dispersion),
+      with its many-body parts, beside the orthogonal ``pauli``. It and
+      ``classical_electrostatic`` are the pair to compare with SAPT.
+    * Each frame and calculation records where it ran (``EDA_platform``: GPU, CUDA,
+      driver and library versions).
+    * The calculations use the number of cores SEAMM's ``ncores`` option allows.
+
 2026.11.7 -- First release: interaction energy decomposition with ALMO-EDA2 on GPUs
     * A new step, Interaction EDA, that decomposes the interactions between the
       molecules of a structure into electrostatics, Pauli repulsion, dispersion,

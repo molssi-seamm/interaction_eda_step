@@ -105,6 +105,15 @@ def test_shell_a(tmp_path):
         info["EDA_ALMOEDA2_charge_transfer"]
     )
     assert float(info["EDA_ALMOEDA2_induction"]) == pytest.approx(induction)
+    for suffix in ("", "_2body", "_ge3body_exact"):
+        mod_pauli = (
+            float(info["EDA_ALMOEDA2_frozen" + suffix])
+            - float(info["EDA_ALMOEDA2_classical_electrostatic" + suffix])
+            - float(info["EDA_ALMOEDA2_dispersion" + suffix])
+        )
+        assert float(info["EDA_ALMOEDA2_mod_pauli" + suffix]) == pytest.approx(
+            mod_pauli, abs=5e-6
+        )
     assert "ferf=coupled" in info["EDA_method"]
     assert "BSSE" in info["EDA_conventions"]
     assert frames.count("Properties=") == 11
