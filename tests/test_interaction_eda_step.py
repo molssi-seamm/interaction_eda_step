@@ -92,3 +92,17 @@ def test_backend_settings():
     assert backend.problems(full) == []
     text = " ".join(node.description_text(P).split())
     assert "no VV10 in the FERF response" in text
+
+
+def test_n_cores():
+    """SEAMM's ncores option caps the cores the backend uses."""
+    node = interaction_eda_step.InteractionEda()
+    node.global_options = {}
+    assert node.n_cores(11) == 11
+    node.global_options = {"ncores": "available"}
+    assert node.n_cores(11) == 11
+    node.global_options = {"ncores": "5"}
+    assert node.n_cores(11) == 5
+    assert node.n_cores(4) == 4
+    node.global_options = {"ncores": 0}
+    assert node.n_cores(4) == 1

@@ -427,6 +427,7 @@ class InteractionEda(seamm.Node):
 
         files = backend.files(calculations, settings)
         ce = seamm_exec.computational_environment()
+        ce["NTASKS"] = self.n_cores(ce["NTASKS"])
         result = executor.run(
             cmd=backend.command(),
             config=config,
@@ -445,6 +446,18 @@ class InteractionEda(seamm.Node):
                 if text:
                     (Path(self.directory) / f"{name}.txt").write_text(text)
         return result
+
+    def n_cores(self, available):
+        """The cores to use: those available, capped by SEAMM's ``ncores`` option.
+
+        ``ncores`` in the [DEFAULT] section of seamm.ini (or ``--ncores``) limits
+        every step, e.g. to a laptop's performance cores.
+        """
+        n = int(available)
+        limit = str(self.global_options.get("ncores", "available")).strip()
+        if limit.lower() != "available":
+            n = min(n, int(limit))
+        return max(n, 1)
 
     def print_fragments(self, fragments):
         rows = [
