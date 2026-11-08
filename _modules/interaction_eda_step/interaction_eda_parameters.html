@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda_parameters &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+    <title>interaction_eda_step.interaction_eda_parameters &#8212; SEAMM Interaction EDA Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -616,6 +616,7 @@
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"vv10"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"as in the functional"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
@@ -630,6 +631,7 @@
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"vv10 in response"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">,</span> <span class="s2">"vv10"</span><span class="p">:</span> <span class="s2">"as in the functional"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"on"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
@@ -645,6 +647,7 @@
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"dispersion"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"none"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
@@ -670,7 +673,10 @@
                 <span class="s2">"define the polarization space are made: 'coupled' solves the "</span>
                 <span class="s2">"coupled-perturbed equations (the validated default); 'uncoupled' "</span>
                 <span class="s2">"uses orbital-energy denominators without the XC kernel. Only the "</span>
-                <span class="s2">"split between polarization and charge transfer changes."</span>
+                <span class="s2">"split between polarization and charge transfer changes: uncoupled "</span>
+                <span class="s2">"moves energy from polarization into charge transfer (+1.4 kJ/mol "</span>
+                <span class="s2">"for Li+-EC at equilibrium, up to 6 at short range), so its terms "</span>
+                <span class="s2">"are not comparable with coupled ones."</span>
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"svd threshold"</span><span class="p">:</span> <span class="p">{</span>
@@ -686,6 +692,7 @@
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"low fp64 gpus"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"refuse"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
@@ -712,6 +719,7 @@
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"fragment column"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"fragments"</span><span class="p">:</span> <span class="s2">"atom column"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"fragment"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
@@ -739,6 +747,7 @@
             <span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">"triples cutoff"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"calculations"</span><span class="p">:</span> <span class="s2">"cluster, pairs and triples"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"all"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"float"</span><span class="p">,</span>
             <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">"Å"</span><span class="p">,</span>
@@ -760,6 +769,77 @@
             <span class="s2">"help_text"</span><span class="p">:</span> <span class="s2">"The results to save to variables or in tables."</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">}</span>
+
+    <span class="c1"># -------------------------------------------------------------------------</span>
+    <span class="c1"># Rules shared by the dialog and the flowchart tools (see seamm.Parameters).</span>
+    <span class="c1"># The "applies_when" conditions above hide what a backend does not offer:</span>
+    <span class="c1"># Psi4 runs on CPUs, always keeps a -V functional's VV10, has no VV10 in the</span>
+    <span class="c1"># response kernel and no dispersion corrections yet. Here: Psi4 has no</span>
+    <span class="c1"># response kernel for meta-GGAs, so it does not offer them at all (Paul,</span>
+    <span class="c1"># 2026-11-07: refuse, rather than switch to the uncoupled response).</span>
+    <span class="c1"># -------------------------------------------------------------------------</span>
+
+    <span class="c1">#: The functional the dialog switches to when Psi4 cannot run the chosen one.</span>
+    <span class="n">psi4_default_functional</span> <span class="o">=</span> <span class="s2">"wB97X-V"</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_psi4_meta</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Whether the backend is Psi4 and the functional a meta-GGA."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.backends.psi4</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_meta</span>
+
+        <span class="n">backend</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"backend"</span><span class="p">)</span>
+        <span class="n">functional</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"functional"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">backend</span> <span class="o">!=</span> <span class="s2">"Psi4"</span> <span class="ow">or</span> <span class="n">InteractionEdaParameters</span><span class="o">.</span><span class="n">_is_expr</span><span class="p">(</span><span class="n">functional</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">is_meta</span><span class="p">(</span><span class="n">functional</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InteractionEdaParameters.functional_suggestions">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters.functional_suggestions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">functional_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The functionals to offer in the dialog: no meta-GGAs with Psi4."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">.backends.psi4</span><span class="w"> </span><span class="kn">import</span> <span class="n">is_meta</span>
+
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"functional"</span><span class="p">]</span><span class="o">.</span><span class="n">enumeration</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"backend"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"Psi4"</span><span class="p">:</span>
+            <span class="n">suggestions</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">suggestions</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_meta</span><span class="p">(</span><span class="n">f</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">suggestions</span></div>
+
+
+<div class="viewcode-block" id="InteractionEdaParameters.problems">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters.problems">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">problems</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The base checks, and a meta-GGA functional with Psi4."""</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">problems</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi4_meta</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"Psi4 cannot run meta-GGA functionals such as "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'functional'</span><span class="p">)</span><span class="si">}</span><span class="s2"> (it has no response kernel for them): "</span>
+                <span class="s2">"use a GGA or hybrid functional such as wB97X-V, or GPU4PySCF."</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="InteractionEdaParameters.not_applicable_reason">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda_parameters.InteractionEdaParameters.not_applicable_reason">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">not_applicable_reason</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Why a setting does not apply, in the user's terms."""</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_values</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"backend"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"Psi4"</span><span class="p">:</span>
+            <span class="n">reasons</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"vv10"</span><span class="p">:</span> <span class="s2">"Psi4 always keeps the functional's VV10"</span><span class="p">,</span>
+                <span class="s2">"vv10 in response"</span><span class="p">:</span> <span class="s2">"Psi4 has no VV10 response kernel; it is off"</span><span class="p">,</span>
+                <span class="s2">"dispersion"</span><span class="p">:</span> <span class="s2">"dispersion corrections are not available with Psi4"</span><span class="p">,</span>
+                <span class="s2">"low fp64 gpus"</span><span class="p">:</span> <span class="s2">"Psi4 runs on CPUs"</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">reasons</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">reasons</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">not_applicable_reason</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaults</span><span class="o">=</span><span class="p">{},</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""</span>

@@ -35,10 +35,11 @@ triples), with the atoms' fragment and fragment charge as columns, and these key
 
 * ``EDA_ALMOEDA2_<term>``: the set's own terms in the scheme's names
   (``electrostatic``, ``classical_electrostatic``, ``pauli``, ``dispersion``,
-  ``frozen``, ``polarization``, ``charge_transfer``, ``total``) and ``induction``.
-  ``electrostatic`` and ``pauli`` are the orthogonal-decomposition pair, which is not
-  comparable with SAPT; the SAPT-comparable pair is ``classical_electrostatic`` and
-  frozen − classical_electrostatic − dispersion;
+  ``frozen``, ``polarization``, ``charge_transfer``, ``total``), ``induction`` and
+  ``mod_pauli``. ``electrostatic`` and ``pauli`` are the orthogonal-decomposition
+  pair, which is not comparable with SAPT; the SAPT-comparable pair is
+  ``classical_electrostatic`` and ``mod_pauli`` = frozen − classical_electrostatic −
+  dispersion (Q-Chem's CLS ELEC and MOD PAULI);
 * on the cluster's frame, ``..._<term>_2body``, ``..._<term>_ge3body_exact`` and, with
   triples, ``..._<term>_3body_triples`` (truncated);
 * on each triple's frame, ``..._<term>_3body``, its 3-body increment;

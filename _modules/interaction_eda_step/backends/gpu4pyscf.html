@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.backends.gpu4pyscf &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+    <title>interaction_eda_step.backends.gpu4pyscf &#8212; SEAMM Interaction EDA Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../../../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -581,19 +581,23 @@
     <span class="n">device</span> <span class="o">=</span> <span class="s2">"gpu"</span>
     <span class="n">max_fragments</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ini</span> <span class="o">=</span> <span class="s2">"gpu4pyscf.ini"</span>
+    <span class="c1">#: The driver script, in the package's data, run with the code's Python.</span>
+    <span class="n">driver</span> <span class="o">=</span> <span class="n">DRIVER</span>
+    <span class="c1">#: The settings and their defaults.</span>
+    <span class="n">defaults</span> <span class="o">=</span> <span class="n">DEFAULTS</span>
 
 <div class="viewcode-block" id="GPU4PySCF.options">
 <a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.options">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">options</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">DEFAULTS</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="GPU4PySCF.settings">
 <a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.settings">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""The full settings: the defaults updated with those given."""</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">DEFAULTS</span><span class="p">)</span>
-        <span class="n">out</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">settings</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">DEFAULTS</span><span class="p">})</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">)</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">settings</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">})</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
 
@@ -622,11 +626,11 @@
             <span class="p">],</span>
         <span class="p">}</span>
         <span class="n">driver</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"interaction_eda_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span> <span class="o">/</span> <span class="n">DRIVER</span>
+            <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"interaction_eda_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span>
         <span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
         <span class="k">return</span> <span class="p">{</span>
             <span class="s2">"input.json"</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
-            <span class="n">DRIVER</span><span class="p">:</span> <span class="n">driver</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="p">:</span> <span class="n">driver</span><span class="p">,</span>
         <span class="p">}</span></div>
 
 
@@ -638,7 +642,7 @@
         <span class="c1"># holding files it returns.</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="s2">"</span><span class="si">{code}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="n">DRIVER</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="p">,</span>
             <span class="s2">"input.json"</span><span class="p">,</span>
             <span class="s2">"-o"</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">results_file</span><span class="p">,</span>

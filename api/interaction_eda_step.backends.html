@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>interaction_eda_step.backends package &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+    <title>interaction_eda_step.backends package &#8212; SEAMM Interaction EDA Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -564,6 +564,12 @@ CPUs) and <code class="docutils literal notranslate"><span class="pre">psi4_sapt
 <dd><p>The command line, with <code class="docutils literal notranslate"><span class="pre">{code}</span></code> from the ini file.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.configure">
+<span class="sig-name descname"><span class="pre">configure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/backends/base.html#Backend.configure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.configure" title="Link to this definition">#</a></dt>
+<dd><p>The ini section as the executor should use it (default: unchanged).</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.device">
 <span class="sig-name descname"><span class="pre">device</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cpu'</span></span><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.device" title="Link to this definition">#</a></dt>
@@ -604,6 +610,12 @@ CPUs) and <code class="docutils literal notranslate"><span class="pre">psi4_sapt
 <dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.options">
 <span class="sig-name descname"><span class="pre">options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/backends/base.html#Backend.options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.options" title="Link to this definition">#</a></dt>
 <dd><p>The settings this backend accepts: {name: default}.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.problems">
+<span class="sig-name descname"><span class="pre">problems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/backends/base.html#Backend.problems"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.problems" title="Link to this definition">#</a></dt>
+<dd><p>Why these settings cannot run with this backend; [] if they can.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -723,9 +735,21 @@ with the same id (a rerun after a failure).</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.defaults">
+<span class="sig-name descname"><span class="pre">defaults</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'allow_low_fp64':</span> <span class="pre">False,</span> <span class="pre">'auxbasis':</span> <span class="pre">None,</span> <span class="pre">'basis':</span> <span class="pre">'def2-tzvpd',</span> <span class="pre">'disp':</span> <span class="pre">None,</span> <span class="pre">'ferf':</span> <span class="pre">'coupled',</span> <span class="pre">'nlc':</span> <span class="pre">None,</span> <span class="pre">'response_nlc':</span> <span class="pre">True,</span> <span class="pre">'svd_threshold':</span> <span class="pre">0.0001,</span> <span class="pre">'verbose':</span> <span class="pre">3,</span> <span class="pre">'xc':</span> <span class="pre">'wb97m-v'}</span></span><a class="headerlink" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.defaults" title="Link to this definition">#</a></dt>
+<dd><p>The settings and their defaults.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.device">
 <span class="sig-name descname"><span class="pre">device</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gpu'</span></span><a class="headerlink" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.device" title="Link to this definition">#</a></dt>
 <dd><p>“gpu” or “cpu”.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.driver">
+<span class="sig-name descname"><span class="pre">driver</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'gpu4pyscf_eda.py'</span></span><a class="headerlink" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.driver" title="Link to this definition">#</a></dt>
+<dd><p>The driver script, in the package’s data, run with the code’s Python.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -850,6 +874,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend"><code class="docutils literal notranslate"><span class="pre">Backend</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.citations"><code class="docutils literal notranslate"><span class="pre">Backend.citations()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.command"><code class="docutils literal notranslate"><span class="pre">Backend.command()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.configure"><code class="docutils literal notranslate"><span class="pre">Backend.configure()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.device"><code class="docutils literal notranslate"><span class="pre">Backend.device</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.files"><code class="docutils literal notranslate"><span class="pre">Backend.files()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.ini"><code class="docutils literal notranslate"><span class="pre">Backend.ini</span></code></a></li>
@@ -857,6 +882,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.method_string"><code class="docutils literal notranslate"><span class="pre">Backend.method_string()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.name"><code class="docutils literal notranslate"><span class="pre">Backend.name</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.options"><code class="docutils literal notranslate"><span class="pre">Backend.options()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.problems"><code class="docutils literal notranslate"><span class="pre">Backend.problems()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.read_results"><code class="docutils literal notranslate"><span class="pre">Backend.read_results()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.results_file"><code class="docutils literal notranslate"><span class="pre">Backend.results_file</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.scheme"><code class="docutils literal notranslate"><span class="pre">Backend.scheme</span></code></a></li>
@@ -882,7 +908,9 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.citations"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.citations()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.command"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.command()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.defaults"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.defaults</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.device"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.device</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.driver"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.driver</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.files"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.files()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.ini"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.ini</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.max_fragments"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.max_fragments</span></code></a></li>

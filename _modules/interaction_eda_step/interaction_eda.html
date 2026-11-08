@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -661,11 +661,14 @@
         <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"density fitting"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"no"</span><span class="p">:</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"density fitting with </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'density fitting'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"off"</span><span class="p">):</span>
+        <span class="n">applies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">applicable</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"off"</span><span class="p">):</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"no VV10"</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10 in response"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"off"</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"vv10 in response"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10 in response"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"off"</span><span class="p">:</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"no VV10 in the FERF response"</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">P</span><span class="p">[</span><span class="s2">"backend"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"Psi4"</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"functional"</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"-v"</span><span class="p">):</span>
+            <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"no VV10 in the FERF response"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="s2">""</span><span class="p">):</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'dispersion'</span><span class="p">]</span><span class="si">}</span><span class="s2"> dispersion"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"ferf response"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"coupled"</span><span class="p">:</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'ferf response'</span><span class="p">]</span><span class="si">}</span><span class="s2"> FERF response"</span><span class="p">)</span>
@@ -682,22 +685,34 @@
 <div class="viewcode-block" id="InteractionEda.backend_settings">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.backend_settings">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">backend_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">P</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""The backend's settings from the parameters."""</span>
+<span class="w">        </span><span class="sd">"""The backend's settings from the parameters.</span>
+
+<span class="sd">        Settings that do not apply to the chosen backend (see the parameters'</span>
+<span class="sd">        rules) are left out, so the backend's own defaults hold, e.g. no VV10 in</span>
+<span class="sd">        Psi4's response kernel.</span>
+<span class="sd">        """</span>
+        <span class="n">applies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">applicable</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
         <span class="n">auxbasis</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"density fitting"</span><span class="p">]</span>
-        <span class="n">dispersion</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">{</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"xc"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"functional"</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
             <span class="s2">"basis"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"basis"</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
             <span class="s2">"auxbasis"</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">auxbasis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"no"</span><span class="p">,</span> <span class="s2">"none"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="k">else</span> <span class="n">auxbasis</span><span class="p">,</span>
-            <span class="s2">"nlc"</span><span class="p">:</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">"response_nlc"</span><span class="p">:</span> <span class="p">(</span>
-                <span class="n">P</span><span class="p">[</span><span class="s2">"vv10 in response"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"off"</span> <span class="ow">or</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
-            <span class="p">),</span>
-            <span class="s2">"disp"</span><span class="p">:</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">dispersion</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="k">else</span> <span class="n">dispersion</span><span class="p">,</span>
             <span class="s2">"ferf"</span><span class="p">:</span> <span class="n">P</span><span class="p">[</span><span class="s2">"ferf response"</span><span class="p">],</span>
             <span class="s2">"svd_threshold"</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"svd threshold"</span><span class="p">]),</span>
-            <span class="s2">"allow_low_fp64"</span><span class="p">:</span> <span class="n">P</span><span class="p">[</span><span class="s2">"low fp64 gpus"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"allow"</span><span class="p">,</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
+        <span class="n">vv10_off</span> <span class="o">=</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"vv10"</span><span class="p">]:</span>
+            <span class="n">settings</span><span class="p">[</span><span class="s2">"nlc"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">vv10_off</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"vv10 in response"</span><span class="p">]</span> <span class="ow">or</span> <span class="n">vv10_off</span><span class="p">:</span>
+            <span class="n">settings</span><span class="p">[</span><span class="s2">"response_nlc"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"vv10 in response"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"off"</span> <span class="ow">or</span> <span class="n">vv10_off</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">]:</span>
+            <span class="n">dispersion</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="p">[</span><span class="s2">"dispersion"</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">settings</span><span class="p">[</span><span class="s2">"disp"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="kc">None</span> <span class="k">if</span> <span class="n">dispersion</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"none"</span><span class="p">,</span> <span class="s2">"no"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="k">else</span> <span class="n">dispersion</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="p">[</span><span class="s2">"low fp64 gpus"</span><span class="p">]:</span>
+            <span class="n">settings</span><span class="p">[</span><span class="s2">"allow_low_fp64"</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"low fp64 gpus"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"allow"</span>
+        <span class="k">return</span> <span class="n">settings</span></div>
 
 
 <div class="viewcode-block" id="InteractionEda.run">
@@ -724,6 +739,12 @@
         <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">P</span><span class="p">[</span><span class="s2">"backend"</span><span class="p">]]()</span>
         <span class="n">scheme</span> <span class="o">=</span> <span class="n">SCHEMES</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">scheme</span><span class="p">]</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_settings</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+        <span class="n">problems</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">problems</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">problems</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"These settings cannot run with </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">  "</span>
+                <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">  "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">problems</span><span class="p">)</span>
+            <span class="p">)</span>
 
         <span class="c1"># The fragments and the calculations</span>
         <span class="n">column</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"fragment column"</span><span class="p">]</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"fragments"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"atom column"</span> <span class="k">else</span> <span class="kc">None</span>
@@ -823,7 +844,9 @@
         <span class="n">mb</span> <span class="o">=</span> <span class="n">manybody</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">energies</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">scheme</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">method_string</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_results</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">fragments</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_extxyz</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.extxyz"</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_extxyz</span><span class="p">(</span>
+            <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.extxyz"</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">results</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span>
             <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.json"</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span>
         <span class="p">)</span>
@@ -883,6 +906,12 @@
         <span class="n">ini_path</span> <span class="o">=</span> <span class="n">ini_dir</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ini_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">resources</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"interaction_eda_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> needs </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">, which its own SEAMM step "</span>
+                    <span class="sa">f</span><span class="s2">"installs: install the </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> step "</span>
+                    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">-step) and its code."</span>
+                <span class="p">)</span>
             <span class="n">ini_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">((</span><span class="n">resources</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Wrote a default </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">full_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
@@ -894,7 +923,7 @@
                 <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">installation = local</span><span class="se">\n</span><span class="s2">"</span>
                 <span class="s2">"code = /path/to/env/bin/python"</span>
             <span class="p">)</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">))</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">)))</span>
         <span class="n">code</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"code"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"installation"</span><span class="p">,</span> <span class="s2">"local"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"local"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
             <span class="n">Path</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">if</span> <span class="n">code</span> <span class="k">else</span> <span class="kc">False</span>
@@ -909,6 +938,7 @@
 
         <span class="n">files</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">calculations</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
         <span class="n">ce</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">computational_environment</span><span class="p">()</span>
+        <span class="n">ce</span><span class="p">[</span><span class="s2">"NTASKS"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cores</span><span class="p">(</span><span class="n">ce</span><span class="p">[</span><span class="s2">"NTASKS"</span><span class="p">])</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
             <span class="n">cmd</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">command</span><span class="p">(),</span>
             <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
@@ -927,6 +957,21 @@
                 <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
                     <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="InteractionEda.n_cores">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.n_cores">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">n_cores</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">available</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The cores to use: those available, capped by SEAMM's ``ncores`` option.</span>
+
+<span class="sd">        ``ncores`` in the [DEFAULT] section of seamm.ini (or ``--ncores``) limits</span>
+<span class="sd">        every step, e.g. to a laptop's performance cores.</span>
+<span class="sd">        """</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">available</span><span class="p">)</span>
+        <span class="n">limit</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"ncores"</span><span class="p">,</span> <span class="s2">"available"</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">limit</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">"available"</span><span class="p">:</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="InteractionEda.print_fragments">
@@ -1032,10 +1077,11 @@
 
 <div class="viewcode-block" id="InteractionEda.write_extxyz">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.write_extxyz">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">write_extxyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_extxyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""One frame per computed set of fragments, with the EDA terms as</span>
-<span class="sd">        labels ``EDA_&lt;scheme&gt;_&lt;term&gt;`` (kJ/mol); the cluster's frame also has</span>
-<span class="sd">        the many-body parts."""</span>
+<span class="sd">        labels ``EDA_&lt;scheme&gt;_&lt;term&gt;`` (kJ/mol), plus ``EDA_&lt;scheme&gt;_mod_pauli``,</span>
+<span class="sd">        the SAPT-comparable Pauli; the cluster's frame also has the many-body</span>
+<span class="sd">        parts, and each frame says where it was computed (``EDA_platform``)."""</span>
         <span class="n">tag</span> <span class="o">=</span> <span class="s2">"EDA_"</span> <span class="o">+</span> <span class="n">scheme</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">key</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
@@ -1050,6 +1096,10 @@
             <span class="k">for</span> <span class="n">term</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">scheme</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"induction"</span><span class="p">]:</span>
                 <span class="k">if</span> <span class="n">term</span> <span class="ow">in</span> <span class="n">full</span><span class="p">:</span>
                     <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">(</span><span class="n">term</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">]</span> <span class="o">=</span> <span class="n">full</span><span class="p">[</span><span class="n">term</span><span class="p">]</span>
+            <span class="c1"># The SAPT-comparable Pauli (Q-Chem MOD PAULI = frozen - classical</span>
+            <span class="c1"># electrostatic - dispersion); 'pauli' is the orthogonal one</span>
+            <span class="k">if</span> <span class="s2">"Pauli"</span> <span class="ow">in</span> <span class="n">full</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">(</span><span class="s2">"mod pauli"</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">]</span> <span class="o">=</span> <span class="n">full</span><span class="p">[</span><span class="s2">"Pauli"</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">out</span>
 
         <span class="n">conventions</span> <span class="o">=</span> <span class="p">(</span>
@@ -1058,8 +1108,8 @@
             <span class="s2">"transfer; classical_electrostatic (Q-Chem CLS ELEC) is SAPT-comparable "</span>
             <span class="s2">"electrostatics, electrostatic and pauli (Q-Chem ELEC, PAULI; Horn, Mao "</span>
             <span class="s2">"and Head-Gordon 2016) are the orthogonal decomposition and are not "</span>
-            <span class="s2">"SAPT-comparable; SAPT-comparable Pauli = frozen - "</span>
-            <span class="s2">"classical_electrostatic - dispersion (Q-Chem MOD PAULI); frozen = "</span>
+            <span class="s2">"SAPT-comparable; mod_pauli = frozen - classical_electrostatic - "</span>
+            <span class="s2">"dispersion (Q-Chem MOD PAULI) is the SAPT-comparable Pauli; frozen = "</span>
             <span class="s2">"elst + Pauli + disp in both sets; ge3body_exact = cluster - sum of "</span>
             <span class="s2">"pairs; 3body_triples is truncated to the triples computed"</span>
         <span class="p">)</span>
@@ -1084,6 +1134,10 @@
                 <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">labels</span><span class="p">(</span><span class="n">mb</span><span class="o">.</span><span class="n">three_body</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="s2">"_3body"</span><span class="p">))</span>
             <span class="n">info</span><span class="p">[</span><span class="s2">"EDA_method"</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
             <span class="n">info</span><span class="p">[</span><span class="s2">"EDA_conventions"</span><span class="p">]</span> <span class="o">=</span> <span class="n">conventions</span>
+            <span class="k">if</span> <span class="n">results</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                <span class="n">platform</span> <span class="o">=</span> <span class="n">platform_text</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">platform</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="s2">"EDA_platform"</span><span class="p">]</span> <span class="o">=</span> <span class="n">platform</span>
             <span class="n">atoms</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="p">:</span>
                 <span class="n">f</span> <span class="o">=</span> <span class="n">fragments</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -1133,6 +1187,43 @@
         <span class="p">}</span>
         <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span></div>
 </div>
+
+
+
+<div class="viewcode-block" id="platform_text">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.platform_text">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">platform_text</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Where a calculation ran, e.g. 'GPU4PySCF 1.9.1, PySCF 2.15.0, CuPy 14.2.0 on</span>
+<span class="sd">    NVIDIA A30 (sm 8.0, CUDA 12.9, driver 580.82.07)' or 'Psi4 1.11 on CPU, 8</span>
+<span class="sd">    threads', from a backend's record; '' if it says nothing."""</span>
+    <span class="n">versions</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"versions"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{}</span>
+    <span class="n">gpu</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"gpu"</span><span class="p">)</span>
+    <span class="n">codes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">versions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="p">(</span><span class="s2">"gpu4pyscf"</span><span class="p">,</span> <span class="s2">"GPU4PySCF"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"pyscf"</span><span class="p">,</span> <span class="s2">"PySCF"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"cupy"</span><span class="p">,</span> <span class="s2">"CuPy"</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">"psi4"</span><span class="p">,</span> <span class="s2">"Psi4"</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">versions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">gpu</span><span class="p">:</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">versions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="p">(</span><span class="s2">"compute_capability"</span><span class="p">,</span> <span class="s2">"sm"</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">"cuda_driver"</span><span class="p">,</span> <span class="s2">"CUDA"</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">"nvidia_driver"</span><span class="p">,</span> <span class="s2">"driver"</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">versions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"on </span><span class="si">{</span><span class="n">gpu</span><span class="si">}</span><span class="s2">"</span> <span class="o">+</span> <span class="p">(</span><span class="sa">f</span><span class="s2">" (</span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">details</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span> <span class="k">if</span> <span class="n">details</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">versions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"threads"</span><span class="p">):</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"on CPU, </span><span class="si">{</span><span class="n">versions</span><span class="p">[</span><span class="s1">'threads'</span><span class="p">]</span><span class="si">}</span><span class="s2"> threads"</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="k">return</span> <span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">part</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">codes</span><span class="p">),</span> <span class="n">where</span><span class="p">)</span> <span class="k">if</span> <span class="n">part</span><span class="p">)</span></div>
 
 
 

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Output &#8212; SEAMM Interaction EDA Plug-in 2026.11.7 documentation</title>
+    <title>Output &#8212; SEAMM Interaction EDA Plug-in 2026.11.8 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=7bebf36f"></script>
+    <script src="../_static/documentation_options.js?v=93f150ad"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.7" />
+  <meta name="docsearch:version" content="2026.11.8" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -551,10 +551,11 @@ triples), with the atoms’ fragment and fragment charge as columns, and these k
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">EDA_ALMOEDA2_&lt;term&gt;</span></code>: the set’s own terms in the scheme’s names
 (<code class="docutils literal notranslate"><span class="pre">electrostatic</span></code>, <code class="docutils literal notranslate"><span class="pre">classical_electrostatic</span></code>, <code class="docutils literal notranslate"><span class="pre">pauli</span></code>, <code class="docutils literal notranslate"><span class="pre">dispersion</span></code>,
-<code class="docutils literal notranslate"><span class="pre">frozen</span></code>, <code class="docutils literal notranslate"><span class="pre">polarization</span></code>, <code class="docutils literal notranslate"><span class="pre">charge_transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">total</span></code>) and <code class="docutils literal notranslate"><span class="pre">induction</span></code>.
-<code class="docutils literal notranslate"><span class="pre">electrostatic</span></code> and <code class="docutils literal notranslate"><span class="pre">pauli</span></code> are the orthogonal-decomposition pair, which is not
-comparable with SAPT; the SAPT-comparable pair is <code class="docutils literal notranslate"><span class="pre">classical_electrostatic</span></code> and
-frozen − classical_electrostatic − dispersion;</p></li>
+<code class="docutils literal notranslate"><span class="pre">frozen</span></code>, <code class="docutils literal notranslate"><span class="pre">polarization</span></code>, <code class="docutils literal notranslate"><span class="pre">charge_transfer</span></code>, <code class="docutils literal notranslate"><span class="pre">total</span></code>), <code class="docutils literal notranslate"><span class="pre">induction</span></code> and
+<code class="docutils literal notranslate"><span class="pre">mod_pauli</span></code>. <code class="docutils literal notranslate"><span class="pre">electrostatic</span></code> and <code class="docutils literal notranslate"><span class="pre">pauli</span></code> are the orthogonal-decomposition
+pair, which is not comparable with SAPT; the SAPT-comparable pair is
+<code class="docutils literal notranslate"><span class="pre">classical_electrostatic</span></code> and <code class="docutils literal notranslate"><span class="pre">mod_pauli</span></code> = frozen − classical_electrostatic −
+dispersion (Q-Chem’s CLS ELEC and MOD PAULI);</p></li>
 <li><p>on the cluster’s frame, <code class="docutils literal notranslate"><span class="pre">..._&lt;term&gt;_2body</span></code>, <code class="docutils literal notranslate"><span class="pre">..._&lt;term&gt;_ge3body_exact</span></code> and, with
 triples, <code class="docutils literal notranslate"><span class="pre">..._&lt;term&gt;_3body_triples</span></code> (truncated);</p></li>
 <li><p>on each triple’s frame, <code class="docutils literal notranslate"><span class="pre">..._&lt;term&gt;_3body</span></code>, its 3-body increment;</p></li>
