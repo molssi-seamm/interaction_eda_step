@@ -338,7 +338,9 @@ class InteractionEda(seamm.Node):
         mb = manybody.analyze(energies, n, scheme.terms)
         method = backend.method_string(settings)
         self.print_results(mb, scheme, fragments)
-        self.write_extxyz(directory / "eda.extxyz", fragments, mb, scheme, method)
+        self.write_extxyz(
+            directory / "eda.extxyz", fragments, mb, scheme, method, results
+        )
         self.write_json(
             directory / "eda.json", fragments, results, mb, scheme, method, settings
         )
@@ -554,10 +556,11 @@ class InteractionEda(seamm.Node):
             )
         )
 
-    def write_extxyz(self, path, fragments, mb, scheme, method):
+    def write_extxyz(self, path, fragments, mb, scheme, method, results=None):
         """One frame per computed set of fragments, with the EDA terms as
         labels ``EDA_<scheme>_<term>`` (kJ/mol); the cluster's frame also has
-        the many-body parts."""
+        the many-body parts, and each frame says where it was computed
+        (``EDA_platform``)."""
         tag = "EDA_" + scheme.name.replace("-", "")
 
         def key(term):
@@ -606,6 +609,10 @@ class InteractionEda(seamm.Node):
                 info.update(labels(mb.three_body[k], "_3body"))
             info["EDA_method"] = method
             info["EDA_conventions"] = conventions
+            if results is not None and k in results:
+                platform = platform_text(results[k].data)
+                if platform:
+                    info["EDA_platform"] = platform
             atoms = []
             for i in k:
                 f = fragments[i]
@@ -651,6 +658,40 @@ class InteractionEda(seamm.Node):
             "n_triples_total": mb.n_triples_total,
         }
         path.write_text(json.dumps(data, indent=2))
+
+
+def platform_text(data):
+    """Where a calculation ran, e.g. 'GPU4PySCF 1.9.1, PySCF 2.15.0, CuPy 14.2.0 on
+    NVIDIA A30 (sm 8.0, CUDA 12.9, driver 580.82.07)' or 'Psi4 1.11 on CPU, 8
+    threads', from a backend's record; '' if it says nothing."""
+    versions = data.get("versions") or {}
+    gpu = data.get("gpu")
+    codes = [
+        f"{label} {versions[name]}"
+        for name, label in (
+            ("gpu4pyscf", "GPU4PySCF"),
+            ("pyscf", "PySCF"),
+            ("cupy", "CuPy"),
+            ("psi4", "Psi4"),
+        )
+        if versions.get(name)
+    ]
+    if gpu:
+        details = [
+            f"{label} {versions[name]}"
+            for name, label in (
+                ("compute_capability", "sm"),
+                ("cuda_driver", "CUDA"),
+                ("nvidia_driver", "driver"),
+            )
+            if versions.get(name)
+        ]
+        where = f"on {gpu}" + (f" ({', '.join(details)})" if details else "")
+    elif versions.get("threads"):
+        where = f"on CPU, {versions['threads']} threads"
+    else:
+        where = ""
+    return " ".join(part for part in (", ".join(codes), where) if part)
 
 
 def _extxyz_value(value):

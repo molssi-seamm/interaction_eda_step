@@ -106,3 +106,27 @@ def test_n_cores():
     assert node.n_cores(4) == 4
     node.global_options = {"ncores": 0}
     assert node.n_cores(4) == 1
+
+
+def test_platform_text():
+    """Where a calculation ran, for the extxyz frames (A100, A30 and V100 so far)."""
+    from interaction_eda_step.interaction_eda import platform_text
+
+    gpu = {
+        "gpu": "NVIDIA A30",
+        "versions": {
+            "gpu4pyscf": "1.9.1",
+            "pyscf": "2.15.0",
+            "cupy": "14.2.0",
+            "compute_capability": "8.0",
+            "cuda_driver": "12.9",
+            "nvidia_driver": "580.82.07",
+        },
+    }
+    assert platform_text(gpu) == (
+        "GPU4PySCF 1.9.1, PySCF 2.15.0, CuPy 14.2.0 on NVIDIA A30 "
+        "(sm 8.0, CUDA 12.9, driver 580.82.07)"
+    )
+    cpu = {"code": "psi4", "versions": {"psi4": "1.11", "numpy": "2.3", "threads": 5}}
+    assert platform_text(cpu) == "Psi4 1.11 on CPU, 5 threads"
+    assert platform_text({}) == ""

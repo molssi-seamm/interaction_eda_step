@@ -101,6 +101,7 @@ def done_ids(path):
 
 
 def versions():
+    """The codes' versions, and the GPU's compute capability, CUDA and driver."""
     out = {"python": sys.version.split()[0]}
     for name in ("gpu4pyscf", "pyscf", "cupy"):
         try:
@@ -108,6 +109,30 @@ def versions():
             out[name] = getattr(module, "__version__", "?")
         except Exception:  # pragma: no cover
             out[name] = None
+    try:  # pragma: no cover - needs a GPU
+        import cupy as cp
+
+        def cuda(version):  # 12090 -> "12.9"
+            return f"{version // 1000}.{version % 1000 // 10}"
+
+        props = cp.cuda.runtime.getDeviceProperties(0)
+        out["compute_capability"] = f"{props['major']}.{props['minor']}"
+        out["cuda_driver"] = cuda(cp.cuda.runtime.driverGetVersion())
+        out["cuda_runtime"] = cuda(cp.cuda.runtime.runtimeGetVersion())
+    except Exception:
+        pass
+    try:  # pragma: no cover - needs a GPU
+        import subprocess
+
+        result = subprocess.run(
+            ["nvidia-smi", "--query-gpu=driver_version", "--format=csv,noheader"],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        out["nvidia_driver"] = result.stdout.strip().splitlines()[0] or None
+    except Exception:
+        out["nvidia_driver"] = None
     return out
 
 
