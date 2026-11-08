@@ -121,6 +121,7 @@ class InteractionEdaParameters(seamm.Parameters):
             ),
         },
         "vv10": {
+            "applies_when": {"backend": "GPU4PySCF"},
             "default": "as in the functional",
             "kind": "enumeration",
             "default_units": "",
@@ -135,6 +136,7 @@ class InteractionEdaParameters(seamm.Parameters):
             ),
         },
         "vv10 in response": {
+            "applies_when": {"backend": "GPU4PySCF", "vv10": "as in the functional"},
             "default": "on",
             "kind": "enumeration",
             "default_units": "",
@@ -150,6 +152,7 @@ class InteractionEdaParameters(seamm.Parameters):
             ),
         },
         "dispersion": {
+            "applies_when": {"backend": "GPU4PySCF"},
             "default": "none",
             "kind": "string",
             "default_units": "",
@@ -175,7 +178,10 @@ class InteractionEdaParameters(seamm.Parameters):
                 "define the polarization space are made: 'coupled' solves the "
                 "coupled-perturbed equations (the validated default); 'uncoupled' "
                 "uses orbital-energy denominators without the XC kernel. Only the "
-                "split between polarization and charge transfer changes."
+                "split between polarization and charge transfer changes: uncoupled "
+                "moves energy from polarization into charge transfer (+1.4 kJ/mol "
+                "for Li+-EC at equilibrium, up to 6 at short range), so its terms "
+                "are not comparable with coupled ones."
             ),
         },
         "svd threshold": {
@@ -191,6 +197,7 @@ class InteractionEdaParameters(seamm.Parameters):
             ),
         },
         "low fp64 gpus": {
+            "applies_when": {"backend": "GPU4PySCF"},
             "default": "refuse",
             "kind": "enumeration",
             "default_units": "",
@@ -217,6 +224,7 @@ class InteractionEdaParameters(seamm.Parameters):
             ),
         },
         "fragment column": {
+            "applies_when": {"fragments": "atom column"},
             "default": "fragment",
             "kind": "string",
             "default_units": "",
@@ -244,6 +252,7 @@ class InteractionEdaParameters(seamm.Parameters):
             ),
         },
         "triples cutoff": {
+            "applies_when": {"calculations": "cluster, pairs and triples"},
             "default": "all",
             "kind": "float",
             "default_units": "Å",
@@ -265,6 +274,68 @@ class InteractionEdaParameters(seamm.Parameters):
             "help_text": "The results to save to variables or in tables.",
         },
     }
+
+    # -------------------------------------------------------------------------
+    # Rules shared by the dialog and the flowchart tools (see seamm.Parameters).
+    # The "applies_when" conditions above hide what a backend does not offer:
+    # Psi4 runs on CPUs, always keeps a -V functional's VV10, has no VV10 in the
+    # response kernel and no dispersion corrections yet. Here: Psi4 has no
+    # response kernel for meta-GGAs, so it does not offer them at all (Paul,
+    # 2026-11-07: refuse, rather than switch to the uncoupled response).
+    # -------------------------------------------------------------------------
+
+    #: The functional the dialog switches to when Psi4 cannot run the chosen one.
+    psi4_default_functional = "wB97X-V"
+
+    @staticmethod
+    def _psi4_meta(values):
+        """Whether the backend is Psi4 and the functional a meta-GGA."""
+        from .backends.psi4 import is_meta
+
+        backend = values.get("backend")
+        functional = values.get("functional")
+        if backend != "Psi4" or InteractionEdaParameters._is_expr(functional):
+            return False
+        return is_meta(functional)
+
+    def functional_suggestions(self, values=None):
+        """The functionals to offer in the dialog: no meta-GGAs with Psi4."""
+        from .backends.psi4 import is_meta
+
+        if values is None:
+            values = self.current_values()
+        suggestions = list(self["functional"].enumeration)
+        if values.get("backend") == "Psi4":
+            suggestions = [f for f in suggestions if not is_meta(f)]
+        return suggestions
+
+    def problems(self, values=None):
+        """The base checks, and a meta-GGA functional with Psi4."""
+        if values is None:
+            values = self.current_values()
+        result = super().problems(values)
+        if self._psi4_meta(values):
+            result.append(
+                f"Psi4 cannot run meta-GGA functionals such as "
+                f"{values.get('functional')} (it has no response kernel for them): "
+                "use a GGA or hybrid functional such as wB97X-V, or GPU4PySCF."
+            )
+        return result
+
+    def not_applicable_reason(self, key, values=None):
+        """Why a setting does not apply, in the user's terms."""
+        if values is None:
+            values = self.current_values()
+        if values.get("backend") == "Psi4":
+            reasons = {
+                "vv10": "Psi4 always keeps the functional's VV10",
+                "vv10 in response": "Psi4 has no VV10 response kernel; it is off",
+                "dispersion": "dispersion corrections are not available with Psi4",
+                "low fp64 gpus": "Psi4 runs on CPUs",
+            }
+            if key in reasons:
+                return reasons[key]
+        return super().not_applicable_reason(key, values)
 
     def __init__(self, defaults={}, data=None):
         """

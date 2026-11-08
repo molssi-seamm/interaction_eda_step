@@ -150,7 +150,7 @@ class TkInteractionEda(seamm.TkNode):
             self[key] = P[key].widget(self["fragments frame"])
 
         # Re-lay out when a choice changes which other settings apply
-        for key in ("vv10", "fragments", "calculations"):
+        for key in ("backend", "functional", "vv10", "fragments", "calculations"):
             self[key].combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
             self[key].combobox.bind("<Return>", self.reset_dialog)
             self[key].combobox.bind("<FocusOut>", self.reset_dialog)
@@ -160,9 +160,14 @@ class TkInteractionEda(seamm.TkNode):
     def reset_dialog(self, widget=None):
         """Lay out the widgets, showing only the settings that apply.
 
-        The atom column applies only when the fragments come from an atom
-        column, and the triples cutoff only when triples are computed.
+        Which settings apply, which choices are valid and which values follow
+        from others come from the parameters' rules
+        (:class:`InteractionEdaParameters`), which the flowchart tools use too:
+        e.g. the atom column only for fragments from an atom column, the triples
+        cutoff only with triples, and with Psi4 no GPU, VV10 or dispersion
+        settings and no meta-GGA functionals (a meta-GGA becomes wB97X-V).
         """
+        P = self.node.parameters
         frame = self["frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
@@ -173,31 +178,26 @@ class TkInteractionEda(seamm.TkNode):
         self["method frame"].grid(row=0, column=0, sticky=tk.EW, pady=5)
         self["fragments frame"].grid(row=1, column=0, sticky=tk.EW, pady=5)
 
-        # VV10 in the response only matters when the functional keeps VV10
-        method = [
-            key
-            for key in METHOD
-            if not (key == "vv10 in response" and self["vv10"].get().startswith("off"))
-        ]
-        widgets = []
-        for row, key in enumerate(method):
-            self[key].grid(row=row, column=0, sticky=tk.EW)
-            widgets.append(self[key])
-        sw.align_labels(widgets, sticky=tk.E)
+        # Offer only the functionals the backend can run; Psi4 has no meta-GGAs
+        values = self._widget_values()
+        self["functional"].combobox.configure(values=P.functional_suggestions(values))
+        if P._psi4_meta(values):
+            self["functional"].set(P.psi4_default_functional)
+        values = self._widget_values()
 
-        fragments = self["fragments"].get()
-        calculations = self["calculations"].get()
-        keys = ["fragments"]
-        if fragments == "atom column":
-            keys.append("fragment column")
-        keys.append("calculations")
-        if "triples" in calculations:
-            keys.append("triples cutoff")
-        widgets = []
-        for row, key in enumerate(keys):
-            self[key].grid(row=row, column=0, sticky=tk.EW)
-            widgets.append(self[key])
-        sw.align_labels(widgets, sticky=tk.E)
+        for frame_key, keys in (
+            ("method frame", METHOD),
+            ("fragments frame", FRAGMENTS),
+        ):
+            widgets = []
+            row = 0
+            for key in keys:
+                if not P.applies(key, values):
+                    continue
+                self[key].grid(row=row, column=0, sticky=tk.EW)
+                widgets.append(self[key])
+                row += 1
+            sw.align_labels(widgets, sticky=tk.E)
 
         frame.columnconfigure(0, weight=1)
 
@@ -206,6 +206,17 @@ class TkInteractionEda(seamm.TkNode):
         )
         if have_results and "results" in self.node.parameters:
             self.setup_results()
+
+    def _widget_values(self):
+        """The dialog's current values, {name: value}, for the parameters' rules."""
+        values = {}
+        for key in METHOD + FRAGMENTS:
+            try:
+                value = self[key].get()
+            except Exception:
+                continue
+            values[key] = value[0] if isinstance(value, tuple) else value
+        return values
 
     def right_click(self, event):
         """

@@ -161,11 +161,14 @@ class InteractionEda(seamm.Node):
         options = []
         if P["density fitting"] != "no":
             options.append(f"density fitting with {P['density fitting']}")
-        if P["vv10"].startswith("off"):
+        applies = self.parameters.applicable(P)
+        if applies["vv10"] and P["vv10"].startswith("off"):
             options.append("no VV10")
-        elif P["vv10 in response"] == "off":
+        elif applies["vv10 in response"] and P["vv10 in response"] == "off":
             options.append("no VV10 in the FERF response")
-        if P["dispersion"] not in ("none", ""):
+        elif P["backend"] == "Psi4" and str(P["functional"]).lower().endswith("-v"):
+            options.append("no VV10 in the FERF response")
+        if applies["dispersion"] and P["dispersion"] not in ("none", ""):
             options.append(f"{P['dispersion']} dispersion")
         if P["ferf response"] != "coupled":
             options.append(f"{P['ferf response']} FERF response")
@@ -179,22 +182,34 @@ class InteractionEda(seamm.Node):
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
 
     def backend_settings(self, P):
-        """The backend's settings from the parameters."""
+        """The backend's settings from the parameters.
+
+        Settings that do not apply to the chosen backend (see the parameters'
+        rules) are left out, so the backend's own defaults hold, e.g. no VV10 in
+        Psi4's response kernel.
+        """
+        applies = self.parameters.applicable(P)
         auxbasis = P["density fitting"]
-        dispersion = str(P["dispersion"]).strip()
-        return {
+        settings = {
             "xc": str(P["functional"]).lower(),
             "basis": str(P["basis"]).lower(),
             "auxbasis": None if auxbasis in ("no", "none", "") else auxbasis,
-            "nlc": False if P["vv10"].startswith("off") else None,
-            "response_nlc": (
-                P["vv10 in response"] != "off" or P["vv10"].startswith("off")
-            ),
-            "disp": None if dispersion.lower() in ("none", "no", "") else dispersion,
             "ferf": P["ferf response"],
             "svd_threshold": float(P["svd threshold"]),
-            "allow_low_fp64": P["low fp64 gpus"] == "allow",
         }
+        vv10_off = applies["vv10"] and P["vv10"].startswith("off")
+        if applies["vv10"]:
+            settings["nlc"] = False if vv10_off else None
+        if applies["vv10 in response"] or vv10_off:
+            settings["response_nlc"] = P["vv10 in response"] != "off" or vv10_off
+        if applies["dispersion"]:
+            dispersion = str(P["dispersion"]).strip()
+            settings["disp"] = (
+                None if dispersion.lower() in ("none", "no", "") else dispersion
+            )
+        if applies["low fp64 gpus"]:
+            settings["allow_low_fp64"] = P["low fp64 gpus"] == "allow"
+        return settings
 
     def run(self):
         """Run the Interaction EDA step.
@@ -218,6 +233,12 @@ class InteractionEda(seamm.Node):
         backend = BACKENDS[P["backend"]]()
         scheme = SCHEMES[backend.scheme]
         settings = backend.settings(self.backend_settings(P))
+        problems = backend.problems(settings)
+        if problems:
+            raise RuntimeError(
+                f"These settings cannot run with {backend.name}:\n  "
+                + "\n  ".join(problems)
+            )
 
         # The fragments and the calculations
         column = P["fragment column"] if P["fragments"] == "atom column" else None
@@ -317,7 +338,9 @@ class InteractionEda(seamm.Node):
         mb = manybody.analyze(energies, n, scheme.terms)
         method = backend.method_string(settings)
         self.print_results(mb, scheme, fragments)
-        self.write_extxyz(directory / "eda.extxyz", fragments, mb, scheme, method)
+        self.write_extxyz(
+            directory / "eda.extxyz", fragments, mb, scheme, method, results
+        )
         self.write_json(
             directory / "eda.json", fragments, results, mb, scheme, method, settings
         )
@@ -374,6 +397,12 @@ class InteractionEda(seamm.Node):
         ini_path = ini_dir / backend.ini
         if not ini_path.exists():
             resources = importlib.resources.files("interaction_eda_step") / "data"
+            if not (resources / backend.ini).is_file():
+                raise RuntimeError(
+                    f"{backend.name} needs {ini_path}, which its own SEAMM step "
+                    f"installs: install the {backend.name} step "
+                    f"({backend.name.lower()}-step) and its code."
+                )
             ini_path.write_text((resources / backend.ini).read_text())
             self.logger.info(f"Wrote a default {ini_path}")
         full_config = configparser.ConfigParser()
@@ -385,7 +414,7 @@ class InteractionEda(seamm.Node):
                 f"[{executor_type}]\ninstallation = local\n"
                 "code = /path/to/env/bin/python"
             )
-        config = dict(full_config.items(executor_type))
+        config = backend.configure(dict(full_config.items(executor_type)))
         code = config.get("code", "")
         if config.get("installation", "local") == "local" and not (
             Path(code.split()[0]).expanduser().exists() if code else False
@@ -400,6 +429,7 @@ class InteractionEda(seamm.Node):
 
         files = backend.files(calculations, settings)
         ce = seamm_exec.computational_environment()
+        ce["NTASKS"] = self.n_cores(ce["NTASKS"])
         result = executor.run(
             cmd=backend.command(),
             config=config,
@@ -418,6 +448,18 @@ class InteractionEda(seamm.Node):
                 if text:
                     (Path(self.directory) / f"{name}.txt").write_text(text)
         return result
+
+    def n_cores(self, available):
+        """The cores to use: those available, capped by SEAMM's ``ncores`` option.
+
+        ``ncores`` in the [DEFAULT] section of seamm.ini (or ``--ncores``) limits
+        every step, e.g. to a laptop's performance cores.
+        """
+        n = int(available)
+        limit = str(self.global_options.get("ncores", "available")).strip()
+        if limit.lower() != "available":
+            n = min(n, int(limit))
+        return max(n, 1)
 
     def print_fragments(self, fragments):
         rows = [
@@ -514,10 +556,11 @@ class InteractionEda(seamm.Node):
             )
         )
 
-    def write_extxyz(self, path, fragments, mb, scheme, method):
+    def write_extxyz(self, path, fragments, mb, scheme, method, results=None):
         """One frame per computed set of fragments, with the EDA terms as
-        labels ``EDA_<scheme>_<term>`` (kJ/mol); the cluster's frame also has
-        the many-body parts."""
+        labels ``EDA_<scheme>_<term>`` (kJ/mol), plus ``EDA_<scheme>_mod_pauli``,
+        the SAPT-comparable Pauli; the cluster's frame also has the many-body
+        parts, and each frame says where it was computed (``EDA_platform``)."""
         tag = "EDA_" + scheme.name.replace("-", "")
 
         def key(term):
@@ -532,6 +575,10 @@ class InteractionEda(seamm.Node):
             for term in list(scheme.terms) + ["induction"]:
                 if term in full:
                     out[key(term) + suffix] = full[term]
+            # The SAPT-comparable Pauli (Q-Chem MOD PAULI = frozen - classical
+            # electrostatic - dispersion); 'pauli' is the orthogonal one
+            if "Pauli" in full:
+                out[key("mod pauli") + suffix] = full["Pauli"]
             return out
 
         conventions = (
@@ -540,8 +587,8 @@ class InteractionEda(seamm.Node):
             "transfer; classical_electrostatic (Q-Chem CLS ELEC) is SAPT-comparable "
             "electrostatics, electrostatic and pauli (Q-Chem ELEC, PAULI; Horn, Mao "
             "and Head-Gordon 2016) are the orthogonal decomposition and are not "
-            "SAPT-comparable; SAPT-comparable Pauli = frozen - "
-            "classical_electrostatic - dispersion (Q-Chem MOD PAULI); frozen = "
+            "SAPT-comparable; mod_pauli = frozen - classical_electrostatic - "
+            "dispersion (Q-Chem MOD PAULI) is the SAPT-comparable Pauli; frozen = "
             "elst + Pauli + disp in both sets; ge3body_exact = cluster - sum of "
             "pairs; 3body_triples is truncated to the triples computed"
         )
@@ -566,6 +613,10 @@ class InteractionEda(seamm.Node):
                 info.update(labels(mb.three_body[k], "_3body"))
             info["EDA_method"] = method
             info["EDA_conventions"] = conventions
+            if results is not None and k in results:
+                platform = platform_text(results[k].data)
+                if platform:
+                    info["EDA_platform"] = platform
             atoms = []
             for i in k:
                 f = fragments[i]
@@ -611,6 +662,40 @@ class InteractionEda(seamm.Node):
             "n_triples_total": mb.n_triples_total,
         }
         path.write_text(json.dumps(data, indent=2))
+
+
+def platform_text(data):
+    """Where a calculation ran, e.g. 'GPU4PySCF 1.9.1, PySCF 2.15.0, CuPy 14.2.0 on
+    NVIDIA A30 (sm 8.0, CUDA 12.9, driver 580.82.07)' or 'Psi4 1.11 on CPU, 8
+    threads', from a backend's record; '' if it says nothing."""
+    versions = data.get("versions") or {}
+    gpu = data.get("gpu")
+    codes = [
+        f"{label} {versions[name]}"
+        for name, label in (
+            ("gpu4pyscf", "GPU4PySCF"),
+            ("pyscf", "PySCF"),
+            ("cupy", "CuPy"),
+            ("psi4", "Psi4"),
+        )
+        if versions.get(name)
+    ]
+    if gpu:
+        details = [
+            f"{label} {versions[name]}"
+            for name, label in (
+                ("compute_capability", "sm"),
+                ("cuda_driver", "CUDA"),
+                ("nvidia_driver", "driver"),
+            )
+            if versions.get(name)
+        ]
+        where = f"on {gpu}" + (f" ({', '.join(details)})" if details else "")
+    elif versions.get("threads"):
+        where = f"on CPU, {versions['threads']} threads"
+    else:
+        where = ""
+    return " ".join(part for part in (", ".join(codes), where) if part)
 
 
 def _extxyz_value(value):

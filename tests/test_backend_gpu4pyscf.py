@@ -170,3 +170,82 @@ def test_refusal_setting_reaches_the_driver():
     s = json.loads(backend.files(calcs, {"allow_low_fp64": True})["input.json"])
     assert s["settings"]["allow_low_fp64"] is True
     assert "fp64" not in backend.method_string({"allow_low_fp64": True})
+
+
+# ---- Psi4 (ALMO-EDA2 on CPUs), not yet offered by the step ----------------
+def load_psi4_driver():
+    path = importlib.resources.files("interaction_eda_step") / "data" / "psi4_eda.py"
+    spec = importlib.util.spec_from_file_location("psi4_eda", str(path))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)  # imports nothing from Psi4 at load
+    return module
+
+
+def test_psi4_backend_input_and_command():
+    from interaction_eda_step.backends.psi4 import Psi4
+
+    backend = Psi4()
+    files = backend.files([Calculation((0, 1), li_ec_fragments())], {})
+    assert set(files) == {"input.json", "psi4_eda.py"}
+    s = json.loads(files["input.json"])["settings"]
+    assert (s["xc"], s["ferf"], s["response_nlc"]) == ("wb97x-v", "coupled", False)
+    assert backend.command()[:2] == ["{code}", "psi4_eda.py"]
+    assert backend.command()[-2:] == ["--threads", "{NTASKS}"]
+    assert (
+        backend.configure({"code": "psi4 -n 4", "installation": "conda"})["code"]
+        == "python"
+    )
+    assert "backend=Psi4" in backend.method_string({})
+
+
+def test_psi4_backend_problems():
+    from interaction_eda_step.backends.psi4 import Psi4
+
+    backend = Psi4()
+    assert backend.problems({}) == []
+    for ferf in ("coupled", "uncoupled"):
+        (text,) = backend.problems({"xc": "wb97m-v", "ferf": ferf})
+        assert "meta-GGA" in text
+    (text,) = backend.problems({"xc": "wb97x-v", "response_nlc": True})
+    assert "VV10 response kernel" in text
+    assert backend.problems({"xc": "hf"}) == []
+
+
+def test_psi4_driver_numerics():
+    """The driver's linear algebra, without Psi4."""
+    d = load_psi4_driver()
+    rng = np.random.default_rng(3)
+    A = rng.standard_normal((6, 6))
+    A = A - A.T
+    U = d.expm_antisymmetric(A)
+    assert np.allclose(U @ U.T, np.eye(6))
+    w, V = np.linalg.eig(A)
+    assert np.allclose(U, (V @ np.diag(np.exp(w)) @ np.linalg.inv(V)).real)
+
+    M = rng.standard_normal((5, 5))
+    M = M + M.T
+    assert np.allclose(d.unpack_tril(d.pack_tril(M), 5), M)
+
+    S = np.eye(5) + 0.1 * (M @ M.T) / 10
+    F = M
+    e, C = d.generalized_eigh(F, S)
+    assert np.allclose(F @ C, S @ C @ np.diag(e)) and np.all(np.diff(e) >= 0)
+
+    P = rng.standard_normal((8, 8))
+    SPD = P @ P.T + 8 * np.eye(8)
+    b = rng.standard_normal(8)
+    x = d.conjugate_gradient(lambda v: SPD @ v, b, np.zeros(8), lambda r: r, 1e-12)
+    assert np.allclose(SPD @ x, b)
+    B = rng.standard_normal((8, 3))
+    X = d.block_conjugate_gradient(lambda V: SPD @ V, B, lambda R: R, 1e-12)
+    assert np.allclose(SPD @ X, B)
+
+    diis = d.DIIS()
+    # On a linear problem x -> x - (A x - c), DIIS converges to the solution
+    c = rng.standard_normal(4)
+    A4 = np.eye(4) + 0.3 * np.diag([1, 2, 3, 4])
+    x = np.zeros(4)
+    for _ in range(10):
+        r = A4 @ x - c
+        x = diis.update(x - 0.5 * r, r)
+    assert np.allclose(A4 @ x, c, atol=1e-8)

@@ -63,3 +63,24 @@ def test_dialog_layouts(tk_node):
     tk_node["vv10"].set("as in the functional")
     tk_node.reset_dialog()
     assert tk_node["vv10 in response"].grid_info() != {}
+
+
+def test_dialog_psi4(tk_node):
+    """Psi4 hides the GPU, VV10 and dispersion settings and offers no meta-GGAs."""
+    tk_node.create_dialog()
+    assert tk_node["functional"].get() == "wB97M-V"
+    tk_node["backend"].set("Psi4")
+    tk_node.reset_dialog()
+    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+        assert tk_node[key].grid_info() == {}, key
+    # The default meta-GGA is replaced, and none are offered
+    assert tk_node["functional"].get() == "wB97X-V"
+    offered = list(tk_node["functional"].combobox.cget("values"))
+    assert "wB97X-V" in offered and "wB97M-V" not in offered
+    assert len(tk_node["ferf response"].combobox.cget("values")) == 2
+
+    tk_node["backend"].set("GPU4PySCF")
+    tk_node.reset_dialog()
+    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+        assert tk_node[key].grid_info() != {}, key
+    assert "wB97M-V" in list(tk_node["functional"].combobox.cget("values"))

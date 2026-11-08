@@ -86,14 +86,18 @@ class GPU4PySCF(Backend):
     device = "gpu"
     max_fragments = None
     ini = "gpu4pyscf.ini"
+    #: The driver script, in the package's data, run with the code's Python.
+    driver = DRIVER
+    #: The settings and their defaults.
+    defaults = DEFAULTS
 
     def options(self):
-        return dict(DEFAULTS)
+        return dict(self.defaults)
 
     def settings(self, settings):
         """The full settings: the defaults updated with those given."""
-        out = dict(DEFAULTS)
-        out.update({k: v for k, v in (settings or {}).items() if k in DEFAULTS})
+        out = dict(self.defaults)
+        out.update({k: v for k, v in (settings or {}).items() if k in self.defaults})
         return out
 
     def files(self, calculations, settings):
@@ -119,11 +123,11 @@ class GPU4PySCF(Backend):
             ],
         }
         driver = (
-            importlib.resources.files("interaction_eda_step") / "data" / DRIVER
+            importlib.resources.files("interaction_eda_step") / "data" / self.driver
         ).read_text()
         return {
             "input.json": json.dumps(data, indent=1),
-            DRIVER: driver,
+            self.driver: driver,
         }
 
     def command(self):
@@ -132,7 +136,7 @@ class GPU4PySCF(Backend):
         # holding files it returns.
         return [
             "{code}",
-            DRIVER,
+            self.driver,
             "input.json",
             "-o",
             self.results_file,
