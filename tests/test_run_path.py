@@ -122,7 +122,10 @@ def test_shell_a(tmp_path):
     assert "BSSE" in info["EDA_conventions"]
     assert frames.count("Properties=") == 11
 
-    assert (step / "0+1.log").exists() and (step / "0+1+2+3+4.log").exists()
+    # each calculation ran as its own task, with its log in its directory
+    tasks = step / "tasks"
+    assert (tasks / "0+1" / "0+1.log").exists()
+    assert (tasks / "0+1+2+3+4" / "0+1+2+3+4.log").exists()
 
     out = (step / "step.out").read_text()
     assert "≥3-body (exact)" in out and "ALMO-EDA2 interaction energies" in out
@@ -238,6 +241,63 @@ def test_shell_a_psi4(tmp_path):
     info = dict(token.split("=", 1) for token in shlex.split(frames.splitlines()[1]))
     assert "backend=Psi4" in info["EDA_method"]
     assert "response_nlc=off" in info["EDA_method"]
-    assert (step / "0+1.psi4.log").exists()
+    assert (step / "tasks" / "0+1" / "0+1.psi4.log").exists()
     out = (step / "step.out").read_text()
     assert "Psi4" in out
+
+
+MANY_SPEC = """
+title: Interaction EDA of two Li+ pairs in one step
+steps:
+- Read Structure:
+    file: {sdf}
+    system name: title
+    configuration name: title
+- Interaction EDA:
+    source systems: all
+    calculations: pairs
+"""
+
+
+def test_many_structures(tmp_path):
+    """One step over several structures: a task per (structure, set), one line
+    per structure in eda.jsonl, named after the structure."""
+    records = (DATA / "shellA_dp000.sdf").read_text().split("$$$$\n")
+    pairs = records[1:3]
+    sdf = tmp_path / "pairs.sdf"
+    sdf.write_text("$$$$\n".join(pairs) + "$$$$\n")
+    titles = [r.splitlines()[0].strip() for r in pairs]
+
+    fake = tmp_path / "bin" / "python"
+    fake.parent.mkdir()
+    fake.write_text(
+        FAKE.format(
+            python=sys.executable,
+            reference=str(DATA / "shellA_dp000_svd1e-4.jsonl"),
+        )
+    )
+    fake.chmod(0o755)
+
+    job = seamm_testing.run_spec(
+        tmp_path,
+        MANY_SPEC.format(sdf=sdf),
+        inis={"gpu4pyscf": {"installation": "local", "code": str(fake)}},
+        source=SOURCE,
+    )
+    steps = [p for p in job.iterdir() if (p / "eda.jsonl").exists()]
+    assert len(steps) == 1, list(job.iterdir())
+    step = steps[0]
+    assert not (step / "eda.json").exists()
+    lines = [json.loads(x) for x in (step / "eda.jsonl").read_text().splitlines()]
+    assert [x["structure"]["configuration_name"] for x in lines] == titles
+    for x in lines:
+        assert list(x["calculations"]) == ["0+1"]
+        assert x["calculations"]["0+1"]["error"] is None
+    assert sorted(p.name for p in (step / "tasks").iterdir() if p.is_dir()) == [
+        "0.0+1",
+        "1.0+1",
+    ]
+    frames = (step / "eda.extxyz").read_text()
+    assert frames.count("Properties=") == 2
+    for title in titles:
+        assert title in frames

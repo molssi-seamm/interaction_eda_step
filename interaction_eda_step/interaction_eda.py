@@ -2,13 +2,11 @@
 
 """Non-graphical part of the Interaction EDA step in a SEAMM flowchart"""
 
-import configparser
 import importlib.resources
 import json
 import logging
 from pathlib import Path
 import pprint  # noqa: F401
-import shutil
 import time
 
 from tabulate import tabulate
@@ -16,7 +14,7 @@ from tabulate import tabulate
 import interaction_eda_step
 from . import fragments as F
 from . import manybody
-from .backends import BACKENDS, Calculation
+from .backends import BACKENDS, Calculation, Result
 from .terms import SCHEMES
 import molsystem
 import seamm
@@ -180,6 +178,22 @@ class InteractionEda(seamm.Node):
         if "triples" in P["calculations"] and P["triples cutoff"] != "all":
             text += f", using triples within {P['triples cutoff']}"
         text += "."
+        if (
+            P.get("source systems", "current"),
+            P.get("source configurations", "current"),
+        ) != (
+            "current",
+            "current",
+        ):
+            text += " " + seamm.standard_parameters.structure_selection_description(P)
+        if applies.get("cores per calculation") and (
+            str(P.get("cores per calculation")) != "automatic"
+            or str(P.get("memory per calculation")) != "automatic"
+        ):
+            text += (
+                f" Each calculation has {P['cores per calculation']} cores and "
+                f"{P['memory per calculation']} memory."
+            )
 
         return self.header + "\n" + __(text, indent=4 * " ").__str__()
 
@@ -220,6 +234,11 @@ class InteractionEda(seamm.Node):
     def run(self):
         """Run the Interaction EDA step.
 
+        Every calculation -- each set of fragments of each selected structure --
+        is a ``seamm_exec`` task, sized by its number of basis functions. The
+        tasks run together: in the job's own cores, or bundled on the job's queue,
+        and a rerun keeps those already finished.
+
         Returns
         -------
         seamm.Node
@@ -234,12 +253,6 @@ class InteractionEda(seamm.Node):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
-        system, configuration = self.get_system_configuration(None)
-        structure = {
-            "system_name": system.name,
-            "configuration_name": configuration.name,
-        }
-
         backend = BACKENDS[P["backend"]]()
         scheme = SCHEMES[backend.scheme]
         settings = backend.settings(self.backend_settings(P))
@@ -249,8 +262,129 @@ class InteractionEda(seamm.Node):
                 f"These settings cannot run with {backend.name}:\n  "
                 + "\n  ".join(problems)
             )
+        self.check_ini(backend)
 
-        # The fragments and the calculations
+        # The structures, their fragments and their calculations
+        structures = [
+            self.structure_calculations(i, configuration, P, backend)
+            for i, configuration in enumerate(self.select_configurations(P))
+        ]
+        single = len(structures) == 1
+        indent = self.indent + 4 * " "
+        if single:
+            self.print_fragments(structures[0]["fragments"])
+        warnings = {svd_warning(settings, s["fragments"]) for s in structures}
+        for warning in sorted(w for w in warnings if w):
+            self.logger.warning(warning)
+            printer.normal(__("Warning: " + warning + "\n", indent=indent))
+        n_calculations = sum(len(s["calculations"]) for s in structures)
+        sizes = {}
+        for s in structures:
+            for calc in s["calculations"]:
+                sizes[len(calc.key)] = sizes.get(len(calc.key), 0) + 1
+        text = f"There are {n_calculations} EDA calculations"
+        if not single:
+            text += f" for {len(structures)} structures"
+        text += ": " + ", ".join(
+            f"{n} of {m} fragments" for m, n in sorted(sizes.items())
+        )
+        printer.normal(__(text + ".\n", indent=indent))
+
+        # One task per calculation
+        cores = P.get("cores per calculation", "automatic")
+        memory = P.get("memory per calculation", "automatic")
+        if str(memory) != "automatic":
+            memory = Q_(memory) if not hasattr(memory, "m_as") else memory
+            memory = int(memory.m_as("byte"))
+        task_set = seamm_exec.TaskSet(self, directory=directory)
+        owners = {}
+        for s in structures:
+            for calc in s["calculations"]:
+                key = calc.id if single else f"{s['index']}.{calc.id}"
+                resources, seconds = backend.task_resources(
+                    calc, settings, cores=cores, memory=memory
+                )
+                task_set.add(
+                    seamm_exec.Task(
+                        key=key,
+                        program=backend.program,
+                        cmd=backend.command(),
+                        files=backend.files([calc], settings),
+                        return_files=[backend.results_file, "*.log"],
+                        resources=resources,
+                        estimated_seconds=seconds,
+                        estimate_source="formula" if seconds else "none",
+                        shell=True,
+                    )
+                )
+                owners[key] = (s, calc)
+
+        t0 = time.time()
+        refused = []
+        for result in task_set.run():
+            s, calc = owners[result.key]
+            outcome = None
+            if result.directory is not None:
+                outcome = backend.read_results(result.directory, [calc])[calc.key]
+            if outcome is None or outcome.energies is None:
+                stderr = result.stderr or ""
+                refused += [
+                    line[len("REFUSED: ") :]
+                    for line in stderr.splitlines()
+                    if line.startswith("REFUSED: ")
+                ]
+                no_result = outcome is None or (outcome.error or "").startswith(
+                    "no result"
+                )
+                if no_result:
+                    tail = stderr.strip().splitlines()[-3:]
+                    reason = result.reason or (" ".join(tail) if tail else "failed")
+                    outcome = Result(calc.key, error=reason)
+            s["results"][calc.key] = outcome
+        wall = time.time() - t0
+        printer.normal(
+            __(
+                f"The {n_calculations} calculations took {wall:.1f} s.\n\n",
+                indent=indent,
+            )
+        )
+        if refused:
+            raise RuntimeError(refused[-1])
+
+        # Each structure: the many-body analysis, the output and the results
+        n_failed = 0
+        all_failed = True
+        for path in (directory / "eda.extxyz", directory / "eda.jsonl"):
+            if path.exists() and not single:
+                path.unlink()
+        for s in structures:
+            failed = self.finish_structure(s, backend, scheme, settings, P, single)
+            n_failed += failed
+            if failed < len(s["calculations"]):
+                all_failed = False
+        if all_failed:
+            raise RuntimeError("All of the EDA calculations failed.")
+
+        for alias, bibtex, level, note in backend.citations(settings):
+            self.references.cite(
+                raw=bibtex,
+                alias=alias,
+                module="interaction_eda_step",
+                level=level,
+                note=note,
+            )
+        if n_failed:
+            printer.normal(
+                __(
+                    f"{n_failed} of the {n_calculations} calculations failed; "
+                    "rerun the step to retry them.",
+                    indent=indent,
+                )
+            )
+        return next_node
+
+    def structure_calculations(self, index, configuration, P, backend):
+        """The fragments and calculations of one structure."""
         column = P["fragment column"] if P["fragments"] == "atom column" else None
         fragments = F.from_configuration(configuration, column=column)
         n = len(fragments)
@@ -274,80 +408,64 @@ class InteractionEda(seamm.Node):
                     f"{backend.name} handles at most {backend.max_fragments} "
                     f"fragments per calculation; choose 'pairs'."
                 )
-        calculations = [Calculation(k, [fragments[i] for i in k]) for k in keys]
+        system = configuration.system
+        return {
+            "index": index,
+            "configuration": configuration,
+            "structure": {
+                "system_name": system.name,
+                "configuration_name": configuration.name,
+            },
+            "fragments": fragments,
+            "calculations": [Calculation(k, [fragments[i] for i in k]) for k in keys],
+            "results": {},
+        }
 
-        self.print_fragments(fragments)
-        warning = svd_warning(settings, fragments)
-        if warning:
-            self.logger.warning(warning)
-            printer.normal(
-                __("Warning: " + warning + "\n", indent=self.indent + 4 * " ")
-            )
-        printer.normal(
-            __(
-                f"There are {len(calculations)} EDA calculations: "
-                + ", ".join(
-                    f"{sum(1 for k in keys if len(k) == m)} of {m} fragments"
-                    for m in sorted({len(k) for k in keys})
-                )
-                + ".\n",
-                indent=self.indent + 4 * " ",
-            )
-        )
-
-        # Run what has not been done (a rerun skips finished calculations)
-        results = backend.read_results(directory, calculations)
-        pending = [c for c in calculations if results[c.key].energies is None]
-        if pending:
-            t0 = time.time()
-            self.run_backend(backend, calculations, settings)
-            wall = time.time() - t0
-            results = backend.read_results(directory, calculations)
-            printer.normal(
-                __(
-                    f"The {len(pending)} calculations took {wall:.1f} s.\n\n",
-                    indent=self.indent + 4 * " ",
-                )
-            )
-
+    def finish_structure(self, s, backend, scheme, settings, P, single):
+        """Analyze, print, write and store one structure's results; returns the
+        number of its calculations that failed."""
+        indent = self.indent + 4 * " "
+        directory = Path(self.directory)
+        fragments = s["fragments"]
+        results = s["results"]
+        name = s["structure"]["configuration_name"] or s["structure"]["system_name"]
         failed = {k: r for k, r in results.items() if r.energies is None}
         for key, r in failed.items():
             last = (r.error or "").strip().splitlines()[-1:] or ["?"]
             printer.normal(
                 __(
-                    f"The calculation for fragments {'+'.join(map(str, key))} "
-                    f"failed: {last[0]}",
-                    indent=self.indent + 4 * " ",
+                    f"{'' if single else name + ': '}the calculation for fragments "
+                    f"{'+'.join(map(str, key))} failed: {last[0]}",
+                    indent=indent,
                 )
             )
         energies = {k: r.energies for k, r in results.items() if r.energies}
         for key, values in energies.items():
-            for name, value, total in scheme.check(values, tolerance=1.0e-4):
+            for term, value, total in scheme.check(values, tolerance=1.0e-4):
                 self.logger.warning(
-                    f"EDA terms of {key} are inconsistent: {name} = {value:.6f} "
+                    f"EDA terms of {key} are inconsistent: {term} = {value:.6f} "
                     f"but its parts sum to {total:.6f} kJ/mol"
                 )
         if not energies:
-            message = "All of the EDA calculations failed."
-            stderr = Path(self.directory) / "stderr.txt"
-            refused = [
-                line[len("REFUSED: ") :]
-                for line in (stderr.read_text() if stderr.exists() else "").splitlines()
-                if line.startswith("REFUSED: ")
-            ]
-            if refused:
-                raise RuntimeError(refused[-1])
-            if stderr.exists():
-                tail = stderr.read_text().strip().splitlines()[-5:]
-                if tail:
-                    message += " The end of the code's error output:\n" + "\n".join(
-                        tail
-                    )
-            raise RuntimeError(message)
+            return len(failed)
 
-        mb = manybody.analyze(energies, n, scheme.terms)
+        mb = manybody.analyze(energies, len(fragments), scheme.terms)
         method = backend.method_string(settings)
-        self.print_results(mb, scheme, fragments)
+        if single:
+            self.print_results(mb, scheme, fragments)
+        else:
+            values = mb.cluster if mb.cluster is not None else None
+            if values is None and len(mb.pairs) == 1:
+                values = next(iter(mb.pairs.values()))
+            if values is not None:
+                common = scheme.to_common(values)
+                printer.normal(
+                    __(
+                        f"{name}: total {common.get('total', values.get('total')):.3f}"
+                        " kJ/mol",
+                        indent=indent,
+                    )
+                )
         self.write_extxyz(
             directory / "eda.extxyz",
             fragments,
@@ -355,20 +473,20 @@ class InteractionEda(seamm.Node):
             scheme,
             method,
             results,
-            structure=structure,
+            structure=s["structure"],
+            append=not single,
         )
-        self.write_json(
-            directory / "eda.json",
-            fragments,
-            results,
-            mb,
-            scheme,
-            method,
-            settings,
-            structure=structure,
+        record = self.json_record(
+            fragments, results, mb, scheme, method, settings, s["structure"]
         )
+        if single:
+            (directory / "eda.json").write_text(json.dumps(record, indent=2))
+        else:
+            with open(directory / "eda.jsonl", "a") as fd:
+                fd.write(json.dumps(record) + "\n")
 
         # Results
+        n = len(fragments)
         self.model = f"{backend.scheme}/{P['functional']}/{P['basis']}"
         data = {"EDA method": method, "number of fragments": n}
         parts = {
@@ -390,101 +508,25 @@ class InteractionEda(seamm.Node):
             data["EDA triples"] = {
                 "+".join(map(str, k)): v for k, v in sorted(mb.three_body.items())
             }
+        self.store_results(configuration=s["configuration"], data=data)
+        return len(failed)
 
-        for alias, bibtex, level, note in backend.citations(settings):
-            self.references.cite(
-                raw=bibtex,
-                alias=alias,
-                module="interaction_eda_step",
-                level=level,
-                note=note,
-            )
-
-        self.store_results(configuration=configuration, data=data)
-
-        if failed:
-            printer.normal(
-                __(
-                    f"{len(failed)} of the {len(calculations)} calculations failed; "
-                    "rerun the step to retry them.",
-                    indent=self.indent + 4 * " ",
-                )
-            )
-        return next_node
-
-    def run_backend(self, backend, calculations, settings):
-        """Run the backend through the executor, with its ini file."""
-        executor = self.flowchart.executor
-        executor_type = executor.name
+    def check_ini(self, backend):
+        """Make sure the backend's ini file exists here, writing the default from
+        the package's data if there is one."""
         ini_dir = Path(self.global_options["root"]).expanduser()
         ini_path = ini_dir / backend.ini
-        if not ini_path.exists():
-            resources = importlib.resources.files("interaction_eda_step") / "data"
-            if not (resources / backend.ini).is_file():
-                raise RuntimeError(
-                    f"{backend.name} needs {ini_path}, which its own SEAMM step "
-                    f"installs: install the {backend.name} step "
-                    f"({backend.name.lower()}-step) and its code."
-                )
-            ini_path.write_text((resources / backend.ini).read_text())
-            self.logger.info(f"Wrote a default {ini_path}")
-        full_config = configparser.ConfigParser()
-        full_config.read(ini_path)
-        if executor_type not in full_config:
+        if ini_path.exists():
+            return
+        resources = importlib.resources.files("interaction_eda_step") / "data"
+        if not (resources / backend.ini).is_file():
             raise RuntimeError(
-                f"No section for '{executor_type}' in {ini_path}. Add one giving "
-                f"the Python of the {backend.name} environment, e.g.\n"
-                f"[{executor_type}]\ninstallation = local\n"
-                "code = /path/to/env/bin/python"
+                f"{backend.name} needs {ini_path}, which its own SEAMM step "
+                f"installs: install the {backend.name} step "
+                f"({backend.name.lower()}-step) and its code."
             )
-        config = backend.configure(dict(full_config.items(executor_type)))
-        code = config.get("code", "")
-        if config.get("installation", "local") == "local" and not (
-            Path(code.split()[0]).expanduser().exists() if code else False
-        ):
-            found = shutil.which(code) if code else None
-            if found is None:
-                raise RuntimeError(
-                    f"The {backend.name} Python '{code}' in {ini_path} "
-                    f"[{executor_type}] does not exist. Point 'code' at the Python "
-                    f"of the environment where {backend.name} is installed."
-                )
-
-        ce = seamm_exec.computational_environment()
-        ce["NTASKS"] = self.n_cores(ce["NTASKS"])
-        settings = self.backend_memory(settings, ce)
-        files = backend.files(calculations, settings)
-        result = executor.run(
-            cmd=backend.command(),
-            config=config,
-            directory=self.directory,
-            files=files,
-            return_files=[backend.results_file, "*.log"],
-            in_situ=True,
-            shell=True,
-            ce=ce,
-        )
-        if not result:
-            self.logger.error(f"There was an error running {backend.name}")
-        else:
-            for name in ("stdout", "stderr"):
-                text = result.get(name)
-                if text:
-                    (Path(self.directory) / f"{name}.txt").write_text(text)
-        return result
-
-    @staticmethod
-    def backend_memory(settings, ce):
-        """The settings with the backend's memory (``memory_gb``, for a backend
-        that takes it, e.g. Psi4) set to 80 % of the memory the calculation was
-        given, when not set otherwise. Psi4's own default of 4 GB would push its
-        density-fitted integrals to disk for all but small systems."""
-        if "memory_gb" not in settings or settings.get("memory_gb"):
-            return settings
-        memory = int(ce.get("MEM_PER_NODE") or 0)
-        if memory <= 0:
-            return settings
-        return {**settings, "memory_gb": round(0.8 * memory / 1e9, 1)}
+        ini_path.write_text((resources / backend.ini).read_text())
+        self.logger.info(f"Wrote a default {ini_path}")
 
     def n_cores(self, available):
         """The cores to use: those available, capped by SEAMM's ``ncores`` option.
@@ -594,7 +636,15 @@ class InteractionEda(seamm.Node):
         )
 
     def write_extxyz(
-        self, path, fragments, mb, scheme, method, results=None, structure=None
+        self,
+        path,
+        fragments,
+        mb,
+        scheme,
+        method,
+        results=None,
+        structure=None,
+        append=False,
     ):
         """One frame per computed set of fragments, with the EDA terms as
         labels ``EDA_<scheme>_<term>`` (kJ/mol), plus ``EDA_<scheme>_mod_pauli``,
@@ -666,11 +716,16 @@ class InteractionEda(seamm.Node):
                 for s, xyz in zip(f.symbols, f.coordinates):
                     atoms.append((s, xyz, i, f.charge))
             frames.append(_extxyz_frame(atoms, info))
-        path.write_text("".join(frames))
+        if append:
+            with open(path, "a") as fd:
+                fd.write("".join(frames))
+        else:
+            path.write_text("".join(frames))
 
-    def write_json(
-        self, path, fragments, results, mb, scheme, method, settings, structure=None
+    def json_record(
+        self, fragments, results, mb, scheme, method, settings, structure=None
     ):
+        """The eda.json record of one structure."""
         data = {
             "structure": dict(structure or {}),
             "method": method,
@@ -707,7 +762,7 @@ class InteractionEda(seamm.Node):
             "sum_3body_triples_truncated": mb.sum_three_body,
             "n_triples_total": mb.n_triples_total,
         }
-        path.write_text(json.dumps(data, indent=2))
+        return data
 
 
 def platform_text(data):

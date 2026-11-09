@@ -203,7 +203,12 @@ def test_psi4_backend_input_and_command():
     s = json.loads(files["input.json"])["settings"]
     assert (s["xc"], s["ferf"], s["response_nlc"]) == ("wb97x-v", "coupled", False)
     assert backend.command()[:2] == ["{code}", "psi4_eda.py"]
-    assert backend.command()[-2:] == ["--threads", "{NTASKS}"]
+    assert backend.command()[-4:] == [
+        "--threads",
+        "{CPUS_PER_TASK}",
+        "--memory",
+        "{MEM_PER_NODE}",
+    ]
     assert (
         backend.configure({"code": "psi4 -n 4", "installation": "conda"})["code"]
         == "python"

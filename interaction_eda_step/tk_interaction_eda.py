@@ -27,6 +27,8 @@ METHOD = (
 )
 #: The settings for the fragments and calculations.
 FRAGMENTS = ("fragments", "fragment column", "calculations", "triples cutoff")
+#: The resources of each calculation (the structures come first, in the same frame).
+RESOURCES = ("cores per calculation", "memory per calculation")
 
 
 class TkInteractionEda(seamm.TkNode):
@@ -138,6 +140,13 @@ class TkInteractionEda(seamm.TkNode):
         self["method frame"] = ttk.LabelFrame(
             frame, borderwidth=4, relief="sunken", text="Method", labelanchor="n"
         )
+        self["structures frame"] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief="sunken",
+            text="Structures and resources",
+            labelanchor="n",
+        )
         self["fragments frame"] = ttk.LabelFrame(
             frame,
             borderwidth=4,
@@ -149,6 +158,9 @@ class TkInteractionEda(seamm.TkNode):
             self[key] = P[key].widget(self["method frame"])
         for key in FRAGMENTS:
             self[key] = P[key].widget(self["fragments frame"])
+        self.create_structure_selection_widgets(self["structures frame"])
+        for key in RESOURCES:
+            self[key] = P[key].widget(self["structures frame"])
 
         # Re-lay out when a choice changes which other settings apply
         for key in ("backend", "functional", "vv10", "fragments", "calculations"):
@@ -172,12 +184,13 @@ class TkInteractionEda(seamm.TkNode):
         frame = self["frame"]
         for slave in frame.grid_slaves():
             slave.grid_forget()
-        for key in ("method frame", "fragments frame"):
+        for key in ("structures frame", "method frame", "fragments frame"):
             for slave in self[key].grid_slaves():
                 slave.grid_forget()
 
-        self["method frame"].grid(row=0, column=0, sticky=tk.EW, pady=5)
-        self["fragments frame"].grid(row=1, column=0, sticky=tk.EW, pady=5)
+        self["structures frame"].grid(row=0, column=0, sticky=tk.EW, pady=5)
+        self["method frame"].grid(row=1, column=0, sticky=tk.EW, pady=5)
+        self["fragments frame"].grid(row=2, column=0, sticky=tk.EW, pady=5)
 
         # Offer only the functionals the backend can run; Psi4 has no meta-GGAs
         values = self._widget_values()
@@ -187,11 +200,14 @@ class TkInteractionEda(seamm.TkNode):
         values = self._widget_values()
 
         for frame_key, keys in (
+            ("structures frame", RESOURCES),
             ("method frame", METHOD),
             ("fragments frame", FRAGMENTS),
         ):
             widgets = []
             row = 0
+            if frame_key == "structures frame":
+                row, widgets = self.layout_structure_selection(row=row)
             for key in keys:
                 if not P.applies(key, values):
                     continue
@@ -211,7 +227,7 @@ class TkInteractionEda(seamm.TkNode):
     def _widget_values(self):
         """The dialog's current values, {name: value}, for the parameters' rules."""
         values = {}
-        for key in METHOD + FRAGMENTS:
+        for key in METHOD + FRAGMENTS + RESOURCES:
             try:
                 value = self[key].get()
             except Exception:

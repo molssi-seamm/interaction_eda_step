@@ -88,19 +88,6 @@ def test_density_fitted_water_dimer(tmp_path):
         assert terms[term] == pytest.approx(value, abs=0.03), term
 
 
-def test_backend_memory():
-    """A backend that takes memory_gb gets 80 % of the allocation unless set; a
-    backend without the key is left alone."""
-    from interaction_eda_step.interaction_eda import InteractionEda
-
-    ce = {"MEM_PER_NODE": 64 * 10**9}
-    got = InteractionEda.backend_memory({"memory_gb": None, "xc": "hf"}, ce)
-    assert got["memory_gb"] == 51.2 and got["xc"] == "hf"
-    assert InteractionEda.backend_memory({"memory_gb": 8}, ce)["memory_gb"] == 8
-    assert "memory_gb" not in InteractionEda.backend_memory({"xc": "hf"}, ce)
-    assert InteractionEda.backend_memory({"memory_gb": None}, {})["memory_gb"] is None
-
-
 def test_scf_falls_back_to_disk_df():
     """Psi4 refuses in-core MEM_DF when its JK lacks memory (it does not go out
     of core by itself): the SCF is retried with DISK_DF, and SCF_TYPE restored."""

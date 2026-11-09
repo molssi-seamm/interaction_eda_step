@@ -74,6 +74,8 @@ class InteractionEdaParameters(seamm.Parameters):
     """
 
     parameters = {
+        # Which structures: SEAMM's standard selection (default: the current one)
+        **seamm.standard_parameters.structure_selection_parameters,
         "backend": {
             "default": "GPU4PySCF",
             "kind": "enumeration",
@@ -228,6 +230,33 @@ class InteractionEdaParameters(seamm.Parameters):
                 "calculation on such a GPU; 'allow' runs anyway."
             ),
         },
+        "cores per calculation": {
+            "applies_when": {"backend": "Psi4"},
+            "default": "automatic",
+            "kind": "integer",
+            "default_units": "",
+            "enumeration": ("automatic",),
+            "format_string": "d",
+            "description": "Cores per calculation:",
+            "help_text": (
+                "Threads for each EDA calculation. 'automatic' uses 8 up to 400 "
+                "basis functions, 16 up to 800 and 32 above, from the measured "
+                "scaling of Psi4."
+            ),
+        },
+        "memory per calculation": {
+            "applies_when": {"backend": "Psi4"},
+            "default": "automatic",
+            "kind": "float",
+            "default_units": "GB",
+            "enumeration": ("automatic",),
+            "format_string": ".1f",
+            "description": "Memory per calculation:",
+            "help_text": (
+                "Memory for each EDA calculation; Psi4 is given 80 % of it. "
+                "'automatic' sizes it from the density-fitted integrals."
+            ),
+        },
         "fragments": {
             "default": "molecules",
             "kind": "enumeration",
@@ -356,6 +385,8 @@ class InteractionEdaParameters(seamm.Parameters):
             }
             if key in reasons:
                 return reasons[key]
+        if key in ("cores per calculation", "memory per calculation"):
+            return "a GPU4PySCF calculation uses one GPU and a few cores"
         return super().not_applicable_reason(key, values)
 
     def __init__(self, defaults={}, data=None):
