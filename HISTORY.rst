@@ -1,6 +1,14 @@
 =======
 History
 =======
+2026.11.8.1 -- Internal: the Psi4 EDA driver's integrals
+    * The Psi4 backend (not yet offered by the step) computes its integrals directly
+      instead of keeping them in memory, which was 4.5 times slower for the EDA's many
+      Fock builds (HF Li+-EC: 260 s against 1179 s on 16 cores, the same terms), and
+      its density-fitted path, which stopped at once, now works: the fitting basis is
+      built explicitly. Density fitting is about 6-9 times faster, with terms within
+      0.03-0.06 kJ/mol of exact integrals.
+
 2026.11.8 -- The SAPT-comparable Pauli term in the extxyz, and where each EDA ran
     * eda.extxyz now has ``EDA_ALMOEDA2_mod_pauli``, the SAPT-comparable Pauli
       repulsion (Q-Chem's MOD PAULI: frozen - classical electrostatic - dispersion),

@@ -75,6 +75,17 @@ Fragments
     column, with charges summed from the formal charges. Every fragment must be
     closed-shell.
 
+    The molecules come from the bonds, which for formats without bonds (e.g. extended
+    XYZ) Read Structure finds from the distances. Alkali and alkaline-earth ions such
+    as Li⁺ and Na⁺ are never bonded, so an ion stays its own fragment even in close
+    contact. A badly distorted structure can still break a molecule apart: a C--H bond
+    stretched to 1.3--1.6 Å, for example, leaves the hydrogen as a separate
+    "molecule". The step then stops with an error naming the molecule whose electron
+    count is odd, rather than guessing a partition and computing the wrong
+    interaction. A split or merge that leaves every piece with an even number of
+    electrons is not caught this way, so check unusual structures, or give the
+    fragments with ``atom column``.
+
 Atom column
     The column for ``atom column``.
 
