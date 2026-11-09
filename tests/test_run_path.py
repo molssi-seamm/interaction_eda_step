@@ -88,6 +88,9 @@ def test_shell_a(tmp_path):
     step = steps[0]
 
     result = json.loads((step / "eda.json").read_text())
+    # the structure's names, to map results back to the input
+    title = text.splitlines()[0].strip()
+    assert title in result["structure"].values(), result["structure"]
     assert [f["charge"] for f in result["fragments"]] == [1, 0, 0, 0, 0]
     assert len(result["calculations"]) == 11
     assert all(c["error"] is None for c in result["calculations"].values())
@@ -97,6 +100,7 @@ def test_shell_a(tmp_path):
 
     frames = (step / "eda.extxyz").read_text()
     info = dict(token.split("=", 1) for token in shlex.split(frames.splitlines()[1]))
+    assert title in (info.get("system_name"), info.get("configuration_name")), info
     assert float(info["EDA_ALMOEDA2_total"]) == pytest.approx(-496.400, abs=1.5e-3)
     assert float(info["EDA_ALMOEDA2_total_ge3body_exact"]) == pytest.approx(
         170.539, abs=1.5e-3

@@ -199,15 +199,16 @@ def jk_algorithm(fragments, settings):
     integrals in core (PK) for the EDA's many Fock builds: 260 s against 1179 s
     for HF Li+-EC/def2-TZVPD (TinkerCliffs, 2026-11-08), with the same terms.
 
-    MEM_DF holds the 3-index tensor (Q|mn) of the whole system in memory, and a
-    second, range-separated one (Q|w|mn) for a range-separated functional. The
-    driver keeps one such JK alive at a time (the full system's SCF runs, and is
-    freed, before the EDA engine is built; see :func:`eda`), within half of
-    Psi4's memory. (Psi4 1.11 has no WCOMBINE for MEM_DF, and its composite JKs
-    refuse range-separated functionals.) When the
-    tensors would not fit, DISK_DF streams them from the scratch directory
-    (``PSI_SCRATCH``, node-local in a batch job) at each Fock build: slower, but
-    bounded in memory.
+    MEM_DF holds the 3-index tensor (Q|mn) of the whole system in memory, and
+    for a range-separated functional also its metric-contracted copy and
+    (Q|w|mn) (:func:`mem_df_bytes`). The driver keeps one such JK alive at a
+    time (the full system's SCF runs, and is freed, before the EDA engine is
+    built; see :func:`eda`), within the part of Psi4's memory its JK may use
+    (:data:`MEM_DF_FRACTION`). (Psi4 1.11 has no WCOMBINE for MEM_DF, and its
+    composite JKs refuse range-separated functionals.) When the tensors would
+    not fit, DISK_DF streams them from the scratch directory (``PSI_SCRATCH``,
+    node-local in a batch job) at each Fock build: slower, but bounded in
+    memory.
     """
     if not settings.get("auxbasis"):
         return "DIRECT"
@@ -228,8 +229,24 @@ def jk_algorithm(fragments, settings):
         tensors = 2 if build_superfunctional(settings.get("xc")).is_x_lrc() else 1
     except Exception:
         return "MEM_DF"
-    needed = 8.0 * naux * nbf * (nbf + 1) / 2 * tensors
-    return "MEM_DF" if needed < 0.45 * psi4.get_memory() else "DISK_DF"
+    return (
+        "MEM_DF"
+        if mem_df_bytes(nbf, naux, tensors) < MEM_DF_FRACTION * (psi4.get_memory())
+        else "DISK_DF"
+    )
+
+
+#: The part of Psi4's memory its JK may use: SCF_MEM_SAFETY_FACTOR (0.75) less the
+#: other matrices; 100 GB gave the JK 67-71 GB (TinkerCliffs, 2026-11-09).
+MEM_DF_FRACTION = 0.65
+
+
+def mem_df_bytes(nbf, naux, tensors=1):
+    """The memory Psi4's in-core MEM_DF needs: (Q|mn) unpacked, and for a
+    range-separated functional also the metric-contracted copy and (Q|w|mn),
+    three tensors of 8 * naux * nbf**2 bytes (shell A, 1121 nbf: about 67 GB,
+    more than the JK had with 100 GB; JK.memory_estimate() leaves out wK)."""
+    return 8.0 * naux * nbf * nbf * (3 if tensors > 1 else 1)
 
 
 def method_name(xc):
@@ -821,12 +838,20 @@ def main(argv=None):
     p.add_argument("-o", "--output", default="results.jsonl")
     p.add_argument("--logdir", default="logs")
     p.add_argument("--threads", type=int, default=None, help="default: settings or 1")
+    p.add_argument(
+        "--memory",
+        type=float,
+        default=None,
+        help="bytes the task was given; Psi4 gets 80 %% unless memory_gb is set",
+    )
     args = p.parse_args(argv)
 
     with open(args.input) as fd:
         data = json.load(fd)
     settings = data.get("settings", {})
     calculations = data["calculations"]
+    if args.memory and not settings.get("memory_gb"):
+        settings["memory_gb"] = round(0.8 * args.memory / 1e9, 1)
 
     import psi4 as _psi4
 

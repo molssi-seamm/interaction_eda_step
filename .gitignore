@@ -149,3 +149,4 @@ target/
 # Cookiecutter
 output/
 python_boilerplate/
+timer.dat

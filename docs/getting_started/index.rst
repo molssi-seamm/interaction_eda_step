@@ -46,6 +46,16 @@ minutes.
 Run the step in a job on a GPU node: through a SEAMM queue that targets a GPU partition
 with FP64 (for example an A100 or A30 partition), or on a workstation with such a GPU.
 
+Without a GPU: Psi4
+-------------------
+With "Code" set to Psi4 the step runs the same EDA on CPUs with Psi4 1.11 or later, in
+the Psi4 step's environment: install the Psi4 step (``seamm-manager install
+psi4-step``) and the step finds Psi4 through its ``psi4.ini``. It runs the EDA script
+with the Python of that environment -- the one beside ``psi4`` when ``code`` gives its
+path, otherwise the first on the PATH once the conda environment is activated. It uses
+the job's cores as threads. Psi4 suits GGA and hybrid functionals such as ωB97X-V, and
+Hartree-Fock; see :ref:`settings` for what it does not offer and how long it takes.
+
 Configuring the step: gpu4pyscf.ini
 -----------------------------------
 The step finds GPU4PySCF through ``gpu4pyscf.ini`` in the SEAMM installation's
