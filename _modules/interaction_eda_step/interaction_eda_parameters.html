@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda_parameters &#8212; SEAMM Interaction EDA Plug-in 2026.11.9 documentation</title>
+    <title>interaction_eda_step.interaction_eda_parameters &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="../../_static/documentation_options.js?v=20f5e7c3"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.9.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -691,6 +691,22 @@
                 <span class="s2">"polarization space (GPU4PySCF's default, 1e-4, is the validated one)."</span>
             <span class="p">),</span>
         <span class="p">},</span>
+        <span class="s2">"integration grid"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">},</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"fine"</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"fine"</span><span class="p">,</span> <span class="s2">"standard"</span><span class="p">),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"s"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Integration grid:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"The DFT integration grids. 'fine' is (150,974) for the "</span>
+                <span class="s2">"exchange-correlation and (99,590) for VV10, converged to about "</span>
+                <span class="s2">"0.01 kJ/mol for compact clusters. 'standard' is GPU4PySCF's default, "</span>
+                <span class="s2">"(99,590) and (50,194) pruned, about 7 times faster on a cluster but "</span>
+                <span class="s2">"0.1-0.4 kJ/mol off in the frozen and dispersion terms."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
         <span class="s2">"low fp64 gpus"</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">},</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"refuse"</span><span class="p">,</span>
@@ -835,6 +851,9 @@
                 <span class="s2">"vv10 in response"</span><span class="p">:</span> <span class="s2">"Psi4 has no VV10 response kernel; it is off"</span><span class="p">,</span>
                 <span class="s2">"dispersion"</span><span class="p">:</span> <span class="s2">"dispersion corrections are not available with Psi4"</span><span class="p">,</span>
                 <span class="s2">"low fp64 gpus"</span><span class="p">:</span> <span class="s2">"Psi4 runs on CPUs"</span><span class="p">,</span>
+                <span class="s2">"integration grid"</span><span class="p">:</span> <span class="p">(</span>
+                    <span class="s2">"Psi4 uses its own grids, (99,590) and (50,194) unpruned"</span>
+                <span class="p">),</span>
             <span class="p">}</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">reasons</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">reasons</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>

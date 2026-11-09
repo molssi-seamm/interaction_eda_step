@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>interaction_eda_step.backends package &#8212; SEAMM Interaction EDA Plug-in 2026.11.9 documentation</title>
+    <title>interaction_eda_step.backends package &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="../_static/documentation_options.js?v=20f5e7c3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.9.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -736,7 +736,7 @@ with the same id (a rerun after a failure).</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.defaults">
-<span class="sig-name descname"><span class="pre">defaults</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'allow_low_fp64':</span> <span class="pre">False,</span> <span class="pre">'auxbasis':</span> <span class="pre">None,</span> <span class="pre">'basis':</span> <span class="pre">'def2-tzvpd',</span> <span class="pre">'disp':</span> <span class="pre">None,</span> <span class="pre">'ferf':</span> <span class="pre">'coupled',</span> <span class="pre">'nlc':</span> <span class="pre">None,</span> <span class="pre">'response_nlc':</span> <span class="pre">True,</span> <span class="pre">'svd_threshold':</span> <span class="pre">0.0001,</span> <span class="pre">'verbose':</span> <span class="pre">3,</span> <span class="pre">'xc':</span> <span class="pre">'wb97m-v'}</span></span><a class="headerlink" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.defaults" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">defaults</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'allow_low_fp64':</span> <span class="pre">False,</span> <span class="pre">'auxbasis':</span> <span class="pre">None,</span> <span class="pre">'basis':</span> <span class="pre">'def2-tzvpd',</span> <span class="pre">'disp':</span> <span class="pre">None,</span> <span class="pre">'ferf':</span> <span class="pre">'coupled',</span> <span class="pre">'nlc':</span> <span class="pre">None,</span> <span class="pre">'nlc_grid':</span> <span class="pre">[99,</span> <span class="pre">590],</span> <span class="pre">'response_nlc':</span> <span class="pre">True,</span> <span class="pre">'svd_threshold':</span> <span class="pre">0.0001,</span> <span class="pre">'verbose':</span> <span class="pre">3,</span> <span class="pre">'xc':</span> <span class="pre">'wb97m-v',</span> <span class="pre">'xc_grid':</span> <span class="pre">[150,</span> <span class="pre">974]}</span></span><a class="headerlink" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.defaults" title="Link to this definition">#</a></dt>
 <dd><p>The settings and their defaults.</p>
 </dd></dl>
 
@@ -807,6 +807,12 @@ with the same id (a rerun after a failure).</p>
 <dd><p>The full settings: the defaults updated with those given.</p>
 </dd></dl>
 
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.gpu4pyscf.GRIDS">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.backends.gpu4pyscf.</span></span><span class="sig-name descname"><span class="pre">GRIDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'fine':</span> <span class="pre">{'nlc_grid':</span> <span class="pre">[99,</span> <span class="pre">590],</span> <span class="pre">'xc_grid':</span> <span class="pre">[150,</span> <span class="pre">974]},</span> <span class="pre">'standard':</span> <span class="pre">{'nlc_grid':</span> <span class="pre">[50,</span> <span class="pre">194],</span> <span class="pre">'xc_grid':</span> <span class="pre">[99,</span> <span class="pre">590]}}</span></span><a class="headerlink" href="#interaction_eda_step.backends.gpu4pyscf.GRIDS" title="Link to this definition">#</a></dt>
+<dd><p>The grids for each choice of the step’s “integration grid”.</p>
 </dd></dl>
 
 </section>
@@ -922,6 +928,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.settings"><code class="docutils literal notranslate"><span class="pre">GPU4PySCF.settings()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.gpu4pyscf.GRIDS"><code class="docutils literal notranslate"><span class="pre">GRIDS</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.backends">Module contents</a><ul class="pst-show_toc_level nav section-nav flex-column">

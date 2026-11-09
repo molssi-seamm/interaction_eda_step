@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.9 documentation</title>
+    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="../_static/documentation_options.js?v=20f5e7c3"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.9.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -522,7 +522,7 @@
 <span id="id1"></span><h1>Settings<a class="headerlink" href="#settings" title="Link to this heading">#</a></h1>
 <p>The defaults are the settings that were validated against SAPT and coupled-cluster
 references and between GPUs: ωB97M-V/def2-TZVPD, exact integrals, coupled FERF-DQ
-response with a singular-value threshold of 10⁻⁴.</p>
+response with a singular-value threshold of 10⁻⁴, and fine integration grids.</p>
 <section id="method">
 <h2>Method<a class="headerlink" href="#method" title="Link to this heading">#</a></h2>
 <dl class="simple">
@@ -565,6 +565,16 @@ transfer split. 10⁻⁴ is converged: for Li⁺–PF₆⁻ and PF₆⁻–EC, 1
 split by less than 10⁻⁸ kJ/mol, while 10⁻³ moves 0.06 kJ/mol from polarization to
 charge transfer for Li⁺–PF₆⁻. The step warns if the threshold is looser than
 10⁻⁴ and there is a cation.</p>
+</dd>
+<dt>Integration grid</dt><dd><p>The DFT integration grids, as (radial, angular) points per atom. <code class="docutils literal notranslate"><span class="pre">fine</span></code> (the
+default) uses (150,974) for the exchange-correlation and (99,590) for VV10.
+<code class="docutils literal notranslate"><span class="pre">standard</span></code> is GPU4PySCF’s own choice, (99,590) and (50,194) with pruning: about 7
+times faster for a cluster, but not converged for compact clusters. For
+Na⁺(H₂O)₆ the standard grids put 0.43 kJ/mol into the frozen term and 0.33 kJ/mol
+into dispersion, with the two grids contributing about equally; the fine grids
+agree with Psi4 to 0.012 kJ/mol in the energy of the whole cluster. Pairs hardly
+change (0.001 kJ/mol). Labels computed before this setting existed (2026.11.9 and
+earlier) used the standard grids.</p>
 </dd>
 <dt>GPUs with little FP64</dt><dd><p><code class="docutils literal notranslate"><span class="pre">refuse</span></code> (the default) stops before any calculation if the GPU is one made mainly
 for single precision (T4, L4, L40S, A10, A40, RTX …), where the EDA runs tens of

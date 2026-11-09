@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.backends.gpu4pyscf &#8212; SEAMM Interaction EDA Plug-in 2026.11.9 documentation</title>
+    <title>interaction_eda_step.backends.gpu4pyscf &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=3789d4b4"></script>
+    <script src="../../../_static/documentation_options.js?v=20f5e7c3"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9" />
+  <meta name="docsearch:version" content="2026.11.9.1" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -516,7 +516,19 @@
     <span class="s2">"ferf"</span><span class="p">:</span> <span class="s2">"coupled"</span><span class="p">,</span>
     <span class="s2">"response_nlc"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
     <span class="s2">"allow_low_fp64"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="c1"># The integration grids, (radial, angular) for the exchange-correlation and</span>
+    <span class="c1"># VV10 parts. GPU4PySCF's EDA defaults, (99, 590) and (50, 194) pruned, are</span>
+    <span class="c1"># 0.1-0.4 kJ/mol from converged in the frozen and dispersion terms of a compact</span>
+    <span class="c1"># Na+(H2O)6 cluster; these are within 0.012 kJ/mol of Psi4 there (2026-11-09).</span>
+    <span class="s2">"xc_grid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">974</span><span class="p">],</span>
+    <span class="s2">"nlc_grid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">99</span><span class="p">,</span> <span class="mi">590</span><span class="p">],</span>
     <span class="s2">"verbose"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1">#: The grids for each choice of the step's "integration grid".</span>
+<span class="n">GRIDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"fine"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"xc_grid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">150</span><span class="p">,</span> <span class="mi">974</span><span class="p">],</span> <span class="s2">"nlc_grid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">99</span><span class="p">,</span> <span class="mi">590</span><span class="p">]},</span>
+    <span class="s2">"standard"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"xc_grid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">99</span><span class="p">,</span> <span class="mi">590</span><span class="p">],</span> <span class="s2">"nlc_grid"</span><span class="p">:</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">194</span><span class="p">]},</span>
 <span class="p">}</span>
 
 <span class="n">BIBTEX</span> <span class="o">=</span> <span class="p">{</span>
@@ -687,6 +699,8 @@
             <span class="sa">f</span><span class="s2">"ferf=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'ferf'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">"svd_threshold=</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'svd_threshold'</span><span class="p">]</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"xc_grid"</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># GPU4PySCF's grids; Psi4's are fixed</span>
+            <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"grids=</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">/</span><span class="si">{}</span><span class="s2">,</span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="s2">"xc_grid"</span><span class="p">],</span> <span class="o">*</span><span class="n">s</span><span class="p">[</span><span class="s2">"nlc_grid"</span><span class="p">]))</span>
         <span class="k">return</span> <span class="s2">";"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span></div>
 
 

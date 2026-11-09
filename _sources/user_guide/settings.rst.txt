@@ -6,7 +6,7 @@ Settings
 
 The defaults are the settings that were validated against SAPT and coupled-cluster
 references and between GPUs: ωB97M-V/def2-TZVPD, exact integrals, coupled FERF-DQ
-response with a singular-value threshold of 10⁻⁴.
+response with a singular-value threshold of 10⁻⁴, and fine integration grids.
 
 Method
 ======
@@ -58,6 +58,17 @@ FERF singular-value threshold
     split by less than 10⁻⁸ kJ/mol, while 10⁻³ moves 0.06 kJ/mol from polarization to
     charge transfer for Li⁺–PF₆⁻. The step warns if the threshold is looser than
     10⁻⁴ and there is a cation.
+
+Integration grid
+    The DFT integration grids, as (radial, angular) points per atom. ``fine`` (the
+    default) uses (150,974) for the exchange-correlation and (99,590) for VV10.
+    ``standard`` is GPU4PySCF's own choice, (99,590) and (50,194) with pruning: about 7
+    times faster for a cluster, but not converged for compact clusters. For
+    Na⁺(H₂O)₆ the standard grids put 0.43 kJ/mol into the frozen term and 0.33 kJ/mol
+    into dispersion, with the two grids contributing about equally; the fine grids
+    agree with Psi4 to 0.012 kJ/mol in the energy of the whole cluster. Pairs hardly
+    change (0.001 kJ/mol). Labels computed before this setting existed (2026.11.9 and
+    earlier) used the standard grids.
 
 GPUs with little FP64
     ``refuse`` (the default) stops before any calculation if the GPU is one made mainly
