@@ -1,6 +1,13 @@
 =======
 History
 =======
+2026.11.9.5 -- Bugfix: Psi4 time estimates for small calculations were too short
+    * The time estimate for each Psi4 calculation now includes a fixed 3 minutes for
+      setting up Psi4, the basis sets, the density fitting and the grids. Small pairs
+      took 4-5 minutes on 8 cores, against about 80 s estimated, so bundles of many
+      small calculations asked for too little time and ran out before the last ones,
+      which then had to be queued again.
+
 2026.11.9.4 -- Every calculation as its own task, and many structures in one step
     * Each EDA calculation -- each set of fragments of each structure -- now runs as
       its own task, asking for the cores, memory and time its size needs (from its
