@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.11.9.6 -- Psi4: more memory for the EDA's integrals, so large clusters keep them in core
+    * The EDA's density-fitted integrals may now use 75 % of Psi4's memory instead of
+      half. The full system's SCF has freed its own integrals by then, so these are
+      the only large ones held. With half, a 1121-function cluster had 1 % to spare
+      and a 1388-function cluster none, and would have read its integrals from disk
+      at every Fock build, which is much slower.
+    * The memory asked for is unchanged in practice, now stated as enough for the
+      peak: about 1.9 times the in-core integrals (98 GB for a 1121-function
+      cluster), with 30 % to spare.
+
 2026.11.9.5 -- Bugfix: Psi4 time estimates for small calculations were too short
     * The time estimate for each Psi4 calculation now includes a fixed 3 minutes for
       setting up Psi4, the basis sets, the density fitting and the grids. Small pairs
