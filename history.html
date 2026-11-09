@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.2 documentation</title>
+    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=170d6da9"></script>
+    <script src="_static/documentation_options.js?v=b375e9b0"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,7 +54,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.2" />
+  <meta name="docsearch:version" content="2026.11.9.3" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -511,6 +511,22 @@
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.9.3 – Bugfix: Psi4 density-fitted SCFs stopped for lack of memory</dt><dd><ul class="simple">
+<li><p>With density fitting and a range-separated functional such as ωB97X-V, Psi4’s
+SCFs could stop with “SCF_SUBTYPE=INCORE was specified, but there is not
+enough memory to do in-core”, even for small clusters with plenty of memory:
+Psi4 gave almost all of it to the DFT grid, because its estimate for the
+in-core integrals leaves out the range-separated ones (Na⁺(H₂O)₆: 2.1 of
+12.8 GB). The SCFs now use Psi4’s DISK_DF algorithm, which keeps the integrals
+in memory when they fit and otherwise reads them from disk. The energies are
+unchanged (to 3e-8 kJ/mol).</p></li>
+<li><p>The EDA’s own integrals fall back to DISK_DF too when they do not fit in
+memory, rather than stopping.</p></li>
+<li><p>After a calculation fails, Psi4 is reset, so the next calculation of the
+structure starts clean. Before, the next one failed as well and the one after
+that hung until the job’s time ran out.</p></li>
+</ul>
+</dd>
 <dt>2026.11.9.2 – Psi4 as the EDA code, on CPUs</dt><dd><ul class="simple">
 <li><p>The Interaction EDA step now offers Psi4 as well as GPU4PySCF. Psi4 runs the
 same second-generation ALMO-EDA on CPUs, with the Psi4 step’s environment
