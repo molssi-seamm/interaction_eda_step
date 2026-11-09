@@ -1,6 +1,22 @@
 =======
 History
 =======
+2026.11.9.2 -- Psi4 as the EDA code, on CPUs
+    * The Interaction EDA step now offers Psi4 as well as GPU4PySCF. Psi4 runs the
+      same second-generation ALMO-EDA on CPUs, with the Psi4 step's environment
+      (psi4.ini), for GGA and hybrid functionals such as ωB97X-V and for
+      Hartree-Fock. Meta-GGAs such as ωB97M-V are not offered with Psi4, because it
+      has no response kernel for them. With density fitting it agrees with GPU4PySCF
+      to 0.021 kJ/mol or better per term for pairs.
+    * eda.json and eda.extxyz now record the structure's system and configuration
+      names, so results can be matched to their input.
+    * The Psi4 driver now keeps its density-fitted integrals in memory only when
+      they fit: for a range-separated functional, about three tensors of 8 × N_aux ×
+      N² bytes. Before, a large cluster could stop with "not enough memory to do
+      in-core" when it should have read them from disk.
+    * The user guide gives the measured times, the cores worth using and the memory
+      needed with Psi4.
+
 2026.11.9.1 -- Fine integration grids for GPU4PySCF by default
     * GPU4PySCF's standard grids, (99,590) for the exchange-correlation and (50,194)
       for VV10 with pruning, are not converged for compact clusters: for Na⁺(H₂O)₆ they

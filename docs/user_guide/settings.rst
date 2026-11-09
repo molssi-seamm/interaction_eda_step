@@ -32,10 +32,24 @@ Code
           GPU4PySCF for them;
         * dispersion corrections are not available yet.
 
-        The cost is dominated by VV10 on the full grid, which grows with the square of
-        the number of atoms: a water dimer with ωB97X-V/def2-TZVPD takes about 1.5
-        minutes on 4 cores, a Li⁺–EC pair more than 15 minutes on 8. Hartree-Fock and
-        functionals without VV10 are several times faster.
+        Use density fitting (``def2-universal-jkfit``) with Psi4: with exact integrals
+        the many Fock builds of the EDA are several times slower. With density
+        fitting, ωB97X-V/def2-TZVPD on AMD EPYC cores (TinkerCliffs, 2026-11-09)
+        takes:
+
+        * Li⁺–EC (284 basis functions): 16 minutes on 4 cores, 8 on 8, 7 on 16, 4
+          on 32;
+        * EC–EC (552): 37 minutes on 8 cores, 16 on 16, 11 on 32;
+        * a Li⁺ shell of two EC and two DMC (1121): about 2 hours on 16 cores.
+
+        Psi4 uses extra cores less and less well: 8 cores are the most economical
+        up to about 400 basis functions, 16 up to about 800, and 32 above. The
+        density-fitted integrals are kept in memory when they fit, which for a
+        range-separated functional takes about 3 × 8 × N\ :sub:`aux` × N\ :sup:`2`
+        bytes -- about 70 GB for the 1121-function cluster, so give such a
+        calculation about 130 GB. With less, Psi4 reads them from the scratch disk
+        at every Fock build, which is slower. The step gives Psi4 80 % of the
+        calculation's memory.
 
 Functional
     The density functional, in PySCF's names (case does not matter), e.g. ``wB97M-V``,
