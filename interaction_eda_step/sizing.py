@@ -67,6 +67,11 @@ PSI4_T16 = ((116, 66.0), (284, 400.0), (552, 956.0), (1121, 5319.0))
 #: The largest memory to ask for: above it the EDA engine reads its integrals
 #: from disk (DISK_DF) rather than the task waiting for a bigger node.
 PSI4_MAX_GB = 240.0
+#: A fixed time per calculation, on top of the size-dependent part: setting up
+#: Psi4, the bases, the fitting and the grids. Small pairs (93-116 nbf, 8 threads)
+#: took 240-270 s on TinkerCliffs (ChemAI 5680, 2026-11-09), against about 80 s
+#: from the size alone; without it a bundle of small tasks overran its time.
+PSI4_FIXED_SECONDS = 180.0
 #: Speed-up relative to 16 threads.
 PSI4_SPEEDUP = {4: 0.41, 8: 0.85, 16: 1.0, 32: 1.6, 64: 2.4}
 #: Memory besides the JK: about 4 GB plus 0.3 GB per thread (EC-EC: 6.3 GB on
@@ -137,7 +142,8 @@ def fragment_factor(n_fragments):
 def psi4_seconds(nbf, cores, n_fragments=2):
     """Estimated wall time of a Psi4 EDA task."""
     t = _loglog(PSI4_T16, nbf) * fragment_factor(n_fragments)
-    return t / _loglog(list(PSI4_SPEEDUP.items()), max(1, int(cores)))
+    t /= _loglog(list(PSI4_SPEEDUP.items()), max(1, int(cores)))
+    return PSI4_FIXED_SECONDS + t
 
 
 # ---------------------------------------------------------------------------
