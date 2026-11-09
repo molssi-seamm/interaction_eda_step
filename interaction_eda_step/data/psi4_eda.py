@@ -192,17 +192,44 @@ def block_conjugate_gradient(matvec, B, precond, tol, max_iter=200):
 # Psi4 pieces
 # ---------------------------------------------------------------------------
 def jk_algorithm(fragments, settings):
-    """Integral-direct (DIRECT), or MEM_DF with an auxiliary basis.
+    """Integral-direct (DIRECT); with an auxiliary basis MEM_DF, or DISK_DF when
+    the 3-index integrals would not fit in memory.
 
     DIRECT is exact and, on 16 AMD cores, 4.5 times faster than keeping the
     integrals in core (PK) for the EDA's many Fock builds: 260 s against 1179 s
     for HF Li+-EC/def2-TZVPD (TinkerCliffs, 2026-11-08), with the same terms.
-    PK's in-core build is memory-bandwidth bound, and out of core its files
-    would collide with the SCFs'. ``fragments`` is unused, kept for the callers.
+
+    MEM_DF holds the 3-index tensor (Q|mn) of the whole system in memory, and a
+    second, range-separated one (Q|w|mn) for a range-separated functional. The
+    driver keeps one such JK alive at a time (the full system's SCF runs, and is
+    freed, before the EDA engine is built; see :func:`eda`), within half of
+    Psi4's memory. (Psi4 1.11 has no WCOMBINE for MEM_DF, and its composite JKs
+    refuse range-separated functionals.) When the
+    tensors would not fit, DISK_DF streams them from the scratch directory
+    (``PSI_SCRATCH``, node-local in a batch job) at each Fock build: slower, but
+    bounded in memory.
     """
-    if settings.get("auxbasis"):
+    if not settings.get("auxbasis"):
+        return "DIRECT"
+    try:
+        mol = molecule(fragments)
+        basis = psi4.core.BasisSet.build(
+            mol, "ORBITAL", settings.get("basis", "def2-tzvpd")
+        )
+        aux = psi4.core.BasisSet.build(
+            mol,
+            "DF_BASIS_SCF",
+            settings["auxbasis"],
+            "JKFIT",
+            basis.name(),
+            basis.has_puream(),
+        )
+        nbf, naux = basis.nbf(), aux.nbf()
+        tensors = 2 if build_superfunctional(settings.get("xc")).is_x_lrc() else 1
+    except Exception:
         return "MEM_DF"
-    return "DIRECT"
+    needed = 8.0 * naux * nbf * (nbf + 1) / 2 * tensors
+    return "MEM_DF" if needed < 0.45 * psi4.get_memory() else "DISK_DF"
 
 
 def method_name(xc):
@@ -268,9 +295,9 @@ class Engine:
                 basis.name(),
                 basis.has_puream(),
             )
+        self.lrc = sup.is_x_lrc()
         self.jk = psi4.core.JK.build(basis, aux=aux, jk_type=jk_type)
         self.jk.set_memory(int(psi4.get_memory() * 0.5 / 8))
-        self.lrc = sup.is_x_lrc()
         if self.lrc:
             self.jk.set_do_wK(True)
             self.jk.set_omega(sup.x_omega())
@@ -684,6 +711,13 @@ def eda(fragments, settings, log):
         V_frag.append(np.asarray(psi4.core.MintsHelper(b).ao_potential()))
         e_nuc_frag.append(frag_wfn[i].molecule().nuclear_repulsion_energy())
     H_frag = [T + Vi for Vi in V_frag]
+
+    # The full system's SCF before the EDA engine: Psi4 frees the SCF's
+    # density-fitted integrals when it ends, so the engine's are never held at
+    # the same time (two sets, 141 GB for a 1121-function cluster, when the SCF
+    # ran last)
+    psi4.core.clean()
+    E_full = psi4.energy(method_name(xc), molecule=full)
     eng = Engine(basis, build_superfunctional(xc), jk_type)
 
     off = np.cumsum([0] + [w.basisset().nbf() for w in frag_wfn])
@@ -738,9 +772,7 @@ def eda(fragments, settings, log):
     # 4. SCF-MI in the FERF spaces: frozen and polarized energies
     E_frozen, E_pol, C_pol = scf_mi(eng, S, H, e_nuc, G_list, Cocc_list, log)
 
-    # 5. The full SCF
-    psi4.core.clean()
-    E_full = psi4.energy(method_name(xc), molecule=full)
+    # 5. The full SCF ran before the engine was built (above)
 
     E_sum = sum(frag_E)
     frozen = E_frozen - E_sum
