@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
+    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.5 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=78fc797d"></script>
+    <script src="../_static/documentation_options.js?v=dc84fd64"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.4" />
+  <meta name="docsearch:version" content="2026.11.9.5" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1390,6 +1390,20 @@ see the developer notes in <code class="docutils literal notranslate"><span clas
 </dd></dl>
 
 <dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.sizing.PSI4_FIXED_SECONDS">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">PSI4_FIXED_SECONDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">180.0</span></span><a class="headerlink" href="#interaction_eda_step.sizing.PSI4_FIXED_SECONDS" title="Link to this definition">#</a></dt>
+<dd><p>setting up
+Psi4, the bases, the fitting and the grids. Small pairs (93-116 nbf, 8 threads)
+took 240-270 s on TinkerCliffs (ChemAI 5680, 2026-11-09), against about 80 s
+from the size alone; without it a bundle of small tasks overran its time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A fixed time per calculation, on top of the size-dependent part</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.PSI4_MAX_GB">
 <span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">PSI4_MAX_GB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">240.0</span></span><a class="headerlink" href="#interaction_eda_step.sizing.PSI4_MAX_GB" title="Link to this definition">#</a></dt>
 <dd><p>above it the EDA engine reads its integrals
@@ -1937,6 +1951,7 @@ A SEAMM plug-in for Interaction EDA</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.DEFAULT_AUX"><code class="docutils literal notranslate"><span class="pre">DEFAULT_AUX</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.ENGINE_FRACTION"><code class="docutils literal notranslate"><span class="pre">ENGINE_FRACTION</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_FIXED_GB"><code class="docutils literal notranslate"><span class="pre">PSI4_FIXED_GB</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_FIXED_SECONDS"><code class="docutils literal notranslate"><span class="pre">PSI4_FIXED_SECONDS</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_MAX_GB"><code class="docutils literal notranslate"><span class="pre">PSI4_MAX_GB</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_SPEEDUP"><code class="docutils literal notranslate"><span class="pre">PSI4_SPEEDUP</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_T16"><code class="docutils literal notranslate"><span class="pre">PSI4_T16</span></code></a></li>

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
+    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.5 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=78fc797d"></script>
+    <script src="_static/documentation_options.js?v=dc84fd64"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,7 +54,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.4" />
+  <meta name="docsearch:version" content="2026.11.9.5" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -511,6 +511,14 @@
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.9.5 – Bugfix: Psi4 time estimates for small calculations were too short</dt><dd><ul class="simple">
+<li><p>The time estimate for each Psi4 calculation now includes a fixed 3 minutes for
+setting up Psi4, the basis sets, the density fitting and the grids. Small pairs
+took 4-5 minutes on 8 cores, against about 80 s estimated, so bundles of many
+small calculations asked for too little time and ran out before the last ones,
+which then had to be queued again.</p></li>
+</ul>
+</dd>
 <dt>2026.11.9.4 – Every calculation as its own task, and many structures in one step</dt><dd><ul class="simple">
 <li><p>Each EDA calculation – each set of fragments of each structure – now runs as
 its own task, asking for the cores, memory and time its size needs (from its

@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
+    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.5 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=78fc797d"></script>
+    <script src="../../_static/documentation_options.js?v=dc84fd64"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.4" />
+  <meta name="docsearch:version" content="2026.11.9.5" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -569,6 +569,11 @@
 <span class="c1">#: The largest memory to ask for: above it the EDA engine reads its integrals</span>
 <span class="c1">#: from disk (DISK_DF) rather than the task waiting for a bigger node.</span>
 <span class="n">PSI4_MAX_GB</span> <span class="o">=</span> <span class="mf">240.0</span>
+<span class="c1">#: A fixed time per calculation, on top of the size-dependent part: setting up</span>
+<span class="c1">#: Psi4, the bases, the fitting and the grids. Small pairs (93-116 nbf, 8 threads)</span>
+<span class="c1">#: took 240-270 s on TinkerCliffs (ChemAI 5680, 2026-11-09), against about 80 s</span>
+<span class="c1">#: from the size alone; without it a bundle of small tasks overran its time.</span>
+<span class="n">PSI4_FIXED_SECONDS</span> <span class="o">=</span> <span class="mf">180.0</span>
 <span class="c1">#: Speed-up relative to 16 threads.</span>
 <span class="n">PSI4_SPEEDUP</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">:</span> <span class="mf">0.41</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">64</span><span class="p">:</span> <span class="mf">2.4</span><span class="p">}</span>
 <span class="c1">#: Memory besides the JK: about 4 GB plus 0.3 GB per thread (EC-EC: 6.3 GB on</span>
@@ -653,7 +658,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">psi4_seconds</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">cores</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Estimated wall time of a Psi4 EDA task."""</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">_loglog</span><span class="p">(</span><span class="n">PSI4_T16</span><span class="p">,</span> <span class="n">nbf</span><span class="p">)</span> <span class="o">*</span> <span class="n">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">t</span> <span class="o">/</span> <span class="n">_loglog</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">PSI4_SPEEDUP</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">cores</span><span class="p">)))</span></div>
+    <span class="n">t</span> <span class="o">/=</span> <span class="n">_loglog</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">PSI4_SPEEDUP</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">cores</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">PSI4_FIXED_SECONDS</span> <span class="o">+</span> <span class="n">t</span></div>
 
 
 
