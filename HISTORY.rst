@@ -1,6 +1,17 @@
 =======
 History
 =======
+2026.11.9 -- Psi4 backend: half the memory for density fitting, and memory from the allocation
+    * The Psi4 backend (not yet offered by the step) held two sets of density-fitted
+      integrals at once: its EDA engine's and those of the final SCF of the whole
+      system. The SCF now runs first, and Psi4 frees its integrals before the engine
+      builds its own, so only one set is in memory (a 1121-function cluster peaked at
+      141 GB with two). The terms are unchanged (to 1e-6 kJ/mol).
+    * When the integrals would not fit in memory, density fitting falls back to
+      reading them from the scratch disk at each build (DISK_DF), slower but bounded.
+    * The step gives Psi4 80 % of the calculation's memory; it ran with Psi4's default
+      of 4 GB before.
+
 2026.11.8.1 -- Internal: the Psi4 EDA driver's integrals
     * The Psi4 backend (not yet offered by the step) computes its integrals directly
       instead of keeping them in memory, which was 4.5 times slower for the EDA's many

@@ -427,9 +427,10 @@ class InteractionEda(seamm.Node):
                     f"of the environment where {backend.name} is installed."
                 )
 
-        files = backend.files(calculations, settings)
         ce = seamm_exec.computational_environment()
         ce["NTASKS"] = self.n_cores(ce["NTASKS"])
+        settings = self.backend_memory(settings, ce)
+        files = backend.files(calculations, settings)
         result = executor.run(
             cmd=backend.command(),
             config=config,
@@ -448,6 +449,19 @@ class InteractionEda(seamm.Node):
                 if text:
                     (Path(self.directory) / f"{name}.txt").write_text(text)
         return result
+
+    @staticmethod
+    def backend_memory(settings, ce):
+        """The settings with the backend's memory (``memory_gb``, for a backend
+        that takes it, e.g. Psi4) set to 80 % of the memory the calculation was
+        given, when not set otherwise. Psi4's own default of 4 GB would push its
+        density-fitted integrals to disk for all but small systems."""
+        if "memory_gb" not in settings or settings.get("memory_gb"):
+            return settings
+        memory = int(ce.get("MEM_PER_NODE") or 0)
+        if memory <= 0:
+            return settings
+        return {**settings, "memory_gb": round(0.8 * memory / 1e9, 1)}
 
     def n_cores(self, available):
         """The cores to use: those available, capped by SEAMM's ``ncores`` option.
