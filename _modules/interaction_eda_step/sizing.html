@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.5 documentation</title>
+    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.6 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=dc84fd64"></script>
+    <script src="../../_static/documentation_options.js?v=eb7c770e"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.5" />
+  <meta name="docsearch:version" content="2026.11.9.6" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -583,8 +583,12 @@
 <span class="c1">#: Psi4's screening keeps about 3/4 of the function pairs (shell A, 1121 nbf:</span>
 <span class="c1">#: 47.6 GiB needed against 62.8 for all pairs, 2026-11-09).</span>
 <span class="n">SCREENED</span> <span class="o">=</span> <span class="mf">0.75</span>
-<span class="c1">#: The EDA engine's JK gets half of Psi4's memory (the driver's Engine).</span>
-<span class="n">ENGINE_FRACTION</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="c1">#: The peak memory of a Psi4 EDA is about 1.9 times its in-core integrals (shell</span>
+<span class="c1">#: A, 1121 nbf: 98 GB at 51 GB, 2026-11-09): the integrals, plus the grids, the</span>
+<span class="c1">#: matrices and the threads' buffers. Asked for with 30 % to spare. The driver</span>
+<span class="c1">#: gives the integrals 75 % of Psi4's memory (80 % of this), so they fit in core.</span>
+<span class="n">PEAK_OVER_JK</span> <span class="o">=</span> <span class="mf">1.9</span>
+<span class="n">PEAK_HEADROOM</span> <span class="o">=</span> <span class="mf">1.3</span>
 
 
 <div class="viewcode-block" id="df_bytes">
@@ -615,16 +619,17 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">psi4_memory</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">naux</span><span class="p">,</span> <span class="n">density_fitting</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Bytes of memory for a Psi4 EDA task (what the queue is asked for).</span>
 
-<span class="sd">    Psi4 gets 80 % of it, and the EDA engine's in-core JK half of that, so the</span>
-<span class="sd">    screened integrals fit in core (MEM_DF) rather than being read from disk.</span>
-<span class="sd">    The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at 98 GB</span>
-<span class="sd">    with 160 GB for Psi4; this gives 130 GB."""</span>
+<span class="sd">    Enough for the peak, about 1.9 times the screened in-core integrals, with</span>
+<span class="sd">    30 % to spare. Psi4 gets 80 % of it, and the EDA engine's in-core JK 75 % of</span>
+<span class="sd">    that, so the integrals stay in core (MEM_DF) rather than being read from</span>
+<span class="sd">    disk. The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at</span>
+<span class="sd">    98 GB with 160 GB for Psi4; this gives 127 GB."""</span>
     <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"automatic"</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span>
     <span class="n">jk</span> <span class="o">=</span> <span class="n">SCREENED</span> <span class="o">*</span> <span class="n">df_bytes</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">naux</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e9</span> <span class="k">if</span> <span class="n">density_fitting</span> <span class="ow">and</span> <span class="n">naux</span> <span class="k">else</span> <span class="mf">0.0</span>
     <span class="n">gb</span> <span class="o">=</span> <span class="mf">1.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">PSI4_FIXED_GB</span> <span class="o">+</span> <span class="n">PSI4_PER_THREAD_GB</span> <span class="o">*</span> <span class="n">cores</span> <span class="o">+</span> <span class="n">jk</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">jk</span><span class="p">:</span>
-        <span class="n">gb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="n">jk</span> <span class="o">/</span> <span class="n">ENGINE_FRACTION</span> <span class="o">/</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="n">PEAK_HEADROOM</span> <span class="o">*</span> <span class="n">PEAK_OVER_JK</span> <span class="o">*</span> <span class="n">jk</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="n">PSI4_MAX_GB</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e9</span><span class="p">)</span></div>
 
 
