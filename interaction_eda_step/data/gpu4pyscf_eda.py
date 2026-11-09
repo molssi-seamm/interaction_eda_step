@@ -86,6 +86,21 @@ class PeakGPUMemory:
         self.thread.join()
 
 
+def grid_options(settings):
+    """The integration grids for eval_ALMO_EDA_2_energies, from the settings.
+
+    ``xc_grid`` and ``nlc_grid`` are (radial, angular) pairs for the
+    exchange-correlation and VV10 grids. Missing (older inputs), GPU4PySCF's own
+    defaults hold: (99, 590) and (50, 194), pruned.
+    """
+    options = {}
+    for key in ("xc_grid", "nlc_grid"):
+        value = settings.get(key)
+        if value is not None:
+            options[key] = tuple(int(n) for n in value)
+    return options
+
+
 def done_ids(path):
     ids = set()
     if os.path.exists(path):
@@ -185,6 +200,7 @@ def main(argv=None):
     auxbasis = settings.get("auxbasis")
     disp = settings.get("disp")
     verbose = int(settings.get("verbose", 3))
+    grids = grid_options(settings)
 
     gpu = cp.cuda.runtime.getDeviceProperties(0)["name"]
     gpu = gpu.decode() if isinstance(gpu, bytes) else str(gpu)
@@ -240,6 +256,7 @@ def main(argv=None):
                             verbose=verbose,
                             nlc=nlc,
                             disp=disp,
+                            **grids,
                         )
                     cp.cuda.runtime.deviceSynchronize()
                     record["eda_kJ_mol"] = {

@@ -170,6 +170,8 @@ class InteractionEda(seamm.Node):
             options.append("no VV10 in the FERF response")
         if applies["dispersion"] and P["dispersion"] not in ("none", ""):
             options.append(f"{P['dispersion']} dispersion")
+        if applies["integration grid"] and P["integration grid"] != "fine":
+            options.append(f"{P['integration grid']} integration grids")
         if P["ferf response"] != "coupled":
             options.append(f"{P['ferf response']} FERF response")
         if options:
@@ -207,6 +209,10 @@ class InteractionEda(seamm.Node):
             settings["disp"] = (
                 None if dispersion.lower() in ("none", "no", "") else dispersion
             )
+        if applies["integration grid"]:
+            from .backends.gpu4pyscf import GRIDS
+
+            settings.update(GRIDS[P["integration grid"]])
         if applies["low fp64 gpus"]:
             settings["allow_low_fp64"] = P["low fp64 gpus"] == "allow"
         return settings
