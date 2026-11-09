@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.8.1 documentation</title>
+    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=5120ad9a"></script>
+    <script src="../../_static/documentation_options.js?v=3789d4b4"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8.1" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -936,9 +936,10 @@
                     <span class="sa">f</span><span class="s2">"of the environment where </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is installed."</span>
                 <span class="p">)</span>
 
-        <span class="n">files</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">calculations</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
         <span class="n">ce</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">computational_environment</span><span class="p">()</span>
         <span class="n">ce</span><span class="p">[</span><span class="s2">"NTASKS"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cores</span><span class="p">(</span><span class="n">ce</span><span class="p">[</span><span class="s2">"NTASKS"</span><span class="p">])</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_memory</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">ce</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">calculations</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
             <span class="n">cmd</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">command</span><span class="p">(),</span>
             <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
@@ -957,6 +958,22 @@
                 <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
                     <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="InteractionEda.backend_memory">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.backend_memory">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">backend_memory</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">ce</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The settings with the backend's memory (``memory_gb``, for a backend</span>
+<span class="sd">        that takes it, e.g. Psi4) set to 80 % of the memory the calculation was</span>
+<span class="sd">        given, when not set otherwise. Psi4's own default of 4 GB would push its</span>
+<span class="sd">        density-fitted integrals to disk for all but small systems."""</span>
+        <span class="k">if</span> <span class="s2">"memory_gb"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"memory_gb"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">settings</span>
+        <span class="n">memory</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ce</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"MEM_PER_NODE"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">memory</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">settings</span>
+        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">settings</span><span class="p">,</span> <span class="s2">"memory_gb"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="n">memory</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span></div>
 
 
 <div class="viewcode-block" id="InteractionEda.n_cores">

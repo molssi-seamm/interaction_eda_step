@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.8.1 documentation</title>
+    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.9 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=5120ad9a"></script>
+    <script src="../_static/documentation_options.js?v=3789d4b4"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8.1" />
+  <meta name="docsearch:version" content="2026.11.9" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -875,6 +875,15 @@ list of remaining argument strings.</p></li>
 <p class="admonition-title">See also</p>
 <p><code class="xref py py-obj docutils literal notranslate"><span class="pre">TkInteractionEda</span></code>, <a class="reference internal" href="#interaction_eda_step.interaction_eda.InteractionEda" title="interaction_eda_step.interaction_eda.InteractionEda"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEda</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">InteractionEdaParameters</span></code></p>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.backend_memory">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">backend_memory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ce</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.backend_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.backend_memory" title="Link to this definition">#</a></dt>
+<dd><p>The settings with the backend’s memory (<code class="docutils literal notranslate"><span class="pre">memory_gb</span></code>, for a backend
+that takes it, e.g. Psi4) set to 80 % of the memory the calculation was
+given, when not set otherwise. Psi4’s own default of 4 GB would push its
+density-fitted integrals to disk for all but small systems.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="interaction_eda_step.interaction_eda.InteractionEda.backend_settings">
 <span class="sig-name descname"><span class="pre">backend_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">P</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/interaction_eda.html#InteractionEda.backend_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.interaction_eda.InteractionEda.backend_settings" title="Link to this definition">#</a></dt>
@@ -1701,6 +1710,7 @@ A SEAMM plug-in for Interaction EDA</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-interaction_eda_step.interaction_eda">interaction_eda_step.interaction_eda module</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda"><code class="docutils literal notranslate"><span class="pre">InteractionEda</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.backend_memory"><code class="docutils literal notranslate"><span class="pre">InteractionEda.backend_memory()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.backend_settings"><code class="docutils literal notranslate"><span class="pre">InteractionEda.backend_settings()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.description_text"><code class="docutils literal notranslate"><span class="pre">InteractionEda.description_text()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.interaction_eda.InteractionEda.git_revision"><code class="docutils literal notranslate"><span class="pre">InteractionEda.git_revision</span></code></a></li>
