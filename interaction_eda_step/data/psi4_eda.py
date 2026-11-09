@@ -290,6 +290,7 @@ class Engine:
     """
 
     def __init__(self, basis, sup, jk_type):
+        self.jk_type = jk_type
         self.basis = basis
         self.sup = sup
         self.nbf = basis.nbf()
@@ -313,18 +314,29 @@ class Engine:
                 basis.has_puream(),
             )
         self.lrc = sup.is_x_lrc()
-        self.jk = psi4.core.JK.build(basis, aux=aux, jk_type=jk_type)
-        self.jk.set_memory(int(psi4.get_memory() * 0.5 / 8))
-        if self.lrc:
-            self.jk.set_do_wK(True)
-            self.jk.set_omega(sup.x_omega())
-        self.jk.initialize()
+        try:
+            self.jk = self._jk(basis, aux, jk_type, sup)
+        except Exception as exc:
+            if not (in_core_refused(exc) and jk_type.upper() == "MEM_DF"):
+                raise
+            # Not enough memory for the integrals in core: read them from disk
+            self.jk = self._jk(basis, aux, "DISK_DF", sup)
+            self.jk_type = "DISK_DF"
         self.alpha = sup.x_alpha() if sup.is_x_hybrid() else 0.0
         self.beta = sup.x_beta() if self.lrc else 0.0
         self.V = None
         if sup.needs_xc():
             self.V = psi4.core.VBase.build(basis, sup, "RV")
             self.V.initialize()
+
+    def _jk(self, basis, aux, jk_type, sup):
+        jk = psi4.core.JK.build(basis, aux=aux, jk_type=jk_type)
+        jk.set_memory(int(psi4.get_memory() * 0.5 / 8))
+        if self.lrc:
+            jk.set_do_wK(True)
+            jk.set_omega(sup.x_omega())
+        jk.initialize()
+        return jk
 
     def jk_build(self, left, right=None):
         """J, K (and wK) for the densities left[k] right[k]^T."""
@@ -422,11 +434,71 @@ class Fragment:
             )
 
 
+def scf_type(jk_type):
+    """The SCF_TYPE for the SCFs (fragments and the whole system).
+
+    With an auxiliary basis the SCFs use DISK_DF, whatever the EDA engine uses:
+    DiskDFJK keeps its integrals in core when they fit, and counts the
+    range-separated ones in its estimate. Psi4 splits an SCF's memory between
+    the JK and the DFT grid's collocation cache by the JK's memory_estimate(),
+    which for MEM_DF leaves the range-separated tensors out: the cache then takes
+    almost everything and the in-core MEM_DF JK is refused (na6_min, 383
+    functions: 2.1 of 12.8 GB for a 2.4 GB need; TinkerCliffs, 2026-11-09).
+    """
+    return "direct" if jk_type == "DIRECT" else "disk_df"
+
+
+def reset_after_failure():
+    """Clear Psi4's state after a failed calculation, so the next one starts
+    clean: a calculation that stopped in DFHelper left its timer running, and
+    the next failed ("Timer DFH: initialize() is already on") and then hung."""
+    try:
+        psi4.core.clean()
+    except Exception:
+        pass
+    for name in ("clean_timers", "clean_variables"):
+        function = getattr(psi4.core, name, None)
+        if function is not None:
+            try:
+                function()
+            except Exception:
+                pass
+
+
+def in_core_refused(exc):
+    """Whether Psi4 refused in-core MEM_DF for lack of memory. Its DFHelper
+    defaults to in-core for MEM_DF and stops rather than go out of core; the
+    memory it is given is Psi4's less the DFT grid's, which for a large system
+    is much less than Psi4's own (1121-function cluster, 104 GiB: the JK got
+    42.8 GiB and needed 47.6)."""
+    return "not enough memory to do in-core" in str(exc)
+
+
+def scf_energy(name, log, **kwargs):
+    """psi4.energy(), retried with DISK_DF if Psi4 refuses in-core MEM_DF."""
+    try:
+        return psi4.energy(name, **kwargs)
+    except Exception as exc:
+        if not in_core_refused(exc):
+            raise
+    scf_type = psi4.core.get_global_option("SCF_TYPE")
+    log(
+        f"Not enough memory for in-core {scf_type}: the SCF reads its integrals "
+        "from disk (DISK_DF)"
+    )
+    psi4.core.clean()
+    psi4.set_options({"scf_type": "disk_df"})
+    try:
+        return psi4.energy(name, **kwargs)
+    finally:
+        psi4.set_options({"scf_type": scf_type.lower()})
+
+
 def run_fragment(fragments, i, xc, log):
     """SCF of fragment i in its own basis. Returns (energy, wfn)."""
     mol = molecule(fragments, which=[i])
     psi4.core.clean()
-    e, wfn = psi4.energy(method_name(xc), molecule=mol, return_wfn=True)
+    e, wfn = scf_energy(method_name(xc), log, molecule=mol, return_wfn=True)
     log(
         f"Fragment {i} energy = {e:.10f} hartree, {wfn.basisset().nbf()} basis "
         f"functions, {wfn.nmo()} orbitals, {wfn.nalpha()} occupied"
@@ -734,8 +806,13 @@ def eda(fragments, settings, log):
     # the same time (two sets, 141 GB for a 1121-function cluster, when the SCF
     # ran last)
     psi4.core.clean()
-    E_full = psi4.energy(method_name(xc), molecule=full)
+    E_full = scf_energy(method_name(xc), log, molecule=full)
     eng = Engine(basis, build_superfunctional(xc), jk_type)
+    if eng.jk_type != jk_type:
+        log(
+            f"Not enough memory for in-core {jk_type}: the EDA reads its integrals "
+            f"from disk ({eng.jk_type})"
+        )
 
     off = np.cumsum([0] + [w.basisset().nbf() for w in frag_wfn])
     ooff = np.cumsum([0] + nocc)
@@ -864,7 +941,7 @@ def main(argv=None):
     options = {
         "basis": settings.get("basis", "def2-tzvpd"),
         # Set per calculation to match the EDA's JK algorithm (jk_algorithm)
-        "scf_type": "direct" if not settings.get("auxbasis") else "mem_df",
+        "scf_type": "direct" if not settings.get("auxbasis") else "disk_df",
         "e_convergence": CONV_TOL,
         "d_convergence": 1.0e-8,
         "maxiter": MAX_CYCLE,
@@ -903,8 +980,8 @@ def main(argv=None):
                     for i, f in enumerate(fragments):
                         Fragment(f, i)
                     jk = jk_algorithm(fragments, settings)
-                    psi4.set_options({"scf_type": jk.lower()})
-                    log(f"Integrals: {jk}")
+                    psi4.set_options({"scf_type": scf_type(jk)})
+                    log(f"Integrals: {jk} (SCFs: {scf_type(jk).upper()})")
                     terms, energies, nbf = eda(fragments, settings, log)
                     record["eda_kJ_mol"] = {k: float(v) for k, v in terms.items()}
                     record["energies_hartree"] = [float(e) for e in energies]
@@ -916,6 +993,7 @@ def main(argv=None):
                     record["error"] = traceback.format_exc()
                     log(record["error"])
                     print(f"{cid}: FAILED\n{record['error']}", flush=True)
+                    reset_after_failure()
             record["wall_s"] = round(time.time() - t0, 2)
             out.write(json.dumps(record) + "\n")
             out.flush()
