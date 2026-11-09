@@ -91,5 +91,11 @@ setup(
         'console_scripts': [
             'interaction-eda-step-installer=interaction_eda_step.__main__:run',
         ],
+        # Each EDA calculation is a seamm_exec task; these find the code's Python
+        # (from psi4.ini or gpu4pyscf.ini) on the machine that runs it.
+        'org.molssi.seamm.exec.resolvers': [
+            'psi4_eda = interaction_eda_step.resolver:resolve_psi4',
+            'gpu4pyscf_eda = interaction_eda_step.resolver:resolve_gpu4pyscf',
+        ],
     }
 )

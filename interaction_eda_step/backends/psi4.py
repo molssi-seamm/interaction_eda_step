@@ -63,6 +63,7 @@ class Psi4(GPU4PySCF):
     max_fragments = None
     #: The Psi4 step's ini file: its environment has Psi4.
     ini = "psi4.ini"
+    program = "psi4_eda"
     driver = "psi4_eda.py"
     defaults = DEFAULTS
 
@@ -85,7 +86,35 @@ class Psi4(GPU4PySCF):
         return config
 
     def command(self):
-        return super().command() + ["--threads", "{NTASKS}"]
+        # A task's threads and memory (bytes), from its share of the machine
+        return super().command() + [
+            "--threads",
+            "{CPUS_PER_TASK}",
+            "--memory",
+            "{MEM_PER_NODE}",
+        ]
+
+    def task_resources(self, calc, settings, cores="automatic", memory="automatic"):
+        """Threads and memory by the size of the calculation, and its time."""
+        import seamm_exec
+
+        from .. import sizing
+
+        s = self.settings(settings)
+        symbols = [x for f in calc.fragments for x in f.symbols]
+        nbf, naux = sizing.size(symbols, s["basis"], s["auxbasis"])
+        if nbf is None:
+            n = 8 if str(cores) == "automatic" else int(cores)
+            mem = 32e9 if str(memory) == "automatic" else int(memory)
+            seconds = None
+        else:
+            n = sizing.psi4_cores(nbf, cores)
+            mem = sizing.psi4_memory(nbf, naux, bool(s["auxbasis"]), memory, cores=n)
+            seconds = sizing.psi4_seconds(nbf, n, len(calc.fragments))
+        resources = seamm_exec.Resources(
+            ntasks=1, cpus_per_task=n, mem_per_cpu=int(mem / n)
+        )
+        return resources, seconds
 
     def problems(self, settings):
         """Why these settings cannot run with Psi4, or [] if they can."""

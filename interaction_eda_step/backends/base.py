@@ -75,6 +75,12 @@ class Backend:
     ini = None
     #: Results file the code writes.
     results_file = "results.jsonl"
+    #: The seamm_exec program of a task (its resolver finds the code's Python).
+    program = None
+
+    def task_resources(self, calc, settings, cores="automatic", memory="automatic"):
+        """(seamm_exec.Resources, estimated seconds) for one calculation."""
+        raise NotImplementedError
 
     def options(self):
         """The settings this backend accepts: {name: default}."""

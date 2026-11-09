@@ -1,6 +1,21 @@
 =======
 History
 =======
+2026.11.9.4 -- Every calculation as its own task, and many structures in one step
+    * Each EDA calculation -- each set of fragments of each structure -- now runs as
+      its own task, asking for the cores, memory and time its size needs (from its
+      number of basis functions and fragments). In the job's own cores they run side
+      by side; on a queue that sends tasks to the scheduler, as batch jobs bundled
+      together. A cluster's pairs no longer wait for, or get the cores of, the
+      cluster.
+    * The step can analyze many structures at once, with SEAMM's standard structure
+      selection, e.g. every system read from a file. Several structures give
+      eda.jsonl, one line per structure, and one eda.extxyz with all of them.
+    * New settings for Psi4: "Cores per calculation" (automatic: 8 up to 400 basis
+      functions, 16 up to 800, 32 above) and "Memory per calculation" (automatic:
+      enough to keep the density-fitted integrals in memory, at most 240 GB).
+    * Each calculation's input, log and results are in tasks/<key> under the step.
+
 2026.11.9.3 -- Bugfix: Psi4 density-fitted SCFs stopped for lack of memory
     * With density fitting and a range-separated functional such as ωB97X-V, Psi4's
       SCFs could stop with "SCF_SUBTYPE=INCORE was specified, but there is not

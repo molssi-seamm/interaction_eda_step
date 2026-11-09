@@ -98,6 +98,7 @@ class GPU4PySCF(Backend):
     device = "gpu"
     max_fragments = None
     ini = "gpu4pyscf.ini"
+    program = "gpu4pyscf_eda"
     #: The driver script, in the package's data, run with the code's Python.
     driver = DRIVER
     #: The settings and their defaults.
@@ -155,6 +156,23 @@ class GPU4PySCF(Backend):
             "--logdir",
             ".",
         ]
+
+    def task_resources(self, calc, settings, cores="automatic", memory="automatic"):
+        """One GPU, a few cores for the host side, and the estimated time."""
+        import seamm_exec
+
+        from .. import sizing
+
+        s = self.settings(settings)
+        symbols = [x for f in calc.fragments for x in f.symbols]
+        nbf, _ = sizing.size(symbols, s["basis"], s["auxbasis"])
+        n = sizing.GPU_CORES if str(cores) == "automatic" else int(cores)
+        mem = sizing.GPU_MEMORY_GB * 1e9 if str(memory) == "automatic" else int(memory)
+        resources = seamm_exec.Resources(
+            ntasks=1, cpus_per_task=n, ngpus=1, mem_per_cpu=int(mem / n)
+        )
+        seconds = sizing.gpu_seconds(nbf, len(calc.fragments)) if nbf else None
+        return resources, seconds
 
     def read_results(self, directory, calculations):
         records = read_jsonl(Path(directory) / self.results_file)

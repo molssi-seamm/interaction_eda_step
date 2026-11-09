@@ -8,6 +8,33 @@ The defaults are the settings that were validated against SAPT and coupled-clust
 references and between GPUs: ωB97M-V/def2-TZVPD, exact integrals, coupled FERF-DQ
 response with a singular-value threshold of 10⁻⁴, and fine integration grids.
 
+Structures and resources
+========================
+Structures
+    Which structures to analyze, with SEAMM's standard choices: the current
+    configuration (the default), the current configuration of every system, all
+    configurations, or those whose names match. One step can analyze a whole file of
+    structures read with Read Structure -- set its system and configuration names to
+    ``title`` so the results carry the names from the file -- with no Loop.
+
+    Every calculation, each set of fragments of each structure, runs as its own task:
+    in the job's own cores, or, on a queue that sends tasks to the scheduler
+    (``tasks = queue``), as batch jobs, several bundled together. Each task asks for
+    the cores, memory and time its size needs, and a rerun keeps the calculations that
+    have finished.
+
+Cores per calculation
+    With Psi4, the threads for each calculation. ``automatic`` uses 8 up to 400 basis
+    functions, 16 up to 800 and 32 above, which is where the extra cores still pay
+    (see :ref:`settings` under Code). GPU4PySCF calculations use one GPU and four
+    cores.
+
+Memory per calculation
+    With Psi4, the memory for each calculation, of which Psi4 gets 80 %. ``automatic``
+    sizes it so the density-fitted integrals of the EDA stay in memory: about 10 GB
+    for a Li⁺–EC pair, 20 GB for an EC–EC pair, 130 GB for a 1121-function cluster,
+    and at most 240 GB, above which they are read from disk.
+
 Method
 ======
 Code
