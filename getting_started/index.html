@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Getting Started &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
+    <title>Getting Started &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../_static/documentation_options.js?v=170d6da9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.9.2" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -552,6 +552,16 @@ minutes.</p>
 <p>Run the step in a job on a GPU node: through a SEAMM queue that targets a GPU partition
 with FP64 (for example an A100 or A30 partition), or on a workstation with such a GPU.</p>
 </section>
+<section id="without-a-gpu-psi4">
+<h3>Without a GPU: Psi4<a class="headerlink" href="#without-a-gpu-psi4" title="Link to this heading">#</a></h3>
+<p>With “Code” set to Psi4 the step runs the same EDA on CPUs with Psi4 1.11 or later, in
+the Psi4 step’s environment: install the Psi4 step (<code class="docutils literal notranslate"><span class="pre">seamm-manager</span> <span class="pre">install</span>
+<span class="pre">psi4-step</span></code>) and the step finds Psi4 through its <code class="docutils literal notranslate"><span class="pre">psi4.ini</span></code>. It runs the EDA script
+with the Python of that environment – the one beside <code class="docutils literal notranslate"><span class="pre">psi4</span></code> when <code class="docutils literal notranslate"><span class="pre">code</span></code> gives its
+path, otherwise the first on the PATH once the conda environment is activated. It uses
+the job’s cores as threads. Psi4 suits GGA and hybrid functionals such as ωB97X-V, and
+Hartree-Fock; see <a class="reference internal" href="../user_guide/settings.html#settings"><span class="std std-ref">Settings</span></a> for what it does not offer and how long it takes.</p>
+</section>
 <section id="configuring-the-step-gpu4pyscf-ini">
 <h3>Configuring the step: gpu4pyscf.ini<a class="headerlink" href="#configuring-the-step-gpu4pyscf-ini" title="Link to this heading">#</a></h3>
 <p>The step finds GPU4PySCF through <code class="docutils literal notranslate"><span class="pre">gpu4pyscf.ini</span></code> in the SEAMM installation’s
@@ -659,6 +669,7 @@ everything. See the <a class="reference internal" href="../user_guide/index.html
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-gpu">The GPU</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#without-a-gpu-psi4">Without a GPU: Psi4</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-step-gpu4pyscf-ini">Configuring the step: gpu4pyscf.ini</a></li>
 </ul>
 </li>

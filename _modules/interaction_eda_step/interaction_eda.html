@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
+    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.2 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../../_static/documentation_options.js?v=170d6da9"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.9.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -740,7 +740,11 @@
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
         <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">_</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">structure</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"system_name"</span><span class="p">:</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s2">"configuration_name"</span><span class="p">:</span> <span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">}</span>
 
         <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">P</span><span class="p">[</span><span class="s2">"backend"</span><span class="p">]]()</span>
         <span class="n">scheme</span> <span class="o">=</span> <span class="n">SCHEMES</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">scheme</span><span class="p">]</span>
@@ -851,10 +855,23 @@
         <span class="n">method</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">method_string</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">print_results</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">fragments</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_extxyz</span><span class="p">(</span>
-            <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.extxyz"</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">results</span>
+            <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.extxyz"</span><span class="p">,</span>
+            <span class="n">fragments</span><span class="p">,</span>
+            <span class="n">mb</span><span class="p">,</span>
+            <span class="n">scheme</span><span class="p">,</span>
+            <span class="n">method</span><span class="p">,</span>
+            <span class="n">results</span><span class="p">,</span>
+            <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span>
-            <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.json"</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span>
+            <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.json"</span><span class="p">,</span>
+            <span class="n">fragments</span><span class="p">,</span>
+            <span class="n">results</span><span class="p">,</span>
+            <span class="n">mb</span><span class="p">,</span>
+            <span class="n">scheme</span><span class="p">,</span>
+            <span class="n">method</span><span class="p">,</span>
+            <span class="n">settings</span><span class="p">,</span>
+            <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Results</span>
@@ -1100,11 +1117,14 @@
 
 <div class="viewcode-block" id="InteractionEda.write_extxyz">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.write_extxyz">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">write_extxyz</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_extxyz</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">"""One frame per computed set of fragments, with the EDA terms as</span>
 <span class="sd">        labels ``EDA_&lt;scheme&gt;_&lt;term&gt;`` (kJ/mol), plus ``EDA_&lt;scheme&gt;_mod_pauli``,</span>
 <span class="sd">        the SAPT-comparable Pauli; the cluster's frame also has the many-body</span>
-<span class="sd">        parts, and each frame says where it was computed (``EDA_platform``)."""</span>
+<span class="sd">        parts, and each frame says where it was computed (``EDA_platform``) and</span>
+<span class="sd">        which structure it came from (``system_name``, ``configuration_name``)."""</span>
         <span class="n">tag</span> <span class="o">=</span> <span class="s2">"EDA_"</span> <span class="o">+</span> <span class="n">scheme</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"-"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">key</span><span class="p">(</span><span class="n">term</span><span class="p">):</span>
@@ -1148,6 +1168,9 @@
                 <span class="k">continue</span>
             <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
             <span class="n">info</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"fragments"</span><span class="p">:</span> <span class="s2">"+"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">))}</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">structure</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
             <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">labels</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">):</span>
                 <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">labels</span><span class="p">(</span><span class="n">mb</span><span class="o">.</span><span class="n">sum_pairs</span><span class="p">,</span> <span class="s2">"_2body"</span><span class="p">))</span>
@@ -1172,8 +1195,11 @@
 
 <div class="viewcode-block" id="InteractionEda.write_json">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.write_json">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">write_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_json</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"structure"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">structure</span> <span class="ow">or</span> <span class="p">{}),</span>
             <span class="s2">"method"</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
             <span class="s2">"scheme"</span><span class="p">:</span> <span class="n">scheme</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="s2">"settings"</span><span class="p">:</span> <span class="n">settings</span><span class="p">,</span>

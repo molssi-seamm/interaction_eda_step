@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.1 documentation</title>
+    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.2 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=20f5e7c3"></script>
+    <script src="../_static/documentation_options.js?v=170d6da9"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.1" />
+  <meta name="docsearch:version" content="2026.11.9.2" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -525,9 +525,47 @@ references and between GPUs: ωB97M-V/def2-TZVPD, exact integrals, coupled FERF-
 response with a singular-value threshold of 10⁻⁴, and fine integration grids.</p>
 <section id="method">
 <h2>Method<a class="headerlink" href="#method" title="Link to this heading">#</a></h2>
-<dl class="simple">
-<dt>Code</dt><dd><p>The code that does the EDA. GPU4PySCF runs second-generation ALMO-EDA on a GPU (see
-<a class="reference internal" href="terms.html#eda-terms"><span class="std std-ref">The EDA terms</span></a>).</p>
+<dl>
+<dt>Code</dt><dd><p>The code that does the EDA. Both run second-generation ALMO-EDA (see
+<a class="reference internal" href="terms.html#eda-terms"><span class="std std-ref">The EDA terms</span></a>) with the same algorithm and settings, and give the same terms.</p>
+<dl>
+<dt>GPU4PySCF</dt><dd><p>Runs on a GPU with good double-precision (FP64) throughput: A100, A30,
+H100/H200, B200. It handles every functional, including meta-GGAs such as
+ωB97M-V with the coupled response, and is much faster.</p>
+</dd>
+<dt>Psi4</dt><dd><p>Runs on CPUs, with the Psi4 step’s environment (<code class="docutils literal notranslate"><span class="pre">psi4.ini</span></code>), so it needs no
+GPU and no environment of its own. Psi4 has the exchange-correlation response
+kernel only for LDA and GGA functionals without VV10, so:</p>
+<ul class="simple">
+<li><p>VV10 is always kept in the energies and always left out of the FERF
+response (the settings for VV10 are not shown);</p></li>
+<li><p>meta-GGA functionals such as ωB97M-V or B97M-V are not available: the
+uncoupled response would move energy from polarization into charge
+transfer – +1.4 kJ/mol for Li⁺–EC at equilibrium, up to 6 kJ/mol at short
+range – and the terms would not be comparable with coupled ones. Use
+GPU4PySCF for them;</p></li>
+<li><p>dispersion corrections are not available yet.</p></li>
+</ul>
+<p>Use density fitting (<code class="docutils literal notranslate"><span class="pre">def2-universal-jkfit</span></code>) with Psi4: with exact integrals
+the many Fock builds of the EDA are several times slower. With density
+fitting, ωB97X-V/def2-TZVPD on AMD EPYC cores (TinkerCliffs, 2026-11-09)
+takes:</p>
+<ul class="simple">
+<li><p>Li⁺–EC (284 basis functions): 16 minutes on 4 cores, 8 on 8, 7 on 16, 4
+on 32;</p></li>
+<li><p>EC–EC (552): 37 minutes on 8 cores, 16 on 16, 11 on 32;</p></li>
+<li><p>a Li⁺ shell of two EC and two DMC (1121): about 2 hours on 16 cores.</p></li>
+</ul>
+<p>Psi4 uses extra cores less and less well: 8 cores are the most economical
+up to about 400 basis functions, 16 up to about 800, and 32 above. The
+density-fitted integrals are kept in memory when they fit, which for a
+range-separated functional takes about 3 × 8 × N<sub>aux</sub> × N<sup>2</sup>
+bytes – about 70 GB for the 1121-function cluster, so give such a
+calculation about 130 GB. With less, Psi4 reads them from the scratch disk
+at every Fock build, which is slower. The step gives Psi4 80 % of the
+calculation’s memory.</p>
+</dd>
+</dl>
 </dd>
 <dt>Functional</dt><dd><p>The density functional, in PySCF’s names (case does not matter), e.g. <code class="docutils literal notranslate"><span class="pre">wB97M-V</span></code>,
 <code class="docutils literal notranslate"><span class="pre">wB97X-V</span></code>, <code class="docutils literal notranslate"><span class="pre">B97M-V</span></code>.</p>
@@ -547,17 +585,18 @@ Najibi and Goerigk’s ωB97X-D4.</p>
 only; the SCF and SCF-MI energies keep the full functional. This matches codes that
 have no VV10 response kernel, such as Psi4. For a Li⁺ shell it moved energy between
 polarization and charge transfer by at most 0.0014 kJ/mol, and does not change the
-total. Shown only when VV10 is kept.</p>
+total. Shown only when VV10 is kept, with GPU4PySCF.</p>
 </dd>
-<dt>Dispersion correction</dt><dd><p>An empirical correction added to the functional, in PySCF’s names: <code class="docutils literal notranslate"><span class="pre">d4</span></code>,
+<dt>Dispersion correction</dt><dd><p>GPU4PySCF only. An empirical correction added to the functional, in PySCF’s names: <code class="docutils literal notranslate"><span class="pre">d4</span></code>,
 <code class="docutils literal notranslate"><span class="pre">d3bj</span></code>, or a specific parameter set such as <code class="docutils literal notranslate"><span class="pre">d4:wb97x</span></code>. It is part of the
 dispersion term; D4’s three-body (ATM) part shows up in the ≥3-body dispersion.</p>
 </dd>
 <dt>FERF response</dt><dd><p><code class="docutils literal notranslate"><span class="pre">coupled</span></code> solves the coupled-perturbed equations for the fragments’ response to
 electric fields (the default). <code class="docutils literal notranslate"><span class="pre">uncoupled</span></code> uses orbital-energy denominators
 without the exchange-correlation kernel, which is cheaper. Only the split between
-polarization and charge transfer changes: by about 1 % of the polarization for a Li⁺
-shell.</p>
+polarization and charge transfer changes: uncoupled moves energy from polarization
+into charge transfer, +1.4 kJ/mol for Li⁺–EC at equilibrium and up to 6 kJ/mol at
+short range with ωB97M-V, so uncoupled terms are not comparable with coupled ones.</p>
 </dd>
 <dt>FERF singular-value threshold</dt><dd><p>Response directions with singular values below this are dropped from the
 polarization space. Like the response, it affects only the polarization/charge
@@ -576,7 +615,7 @@ agree with Psi4 to 0.012 kJ/mol in the energy of the whole cluster. Pairs hardly
 change (0.001 kJ/mol). Labels computed before this setting existed (2026.11.9 and
 earlier) used the standard grids.</p>
 </dd>
-<dt>GPUs with little FP64</dt><dd><p><code class="docutils literal notranslate"><span class="pre">refuse</span></code> (the default) stops before any calculation if the GPU is one made mainly
+<dt>GPUs with little FP64</dt><dd><p>GPU4PySCF only. <code class="docutils literal notranslate"><span class="pre">refuse</span></code> (the default) stops before any calculation if the GPU is one made mainly
 for single precision (T4, L4, L40S, A10, A40, RTX …), where the EDA runs tens of
 times slower; the job ends with a message saying so. <code class="docutils literal notranslate"><span class="pre">allow</span></code> runs anyway, with a
 warning.</p>
