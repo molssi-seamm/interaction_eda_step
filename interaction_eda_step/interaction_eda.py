@@ -234,7 +234,11 @@ class InteractionEda(seamm.Node):
         directory = Path(self.directory)
         directory.mkdir(parents=True, exist_ok=True)
 
-        _, configuration = self.get_system_configuration(None)
+        system, configuration = self.get_system_configuration(None)
+        structure = {
+            "system_name": system.name,
+            "configuration_name": configuration.name,
+        }
 
         backend = BACKENDS[P["backend"]]()
         scheme = SCHEMES[backend.scheme]
@@ -345,10 +349,23 @@ class InteractionEda(seamm.Node):
         method = backend.method_string(settings)
         self.print_results(mb, scheme, fragments)
         self.write_extxyz(
-            directory / "eda.extxyz", fragments, mb, scheme, method, results
+            directory / "eda.extxyz",
+            fragments,
+            mb,
+            scheme,
+            method,
+            results,
+            structure=structure,
         )
         self.write_json(
-            directory / "eda.json", fragments, results, mb, scheme, method, settings
+            directory / "eda.json",
+            fragments,
+            results,
+            mb,
+            scheme,
+            method,
+            settings,
+            structure=structure,
         )
 
         # Results
@@ -576,11 +593,14 @@ class InteractionEda(seamm.Node):
             )
         )
 
-    def write_extxyz(self, path, fragments, mb, scheme, method, results=None):
+    def write_extxyz(
+        self, path, fragments, mb, scheme, method, results=None, structure=None
+    ):
         """One frame per computed set of fragments, with the EDA terms as
         labels ``EDA_<scheme>_<term>`` (kJ/mol), plus ``EDA_<scheme>_mod_pauli``,
         the SAPT-comparable Pauli; the cluster's frame also has the many-body
-        parts, and each frame says where it was computed (``EDA_platform``)."""
+        parts, and each frame says where it was computed (``EDA_platform``) and
+        which structure it came from (``system_name``, ``configuration_name``)."""
         tag = "EDA_" + scheme.name.replace("-", "")
 
         def key(term):
@@ -624,6 +644,9 @@ class InteractionEda(seamm.Node):
                 continue
             seen.add(k)
             info = {"fragments": "+".join(map(str, k))}
+            for name, value in (structure or {}).items():
+                if value:
+                    info[name] = value
             info.update(labels(values))
             if len(k) == len(fragments):
                 info.update(labels(mb.sum_pairs, "_2body"))
@@ -645,8 +668,11 @@ class InteractionEda(seamm.Node):
             frames.append(_extxyz_frame(atoms, info))
         path.write_text("".join(frames))
 
-    def write_json(self, path, fragments, results, mb, scheme, method, settings):
+    def write_json(
+        self, path, fragments, results, mb, scheme, method, settings, structure=None
+    ):
         data = {
+            "structure": dict(structure or {}),
             "method": method,
             "scheme": scheme.name,
             "settings": settings,
