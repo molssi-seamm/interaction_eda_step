@@ -99,3 +99,54 @@ def test_backend_memory():
     assert InteractionEda.backend_memory({"memory_gb": 8}, ce)["memory_gb"] == 8
     assert "memory_gb" not in InteractionEda.backend_memory({"xc": "hf"}, ce)
     assert InteractionEda.backend_memory({"memory_gb": None}, {})["memory_gb"] is None
+
+
+def test_scf_falls_back_to_disk_df():
+    """Psi4 refuses in-core MEM_DF when its JK lacks memory (it does not go out
+    of core by itself): the SCF is retried with DISK_DF, and SCF_TYPE restored."""
+    driver = _driver()
+
+    class FakeCore:
+        def __init__(self, psi4):
+            self.psi4 = psi4
+
+        def get_global_option(self, name):
+            return self.psi4.options["scf_type"].upper()
+
+        def clean(self):
+            self.psi4.cleaned += 1
+
+    class FakePsi4:
+        def __init__(self):
+            self.options = {"scf_type": "mem_df"}
+            self.calls = []
+            self.cleaned = 0
+            self.core = FakeCore(self)
+
+        def set_options(self, options):
+            self.options.update(options)
+
+        def energy(self, name, **kwargs):
+            self.calls.append(self.options["scf_type"])
+            if self.options["scf_type"] == "mem_df":
+                raise RuntimeError(
+                    "Fatal Error: SCF_SUBTYPE=INCORE was specified, but there is not "
+                    "enough memory to do in-core! Increase the amount of memory"
+                )
+            return -1.0
+
+    fake = FakePsi4()
+    driver.psi4 = fake
+    messages = []
+    assert driver.scf_energy("wb97x-v", messages.append, molecule=None) == -1.0
+    assert fake.calls == ["mem_df", "disk_df"]
+    assert fake.options["scf_type"] == "mem_df"
+    assert any("DISK_DF" in m for m in messages)
+
+    # Other errors are not retried
+    def broken(name, **kwargs):
+        raise RuntimeError("SCF did not converge")
+
+    fake.energy = broken
+    with pytest.raises(RuntimeError, match="did not converge"):
+        driver.scf_energy("wb97x-v", messages.append, molecule=None)

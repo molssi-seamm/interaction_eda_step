@@ -1,6 +1,21 @@
 =======
 History
 =======
+2026.11.9.3 -- Bugfix: Psi4 density-fitted SCFs stopped for lack of memory
+    * With density fitting and a range-separated functional such as ωB97X-V, Psi4's
+      SCFs could stop with "SCF_SUBTYPE=INCORE was specified, but there is not
+      enough memory to do in-core", even for small clusters with plenty of memory:
+      Psi4 gave almost all of it to the DFT grid, because its estimate for the
+      in-core integrals leaves out the range-separated ones (Na⁺(H₂O)₆: 2.1 of
+      12.8 GB). The SCFs now use Psi4's DISK_DF algorithm, which keeps the integrals
+      in memory when they fit and otherwise reads them from disk. The energies are
+      unchanged (to 3e-8 kJ/mol).
+    * The EDA's own integrals fall back to DISK_DF too when they do not fit in
+      memory, rather than stopping.
+    * After a calculation fails, Psi4 is reset, so the next calculation of the
+      structure starts clean. Before, the next one failed as well and the one after
+      that hung until the job's time ran out.
+
 2026.11.9.2 -- Psi4 as the EDA code, on CPUs
     * The Interaction EDA step now offers Psi4 as well as GPU4PySCF. Psi4 runs the
       same second-generation ALMO-EDA on CPUs, with the Psi4 step's environment
