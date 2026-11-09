@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.8 documentation</title>
+    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.8.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=93f150ad"></script>
+    <script src="../_static/documentation_options.js?v=5120ad9a"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.8" />
+  <meta name="docsearch:version" content="2026.11.8.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -575,13 +575,23 @@ warning.</p>
 </section>
 <section id="fragments-and-calculations">
 <h2>Fragments and calculations<a class="headerlink" href="#fragments-and-calculations" title="Link to this heading">#</a></h2>
-<dl class="simple">
+<dl>
 <dt>Fragments</dt><dd><p><code class="docutils literal notranslate"><span class="pre">molecules</span></code> (the default) makes each molecule – each bonded group of atoms – a
 fragment. Its charge comes from the atoms’ formal charges or, for common molecules
 and ions, from a built-in catalog (water, carbonates, Li⁺, Na⁺, K⁺, PF₆⁻, BF₄⁻,
 halides). <code class="docutils literal notranslate"><span class="pre">atom</span> <span class="pre">column</span></code> assigns the atoms to fragments with an integer atom
 column, with charges summed from the formal charges. Every fragment must be
 closed-shell.</p>
+<p>The molecules come from the bonds, which for formats without bonds (e.g. extended
+XYZ) Read Structure finds from the distances. Alkali and alkaline-earth ions such
+as Li⁺ and Na⁺ are never bonded, so an ion stays its own fragment even in close
+contact. A badly distorted structure can still break a molecule apart: a C–H bond
+stretched to 1.3–1.6 Å, for example, leaves the hydrogen as a separate
+“molecule”. The step then stops with an error naming the molecule whose electron
+count is odd, rather than guessing a partition and computing the wrong
+interaction. A split or merge that leaves every piece with an even number of
+electrons is not caught this way, so check unusual structures, or give the
+fragments with <code class="docutils literal notranslate"><span class="pre">atom</span> <span class="pre">column</span></code>.</p>
 </dd>
 <dt>Atom column</dt><dd><p>The column for <code class="docutils literal notranslate"><span class="pre">atom</span> <span class="pre">column</span></code>.</p>
 </dd>
