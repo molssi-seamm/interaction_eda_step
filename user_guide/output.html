@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Output &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>Output &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -566,18 +566,25 @@ triples, <code class="docutils literal notranslate"><span class="pre">..._&lt;te
 charge transfer carries the BSSE, what induction is, which electrostatic and Pauli
 terms are comparable with SAPT, and which many-body sum is truncated.</p></li>
 </ul>
+<p>Every frame also has <code class="docutils literal notranslate"><span class="pre">system_name</span></code> and <code class="docutils literal notranslate"><span class="pre">configuration_name</span></code>, the structure it came
+from. With several structures, eda.extxyz has the frames of all of them.</p>
 </section>
-<section id="eda-json">
-<h2>eda.json<a class="headerlink" href="#eda-json" title="Link to this heading">#</a></h2>
-<p>Everything: the settings, the fragments, each calculation’s terms with its wall time,
-peak GPU memory, GPU and code versions (or its error), and the many-body sums.</p>
+<section id="eda-json-and-eda-jsonl">
+<h2>eda.json and eda.jsonl<a class="headerlink" href="#eda-json-and-eda-jsonl" title="Link to this heading">#</a></h2>
+<p>Everything about a structure: its system and configuration names (<code class="docutils literal notranslate"><span class="pre">structure</span></code>), the
+method and settings, the fragments (name, charge, and the 0-based indices of their
+atoms), each calculation’s terms with its wall time, peak GPU memory, GPU and code
+versions (or its error), and the many-body sums. One structure gives <code class="docutils literal notranslate"><span class="pre">eda.json</span></code>;
+several give <code class="docutils literal notranslate"><span class="pre">eda.jsonl</span></code>, one line per structure in the same format.</p>
 </section>
-<section id="reruns">
-<h2>Reruns<a class="headerlink" href="#reruns" title="Link to this heading">#</a></h2>
-<p>Each calculation’s result is kept in <code class="docutils literal notranslate"><span class="pre">results.jsonl</span></code> as soon as it finishes. If a job
-stops – for example it runs out of time – rerunning it computes only the missing
-calculations. A failed calculation is reported and the step still gives every part that
-does not need it.</p>
+<section id="tasks-and-reruns">
+<h2>Tasks and reruns<a class="headerlink" href="#tasks-and-reruns" title="Link to this heading">#</a></h2>
+<p>Each calculation runs in its own directory, <code class="docutils literal notranslate"><span class="pre">tasks/&lt;key&gt;</span></code>, where the key is the set
+of fragments (<code class="docutils literal notranslate"><span class="pre">0+1</span></code>) or, with several structures, the structure’s number and the set
+(<code class="docutils literal notranslate"><span class="pre">3.0+1</span></code>); its input, the code’s log and its <code class="docutils literal notranslate"><span class="pre">results.jsonl</span></code> are there. Finished
+calculations are marked, so if a job stops – for example it runs out of time –
+rerunning it computes only the others. A failed calculation is reported, tried again
+on a rerun, and the step still gives every part that does not need it.</p>
 </section>
 </section>
 
@@ -631,8 +638,8 @@ does not need it.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#printed-output">Printed output</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-extxyz">eda.extxyz</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-json">eda.json</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reruns">Reruns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eda-json-and-eda-jsonl">eda.json and eda.jsonl</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tasks-and-reruns">Tasks and reruns</a></li>
 </ul>
   </nav></div>
 

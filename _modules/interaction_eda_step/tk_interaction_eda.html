@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.tk_interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>interaction_eda_step.tk_interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -520,6 +520,8 @@
 <span class="p">)</span>
 <span class="c1">#: The settings for the fragments and calculations.</span>
 <span class="n">FRAGMENTS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"fragments"</span><span class="p">,</span> <span class="s2">"fragment column"</span><span class="p">,</span> <span class="s2">"calculations"</span><span class="p">,</span> <span class="s2">"triples cutoff"</span><span class="p">)</span>
+<span class="c1">#: The resources of each calculation (the structures come first, in the same frame).</span>
+<span class="n">RESOURCES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"cores per calculation"</span><span class="p">,</span> <span class="s2">"memory per calculation"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="TkInteractionEda">
@@ -635,6 +637,13 @@
         <span class="bp">self</span><span class="p">[</span><span class="s2">"method frame"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span>
             <span class="n">frame</span><span class="p">,</span> <span class="n">borderwidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">relief</span><span class="o">=</span><span class="s2">"sunken"</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">"Method"</span><span class="p">,</span> <span class="n">labelanchor</span><span class="o">=</span><span class="s2">"n"</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">"structures frame"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span>
+            <span class="n">frame</span><span class="p">,</span>
+            <span class="n">borderwidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+            <span class="n">relief</span><span class="o">=</span><span class="s2">"sunken"</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="s2">"Structures and resources"</span><span class="p">,</span>
+            <span class="n">labelanchor</span><span class="o">=</span><span class="s2">"n"</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="p">[</span><span class="s2">"fragments frame"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ttk</span><span class="o">.</span><span class="n">LabelFrame</span><span class="p">(</span>
             <span class="n">frame</span><span class="p">,</span>
             <span class="n">borderwidth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
@@ -646,6 +655,9 @@
             <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"method frame"</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">FRAGMENTS</span><span class="p">:</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"fragments frame"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_structure_selection_widgets</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"structures frame"</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">RESOURCES</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s2">"structures frame"</span><span class="p">])</span>
 
         <span class="c1"># Re-lay out when a choice changes which other settings apply</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"backend"</span><span class="p">,</span> <span class="s2">"functional"</span><span class="p">,</span> <span class="s2">"vv10"</span><span class="p">,</span> <span class="s2">"fragments"</span><span class="p">,</span> <span class="s2">"calculations"</span><span class="p">):</span>
@@ -672,12 +684,13 @@
         <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s2">"frame"</span><span class="p">]</span>
         <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="n">frame</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
             <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"method frame"</span><span class="p">,</span> <span class="s2">"fragments frame"</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"structures frame"</span><span class="p">,</span> <span class="s2">"method frame"</span><span class="p">,</span> <span class="s2">"fragments frame"</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">slave</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">grid_slaves</span><span class="p">():</span>
                 <span class="n">slave</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="p">[</span><span class="s2">"method frame"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-        <span class="bp">self</span><span class="p">[</span><span class="s2">"fragments frame"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">"structures frame"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">"method frame"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s2">"fragments frame"</span><span class="p">]</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">tk</span><span class="o">.</span><span class="n">EW</span><span class="p">,</span> <span class="n">pady</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
         <span class="c1"># Offer only the functionals the backend can run; Psi4 has no meta-GGAs</span>
         <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget_values</span><span class="p">()</span>
@@ -687,11 +700,14 @@
         <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_widget_values</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">frame_key</span><span class="p">,</span> <span class="n">keys</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="p">(</span><span class="s2">"structures frame"</span><span class="p">,</span> <span class="n">RESOURCES</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">"method frame"</span><span class="p">,</span> <span class="n">METHOD</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">"fragments frame"</span><span class="p">,</span> <span class="n">FRAGMENTS</span><span class="p">),</span>
         <span class="p">):</span>
             <span class="n">widgets</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">frame_key</span> <span class="o">==</span> <span class="s2">"structures frame"</span><span class="p">:</span>
+                <span class="n">row</span><span class="p">,</span> <span class="n">widgets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout_structure_selection</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">P</span><span class="o">.</span><span class="n">applies</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
                     <span class="k">continue</span>
@@ -712,7 +728,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_widget_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""The dialog's current values, {name: value}, for the parameters' rules."""</span>
         <span class="n">values</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">METHOD</span> <span class="o">+</span> <span class="n">FRAGMENTS</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">METHOD</span> <span class="o">+</span> <span class="n">FRAGMENTS</span> <span class="o">+</span> <span class="n">RESOURCES</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>

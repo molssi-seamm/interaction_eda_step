@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.backends.base &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>interaction_eda_step.backends.base &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../../../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -576,6 +576,15 @@
     <span class="n">ini</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1">#: Results file the code writes.</span>
     <span class="n">results_file</span> <span class="o">=</span> <span class="s2">"results.jsonl"</span>
+    <span class="c1">#: The seamm_exec program of a task (its resolver finds the code's Python).</span>
+    <span class="n">program</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Backend.task_resources">
+<a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.task_resources">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">task_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calc</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""(seamm_exec.Resources, estimated seconds) for one calculation."""</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 
 <div class="viewcode-block" id="Backend.options">
 <a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.options">[docs]</a>

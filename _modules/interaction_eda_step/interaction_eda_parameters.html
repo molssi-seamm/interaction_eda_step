@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda_parameters &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>interaction_eda_step.interaction_eda_parameters &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -569,6 +569,8 @@
 <span class="sd">    """</span>
 
     <span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># Which structures: SEAMM's standard selection (default: the current one)</span>
+        <span class="o">**</span><span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">structure_selection_parameters</span><span class="p">,</span>
         <span class="s2">"backend"</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"GPU4PySCF"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
@@ -723,6 +725,33 @@
                 <span class="s2">"calculation on such a GPU; 'allow' runs anyway."</span>
             <span class="p">),</span>
         <span class="p">},</span>
+        <span class="s2">"cores per calculation"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"Psi4"</span><span class="p">},</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"automatic"</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"integer"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"automatic"</span><span class="p">,),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">"d"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Cores per calculation:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"Threads for each EDA calculation. 'automatic' uses 8 up to 400 "</span>
+                <span class="s2">"basis functions, 16 up to 800 and 32 above, from the measured "</span>
+                <span class="s2">"scaling of Psi4."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
+        <span class="s2">"memory per calculation"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"applies_when"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"backend"</span><span class="p">:</span> <span class="s2">"Psi4"</span><span class="p">},</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"automatic"</span><span class="p">,</span>
+            <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"float"</span><span class="p">,</span>
+            <span class="s2">"default_units"</span><span class="p">:</span> <span class="s2">"GB"</span><span class="p">,</span>
+            <span class="s2">"enumeration"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"automatic"</span><span class="p">,),</span>
+            <span class="s2">"format_string"</span><span class="p">:</span> <span class="s2">".1f"</span><span class="p">,</span>
+            <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Memory per calculation:"</span><span class="p">,</span>
+            <span class="s2">"help_text"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">"Memory for each EDA calculation; Psi4 is given 80 </span><span class="si">% o</span><span class="s2">f it. "</span>
+                <span class="s2">"'automatic' sizes it from the density-fitted integrals."</span>
+            <span class="p">),</span>
+        <span class="p">},</span>
         <span class="s2">"fragments"</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">"default"</span><span class="p">:</span> <span class="s2">"molecules"</span><span class="p">,</span>
             <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"enumeration"</span><span class="p">,</span>
@@ -859,6 +888,8 @@
             <span class="p">}</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">reasons</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">reasons</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"cores per calculation"</span><span class="p">,</span> <span class="s2">"memory per calculation"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s2">"a GPU4PySCF calculation uses one GPU and a few cores"</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">not_applicable_reason</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span></div>
 
 

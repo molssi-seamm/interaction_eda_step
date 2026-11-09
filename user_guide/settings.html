@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -523,6 +523,32 @@
 <p>The defaults are the settings that were validated against SAPT and coupled-cluster
 references and between GPUs: ωB97M-V/def2-TZVPD, exact integrals, coupled FERF-DQ
 response with a singular-value threshold of 10⁻⁴, and fine integration grids.</p>
+<section id="structures-and-resources">
+<h2>Structures and resources<a class="headerlink" href="#structures-and-resources" title="Link to this heading">#</a></h2>
+<dl>
+<dt>Structures</dt><dd><p>Which structures to analyze, with SEAMM’s standard choices: the current
+configuration (the default), the current configuration of every system, all
+configurations, or those whose names match. One step can analyze a whole file of
+structures read with Read Structure – set its system and configuration names to
+<code class="docutils literal notranslate"><span class="pre">title</span></code> so the results carry the names from the file – with no Loop.</p>
+<p>Every calculation, each set of fragments of each structure, runs as its own task:
+in the job’s own cores, or, on a queue that sends tasks to the scheduler
+(<code class="docutils literal notranslate"><span class="pre">tasks</span> <span class="pre">=</span> <span class="pre">queue</span></code>), as batch jobs, several bundled together. Each task asks for
+the cores, memory and time its size needs, and a rerun keeps the calculations that
+have finished.</p>
+</dd>
+<dt>Cores per calculation</dt><dd><p>With Psi4, the threads for each calculation. <code class="docutils literal notranslate"><span class="pre">automatic</span></code> uses 8 up to 400 basis
+functions, 16 up to 800 and 32 above, which is where the extra cores still pay
+(see <a class="reference internal" href="#settings"><span class="std std-ref">Settings</span></a> under Code). GPU4PySCF calculations use one GPU and four
+cores.</p>
+</dd>
+<dt>Memory per calculation</dt><dd><p>With Psi4, the memory for each calculation, of which Psi4 gets 80 %. <code class="docutils literal notranslate"><span class="pre">automatic</span></code>
+sizes it so the density-fitted integrals of the EDA stay in memory: about 10 GB
+for a Li⁺–EC pair, 20 GB for an EC–EC pair, 130 GB for a 1121-function cluster,
+and at most 240 GB, above which they are read from disk.</p>
+</dd>
+</dl>
+</section>
 <section id="method">
 <h2>Method<a class="headerlink" href="#method" title="Link to this heading">#</a></h2>
 <dl>
@@ -702,6 +728,7 @@ atom-atom distance between the two fragments), or <code class="docutils literal 
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structures-and-resources">Structures and resources</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method">Method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fragments-and-calculations">Fragments and calculations</a></li>
 </ul>

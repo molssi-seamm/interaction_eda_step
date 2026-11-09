@@ -68,6 +68,22 @@ interaction\_eda\_step.metadata module
    :show-inheritance:
    :undoc-members:
 
+interaction\_eda\_step.resolver module
+--------------------------------------
+
+.. automodule:: interaction_eda_step.resolver
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+interaction\_eda\_step.sizing module
+------------------------------------
+
+.. automodule:: interaction_eda_step.sizing
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 interaction\_eda\_step.substep module
 -------------------------------------
 

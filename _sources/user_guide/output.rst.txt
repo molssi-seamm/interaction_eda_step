@@ -50,14 +50,22 @@ triples), with the atoms' fragment and fragment charge as columns, and these key
   charge transfer carries the BSSE, what induction is, which electrostatic and Pauli
   terms are comparable with SAPT, and which many-body sum is truncated.
 
-eda.json
-========
-Everything: the settings, the fragments, each calculation's terms with its wall time,
-peak GPU memory, GPU and code versions (or its error), and the many-body sums.
+Every frame also has ``system_name`` and ``configuration_name``, the structure it came
+from. With several structures, eda.extxyz has the frames of all of them.
 
-Reruns
-======
-Each calculation's result is kept in ``results.jsonl`` as soon as it finishes. If a job
-stops -- for example it runs out of time -- rerunning it computes only the missing
-calculations. A failed calculation is reported and the step still gives every part that
-does not need it.
+eda.json and eda.jsonl
+======================
+Everything about a structure: its system and configuration names (``structure``), the
+method and settings, the fragments (name, charge, and the 0-based indices of their
+atoms), each calculation's terms with its wall time, peak GPU memory, GPU and code
+versions (or its error), and the many-body sums. One structure gives ``eda.json``;
+several give ``eda.jsonl``, one line per structure in the same format.
+
+Tasks and reruns
+================
+Each calculation runs in its own directory, ``tasks/<key>``, where the key is the set
+of fragments (``0+1``) or, with several structures, the structure's number and the set
+(``3.0+1``); its input, the code's log and its ``results.jsonl`` are there. Finished
+calculations are marked, so if a job stops -- for example it runs out of time --
+rerunning it computes only the others. A failed calculation is reported, tried again
+on a rerun, and the step still gives every part that does not need it.

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=78fc797d"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/interaction_eda_step/sizing';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2026.11.9.4" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/SEAMM logo.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/SEAMM Inverted 288x181.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Interaction EDA</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer_guide/index.html">
+    Developer Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Documentation
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../authors.html">
+    Development Team
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../history.html">
+    History
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
+    Main SEAMM documentation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi-seamm.github.io">
+    SEAMM Documentation
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://molssi.org">
+    MolSSI
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/geometry_analysis_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../developer_guide/index.html">
+    Developer Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../authors.html">
+    Development Team
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../history.html">
+    History
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+    Main SEAMM documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi-seamm.github.io">
+    SEAMM Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://molssi.org">
+    MolSSI
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/molssi-seamm/geometry_analysis_step" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/MolSSI_NSF" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-house"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">interaction_eda_step.sizing</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for interaction_eda_step.sizing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">"""How big an EDA calculation is, and what to ask the queue for.</span>
+
+<span class="sd">Each calculation (a set of fragments) runs as its own task, so the step must say</span>
+<span class="sd">before it runs how many cores, how much memory and how much time the task needs.</span>
+<span class="sd">The size is the number of basis functions (and, with density fitting, auxiliary</span>
+<span class="sd">functions), counted from the per-element table in ``data/basis_functions.json``</span>
+<span class="sd">(from basis_set_exchange). The cost and memory models are fits to measured runs:</span>
+<span class="sd">see the developer notes in ``docs``.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="c1">#: The auxiliary basis used to size density-fitted runs when none is named.</span>
+<span class="n">DEFAULT_AUX</span> <span class="o">=</span> <span class="s2">"def2-universal-jkfit"</span>
+
+
+<span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_table</span><span class="p">():</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"interaction_eda_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">((</span><span class="n">path</span> <span class="o">/</span> <span class="s2">"basis_functions.json"</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())[</span><span class="s2">"basis"</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="n_functions">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.n_functions">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">n_functions</span><span class="p">(</span><span class="n">atomic_numbers</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The number of (spherical) basis functions of `basis` on these atoms, or</span>
+<span class="sd">    None if the basis or an element is not in the table."""</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">_table</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">basis</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="n">atomic_numbers</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">z</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">total</span></div>
+
+
+
+<div class="viewcode-block" id="atomic_numbers">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.atomic_numbers">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">atomic_numbers</span><span class="p">(</span><span class="n">symbols</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">seamm_mbe.elements</span><span class="w"> </span><span class="kn">import</span> <span class="n">atomic_number</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">atomic_number</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">symbols</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="size">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.size">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">size</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">auxbasis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""(nbf, naux) of a set of atoms: the basis functions, and the auxiliary</span>
+<span class="sd">    functions of `auxbasis` (or of the default fitting basis, for sizing)."""</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">atomic_numbers</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">n_functions</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">basis</span><span class="p">),</span> <span class="n">n_functions</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">auxbasis</span> <span class="ow">or</span> <span class="n">DEFAULT_AUX</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># Psi4 on CPUs (density fitting, wB97X-V/def2-TZVPD), TinkerCliffs AMD nodes.</span>
+<span class="c1"># Wall time on 16 threads at measured sizes (2026-11-08/09), interpolated on a</span>
+<span class="c1"># log-log scale and extrapolated with the last slope (about nbf**2.8); the</span>
+<span class="c1"># thread scaling is in PSI4_SPEEDUP. Memory: the density-fitted integrals</span>
+<span class="c1"># (8 bytes * naux * nbf(nbf+1)/2, twice for a range-separated functional) plus a</span>
+<span class="c1"># fixed part.</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1">#: Wall time of a pair on 16 threads, by nbf; the 1121-nbf point is shell A (5</span>
+<span class="c1">#: fragments, 7712 s) divided by fragment_factor(5).</span>
+<span class="n">PSI4_T16</span> <span class="o">=</span> <span class="p">((</span><span class="mi">116</span><span class="p">,</span> <span class="mf">66.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">284</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">552</span><span class="p">,</span> <span class="mf">956.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1121</span><span class="p">,</span> <span class="mf">5319.0</span><span class="p">))</span>
+<span class="c1">#: The largest memory to ask for: above it the EDA engine reads its integrals</span>
+<span class="c1">#: from disk (DISK_DF) rather than the task waiting for a bigger node.</span>
+<span class="n">PSI4_MAX_GB</span> <span class="o">=</span> <span class="mf">240.0</span>
+<span class="c1">#: Speed-up relative to 16 threads.</span>
+<span class="n">PSI4_SPEEDUP</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">:</span> <span class="mf">0.41</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">64</span><span class="p">:</span> <span class="mf">2.4</span><span class="p">}</span>
+<span class="c1">#: Memory besides the JK: about 4 GB plus 0.3 GB per thread (EC-EC: 6.3 GB on</span>
+<span class="c1">#: 16 threads, 21 GB on 32, 2026-11-09).</span>
+<span class="n">PSI4_FIXED_GB</span> <span class="o">=</span> <span class="mf">4.0</span>
+<span class="n">PSI4_PER_THREAD_GB</span> <span class="o">=</span> <span class="mf">0.3</span>
+<span class="c1">#: Psi4's screening keeps about 3/4 of the function pairs (shell A, 1121 nbf:</span>
+<span class="c1">#: 47.6 GiB needed against 62.8 for all pairs, 2026-11-09).</span>
+<span class="n">SCREENED</span> <span class="o">=</span> <span class="mf">0.75</span>
+<span class="c1">#: The EDA engine's JK gets half of Psi4's memory (the driver's Engine).</span>
+<span class="n">ENGINE_FRACTION</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+
+<div class="viewcode-block" id="df_bytes">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.df_bytes">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">df_bytes</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">naux</span><span class="p">,</span> <span class="n">range_separated</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The in-core MEM_DF tensors of the EDA engine: 8 * naux * nbf**2 bytes for</span>
+<span class="sd">    all function pairs, three of them for a range-separated functional."""</span>
+    <span class="k">return</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">naux</span> <span class="o">*</span> <span class="n">nbf</span> <span class="o">*</span> <span class="n">nbf</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span> <span class="k">if</span> <span class="n">range_separated</span> <span class="k">else</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="psi4_cores">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.psi4_cores">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">psi4_cores</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Threads for a Psi4 EDA of `nbf` basis functions."""</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"automatic"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">cores</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">nbf</span> <span class="o">&lt;=</span> <span class="mi">400</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">8</span>
+    <span class="k">if</span> <span class="n">nbf</span> <span class="o">&lt;=</span> <span class="mi">800</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">16</span>
+    <span class="k">return</span> <span class="mi">32</span></div>
+
+
+
+<div class="viewcode-block" id="psi4_memory">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.psi4_memory">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">psi4_memory</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">naux</span><span class="p">,</span> <span class="n">density_fitting</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="mi">16</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Bytes of memory for a Psi4 EDA task (what the queue is asked for).</span>
+
+<span class="sd">    Psi4 gets 80 % of it, and the EDA engine's in-core JK half of that, so the</span>
+<span class="sd">    screened integrals fit in core (MEM_DF) rather than being read from disk.</span>
+<span class="sd">    The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at 98 GB</span>
+<span class="sd">    with 160 GB for Psi4; this gives 130 GB."""</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"automatic"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span>
+    <span class="n">jk</span> <span class="o">=</span> <span class="n">SCREENED</span> <span class="o">*</span> <span class="n">df_bytes</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">naux</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e9</span> <span class="k">if</span> <span class="n">density_fitting</span> <span class="ow">and</span> <span class="n">naux</span> <span class="k">else</span> <span class="mf">0.0</span>
+    <span class="n">gb</span> <span class="o">=</span> <span class="mf">1.25</span> <span class="o">*</span> <span class="p">(</span><span class="n">PSI4_FIXED_GB</span> <span class="o">+</span> <span class="n">PSI4_PER_THREAD_GB</span> <span class="o">*</span> <span class="n">cores</span> <span class="o">+</span> <span class="n">jk</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">jk</span><span class="p">:</span>
+        <span class="n">gb</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="n">jk</span> <span class="o">/</span> <span class="n">ENGINE_FRACTION</span> <span class="o">/</span> <span class="mf">0.8</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">gb</span><span class="p">,</span> <span class="n">PSI4_MAX_GB</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e9</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_loglog</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Interpolate (x, y) points on a log-log scale; extrapolate with the end</span>
+<span class="sd">    slopes."""</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">),</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">),</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">points</span><span class="p">))</span> <span class="k">if</span> <span class="n">points</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">),</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">slope</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y1</span> <span class="o">/</span> <span class="n">y0</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x1</span> <span class="o">/</span> <span class="n">x0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y0</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">x0</span><span class="p">)</span> <span class="o">**</span> <span class="n">slope</span>
+
+
+<div class="viewcode-block" id="fragment_factor">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.fragment_factor">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""More fragments, more SCF-MI and FERF work at the same size: na6_min (7</span>
+<span class="sd">    fragments, 383 nbf) took 1362 s on 8 threads, about twice a pair."""</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="psi4_seconds">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.psi4_seconds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">psi4_seconds</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">cores</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Estimated wall time of a Psi4 EDA task."""</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">_loglog</span><span class="p">(</span><span class="n">PSI4_T16</span><span class="p">,</span> <span class="n">nbf</span><span class="p">)</span> <span class="o">*</span> <span class="n">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t</span> <span class="o">/</span> <span class="n">_loglog</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">PSI4_SPEEDUP</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">cores</span><span class="p">)))</span></div>
+
+
+
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="c1"># GPU4PySCF (one GPU). V100 times (2026-11-07): 284 -&gt; 87 s, 552 -&gt; 200 s,</span>
+<span class="c1"># 1121 -&gt; 1538 s, about nbf**2.4; host memory is small.</span>
+<span class="c1"># ---------------------------------------------------------------------------</span>
+<span class="n">GPU_T</span> <span class="o">=</span> <span class="p">(</span><span class="mf">87.0</span><span class="p">,</span> <span class="mi">284</span><span class="p">)</span>
+<span class="n">GPU_EXPONENT</span> <span class="o">=</span> <span class="mf">2.4</span>
+<span class="n">GPU_CORES</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">GPU_MEMORY_GB</span> <span class="o">=</span> <span class="mi">32</span>
+
+
+<div class="viewcode-block" id="gpu_seconds">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.gpu_seconds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">gpu_seconds</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">t</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">GPU_T</span>
+    <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">nbf</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">**</span> <span class="n">GPU_EXPONENT</span> <span class="o">*</span> <span class="n">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span></div>
+
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="_static/documentation_options.js?v=78fc797d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,7 +54,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -511,6 +511,22 @@
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.9.4 – Every calculation as its own task, and many structures in one step</dt><dd><ul class="simple">
+<li><p>Each EDA calculation – each set of fragments of each structure – now runs as
+its own task, asking for the cores, memory and time its size needs (from its
+number of basis functions and fragments). In the job’s own cores they run side
+by side; on a queue that sends tasks to the scheduler, as batch jobs bundled
+together. A cluster’s pairs no longer wait for, or get the cores of, the
+cluster.</p></li>
+<li><p>The step can analyze many structures at once, with SEAMM’s standard structure
+selection, e.g. every system read from a file. Several structures give
+eda.jsonl, one line per structure, and one eda.extxyz with all of them.</p></li>
+<li><p>New settings for Psi4: “Cores per calculation” (automatic: 8 up to 400 basis
+functions, 16 up to 800, 32 above) and “Memory per calculation” (automatic:
+enough to keep the density-fitted integrals in memory, at most 240 GB).</p></li>
+<li><p>Each calculation’s input, log and results are in tasks/&lt;key&gt; under the step.</p></li>
+</ul>
+</dd>
 <dt>2026.11.9.3 – Bugfix: Psi4 density-fitted SCFs stopped for lack of memory</dt><dd><ul class="simple">
 <li><p>With density fitting and a range-separated functional such as ωB97X-V, Psi4’s
 SCFs could stop with “SCF_SUBTYPE=INCORE was specified, but there is not

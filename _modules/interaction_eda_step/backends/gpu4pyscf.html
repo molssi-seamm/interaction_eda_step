@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.backends.gpu4pyscf &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>interaction_eda_step.backends.gpu4pyscf &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../../../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -593,6 +593,7 @@
     <span class="n">device</span> <span class="o">=</span> <span class="s2">"gpu"</span>
     <span class="n">max_fragments</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ini</span> <span class="o">=</span> <span class="s2">"gpu4pyscf.ini"</span>
+    <span class="n">program</span> <span class="o">=</span> <span class="s2">"gpu4pyscf_eda"</span>
     <span class="c1">#: The driver script, in the package's data, run with the code's Python.</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">DRIVER</span>
     <span class="c1">#: The settings and their defaults.</span>
@@ -661,6 +662,26 @@
             <span class="s2">"--logdir"</span><span class="p">,</span>
             <span class="s2">"."</span><span class="p">,</span>
         <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="GPU4PySCF.task_resources">
+<a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.gpu4pyscf.GPU4PySCF.task_resources">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">task_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calc</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="s2">"automatic"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""One GPU, a few cores for the host side, and the estimated time."""</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">seamm_exec</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">sizing</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">calc</span><span class="o">.</span><span class="n">fragments</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">symbols</span><span class="p">]</span>
+        <span class="n">nbf</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">sizing</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s2">"basis"</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s2">"auxbasis"</span><span class="p">])</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">sizing</span><span class="o">.</span><span class="n">GPU_CORES</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"automatic"</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">cores</span><span class="p">)</span>
+        <span class="n">mem</span> <span class="o">=</span> <span class="n">sizing</span><span class="o">.</span><span class="n">GPU_MEMORY_GB</span> <span class="o">*</span> <span class="mf">1e9</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"automatic"</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">Resources</span><span class="p">(</span>
+            <span class="n">ntasks</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cpus_per_task</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">ngpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mem_per_cpu</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">mem</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="n">sizing</span><span class="o">.</span><span class="n">gpu_seconds</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">fragments</span><span class="p">))</span> <span class="k">if</span> <span class="n">nbf</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">resources</span><span class="p">,</span> <span class="n">seconds</span></div>
 
 
 <div class="viewcode-block" id="GPU4PySCF.read_results">

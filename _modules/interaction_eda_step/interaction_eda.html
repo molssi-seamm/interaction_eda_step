@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.3 documentation</title>
+    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.4 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=b375e9b0"></script>
+    <script src="../../_static/documentation_options.js?v=78fc797d"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.3" />
+  <meta name="docsearch:version" content="2026.11.9.4" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -495,13 +495,11 @@
 
 <span class="sd">"""Non-graphical part of the Interaction EDA step in a SEAMM flowchart"""</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>  <span class="c1"># noqa: F401</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">tabulate</span><span class="w"> </span><span class="kn">import</span> <span class="n">tabulate</span>
@@ -509,7 +507,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">interaction_eda_step</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">fragments</span> <span class="k">as</span> <span class="n">F</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">manybody</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BACKENDS</span><span class="p">,</span> <span class="n">Calculation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">BACKENDS</span><span class="p">,</span> <span class="n">Calculation</span><span class="p">,</span> <span class="n">Result</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.terms</span><span class="w"> </span><span class="kn">import</span> <span class="n">SCHEMES</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">molsystem</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seamm</span>
@@ -680,6 +678,22 @@
         <span class="k">if</span> <span class="s2">"triples"</span> <span class="ow">in</span> <span class="n">P</span><span class="p">[</span><span class="s2">"calculations"</span><span class="p">]</span> <span class="ow">and</span> <span class="n">P</span><span class="p">[</span><span class="s2">"triples cutoff"</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">", using triples within </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'triples cutoff'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">text</span> <span class="o">+=</span> <span class="s2">"."</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"source systems"</span><span class="p">,</span> <span class="s2">"current"</span><span class="p">),</span>
+            <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"source configurations"</span><span class="p">,</span> <span class="s2">"current"</span><span class="p">),</span>
+        <span class="p">)</span> <span class="o">!=</span> <span class="p">(</span>
+            <span class="s2">"current"</span><span class="p">,</span>
+            <span class="s2">"current"</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="s2">" "</span> <span class="o">+</span> <span class="n">seamm</span><span class="o">.</span><span class="n">standard_parameters</span><span class="o">.</span><span class="n">structure_selection_description</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">applies</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cores per calculation"</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cores per calculation"</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">"automatic"</span>
+            <span class="ow">or</span> <span class="nb">str</span><span class="p">(</span><span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"memory per calculation"</span><span class="p">))</span> <span class="o">!=</span> <span class="s2">"automatic"</span>
+        <span class="p">):</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">" Each calculation has </span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'cores per calculation'</span><span class="p">]</span><span class="si">}</span><span class="s2"> cores and "</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'memory per calculation'</span><span class="p">]</span><span class="si">}</span><span class="s2"> memory."</span>
+            <span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="n">__</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
@@ -726,6 +740,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""Run the Interaction EDA step.</span>
 
+<span class="sd">        Every calculation -- each set of fragments of each selected structure --</span>
+<span class="sd">        is a ``seamm_exec`` task, sized by its number of basis functions. The</span>
+<span class="sd">        tasks run together: in the job's own cores, or bundled on the job's queue,</span>
+<span class="sd">        and a rerun keeps those already finished.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
 <span class="sd">        seamm.Node</span>
@@ -740,12 +759,6 @@
         <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
         <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="n">system</span><span class="p">,</span> <span class="n">configuration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_system_configuration</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-        <span class="n">structure</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">"system_name"</span><span class="p">:</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="s2">"configuration_name"</span><span class="p">:</span> <span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-        <span class="p">}</span>
-
         <span class="n">backend</span> <span class="o">=</span> <span class="n">BACKENDS</span><span class="p">[</span><span class="n">P</span><span class="p">[</span><span class="s2">"backend"</span><span class="p">]]()</span>
         <span class="n">scheme</span> <span class="o">=</span> <span class="n">SCHEMES</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">scheme</span><span class="p">]</span>
         <span class="n">settings</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">settings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">backend_settings</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
@@ -755,8 +768,132 @@
                 <span class="sa">f</span><span class="s2">"These settings cannot run with </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">  "</span>
                 <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">  "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">problems</span><span class="p">)</span>
             <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_ini</span><span class="p">(</span><span class="n">backend</span><span class="p">)</span>
 
-        <span class="c1"># The fragments and the calculations</span>
+        <span class="c1"># The structures, their fragments and their calculations</span>
+        <span class="n">structures</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">structure_calculations</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">configuration</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">select_configurations</span><span class="p">(</span><span class="n">P</span><span class="p">))</span>
+        <span class="p">]</span>
+        <span class="n">single</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">structures</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span>
+        <span class="k">if</span> <span class="n">single</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_fragments</span><span class="p">(</span><span class="n">structures</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"fragments"</span><span class="p">])</span>
+        <span class="n">warnings</span> <span class="o">=</span> <span class="p">{</span><span class="n">svd_warning</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s2">"fragments"</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">structures</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">w</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">warnings</span> <span class="k">if</span> <span class="n">w</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
+            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="s2">"Warning: "</span> <span class="o">+</span> <span class="n">warning</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">))</span>
+        <span class="n">n_calculations</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"calculations"</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">structures</span><span class="p">)</span>
+        <span class="n">sizes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">structures</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="s2">"calculations"</span><span class="p">]:</span>
+                <span class="n">sizes</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">key</span><span class="p">)]</span> <span class="o">=</span> <span class="n">sizes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">key</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"There are </span><span class="si">{</span><span class="n">n_calculations</span><span class="si">}</span><span class="s2"> EDA calculations"</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">single</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">" for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">structures</span><span class="p">)</span><span class="si">}</span><span class="s2"> structures"</span>
+        <span class="n">text</span> <span class="o">+=</span> <span class="s2">": "</span> <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> fragments"</span> <span class="k">for</span> <span class="n">m</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sizes</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="p">)</span>
+        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">__</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="s2">".</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">))</span>
+
+        <span class="c1"># One task per calculation</span>
+        <span class="n">cores</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"cores per calculation"</span><span class="p">,</span> <span class="s2">"automatic"</span><span class="p">)</span>
+        <span class="n">memory</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"memory per calculation"</span><span class="p">,</span> <span class="s2">"automatic"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">"automatic"</span><span class="p">:</span>
+            <span class="n">memory</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">memory</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">memory</span><span class="p">,</span> <span class="s2">"m_as"</span><span class="p">)</span> <span class="k">else</span> <span class="n">memory</span>
+            <span class="n">memory</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">memory</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s2">"byte"</span><span class="p">))</span>
+        <span class="n">task_set</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">TaskSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="n">directory</span><span class="p">)</span>
+        <span class="n">owners</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">structures</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">calc</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="s2">"calculations"</span><span class="p">]:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">calc</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">single</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">s</span><span class="p">[</span><span class="s1">'index'</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">calc</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">"</span>
+                <span class="n">resources</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">task_resources</span><span class="p">(</span>
+                    <span class="n">calc</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="n">memory</span>
+                <span class="p">)</span>
+                <span class="n">task_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="n">seamm_exec</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span>
+                        <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+                        <span class="n">program</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
+                        <span class="n">cmd</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">command</span><span class="p">(),</span>
+                        <span class="n">files</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">([</span><span class="n">calc</span><span class="p">],</span> <span class="n">settings</span><span class="p">),</span>
+                        <span class="n">return_files</span><span class="o">=</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">results_file</span><span class="p">,</span> <span class="s2">"*.log"</span><span class="p">],</span>
+                        <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">,</span>
+                        <span class="n">estimated_seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span>
+                        <span class="n">estimate_source</span><span class="o">=</span><span class="s2">"formula"</span> <span class="k">if</span> <span class="n">seconds</span> <span class="k">else</span> <span class="s2">"none"</span><span class="p">,</span>
+                        <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">owners</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">calc</span><span class="p">)</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">refused</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">task_set</span><span class="o">.</span><span class="n">run</span><span class="p">():</span>
+            <span class="n">s</span><span class="p">,</span> <span class="n">calc</span> <span class="o">=</span> <span class="n">owners</span><span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">outcome</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">directory</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">outcome</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">read_results</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span> <span class="p">[</span><span class="n">calc</span><span class="p">])[</span><span class="n">calc</span><span class="o">.</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">outcome</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">outcome</span><span class="o">.</span><span class="n">energies</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">stderr</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stderr</span> <span class="ow">or</span> <span class="s2">""</span>
+                <span class="n">refused</span> <span class="o">+=</span> <span class="p">[</span>
+                    <span class="n">line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">"REFUSED: "</span><span class="p">)</span> <span class="p">:]</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stderr</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"REFUSED: "</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="n">no_result</span> <span class="o">=</span> <span class="n">outcome</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="p">(</span><span class="n">outcome</span><span class="o">.</span><span class="n">error</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+                    <span class="s2">"no result"</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">no_result</span><span class="p">:</span>
+                    <span class="n">tail</span> <span class="o">=</span> <span class="n">stderr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>
+                    <span class="n">reason</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">reason</span> <span class="ow">or</span> <span class="p">(</span><span class="s2">" "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tail</span><span class="p">)</span> <span class="k">if</span> <span class="n">tail</span> <span class="k">else</span> <span class="s2">"failed"</span><span class="p">)</span>
+                    <span class="n">outcome</span> <span class="o">=</span> <span class="n">Result</span><span class="p">(</span><span class="n">calc</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="n">reason</span><span class="p">)</span>
+            <span class="n">s</span><span class="p">[</span><span class="s2">"results"</span><span class="p">][</span><span class="n">calc</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">outcome</span>
+        <span class="n">wall</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
+            <span class="n">__</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"The </span><span class="si">{</span><span class="n">n_calculations</span><span class="si">}</span><span class="s2"> calculations took </span><span class="si">{</span><span class="n">wall</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> s.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">,</span>
+                <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">refused</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">refused</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># Each structure: the many-body analysis, the output and the results</span>
+        <span class="n">n_failed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">all_failed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.extxyz"</span><span class="p">,</span> <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.jsonl"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">single</span><span class="p">:</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">structures</span><span class="p">:</span>
+            <span class="n">failed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_structure</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">single</span><span class="p">)</span>
+            <span class="n">n_failed</span> <span class="o">+=</span> <span class="n">failed</span>
+            <span class="k">if</span> <span class="n">failed</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s2">"calculations"</span><span class="p">]):</span>
+                <span class="n">all_failed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">all_failed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"All of the EDA calculations failed."</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">alias</span><span class="p">,</span> <span class="n">bibtex</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">backend</span><span class="o">.</span><span class="n">citations</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">=</span><span class="n">bibtex</span><span class="p">,</span>
+                <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">,</span>
+                <span class="n">module</span><span class="o">=</span><span class="s2">"interaction_eda_step"</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+                <span class="n">note</span><span class="o">=</span><span class="n">note</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_failed</span><span class="p">:</span>
+            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
+                <span class="n">__</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n_failed</span><span class="si">}</span><span class="s2"> of the </span><span class="si">{</span><span class="n">n_calculations</span><span class="si">}</span><span class="s2"> calculations failed; "</span>
+                    <span class="s2">"rerun the step to retry them."</span><span class="p">,</span>
+                    <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">next_node</span></div>
+
+
+<div class="viewcode-block" id="InteractionEda.structure_calculations">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.structure_calculations">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">structure_calculations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">configuration</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">backend</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The fragments and calculations of one structure."""</span>
         <span class="n">column</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="s2">"fragment column"</span><span class="p">]</span> <span class="k">if</span> <span class="n">P</span><span class="p">[</span><span class="s2">"fragments"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"atom column"</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="n">fragments</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">from_configuration</span><span class="p">(</span><span class="n">configuration</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">column</span><span class="p">)</span>
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
@@ -780,80 +917,67 @@
                     <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> handles at most </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">max_fragments</span><span class="si">}</span><span class="s2"> "</span>
                     <span class="sa">f</span><span class="s2">"fragments per calculation; choose 'pairs'."</span>
                 <span class="p">)</span>
-        <span class="n">calculations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Calculation</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">[</span><span class="n">fragments</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="n">configuration</span><span class="o">.</span><span class="n">system</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"index"</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span>
+            <span class="s2">"configuration"</span><span class="p">:</span> <span class="n">configuration</span><span class="p">,</span>
+            <span class="s2">"structure"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"system_name"</span><span class="p">:</span> <span class="n">system</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">"configuration_name"</span><span class="p">:</span> <span class="n">configuration</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">"fragments"</span><span class="p">:</span> <span class="n">fragments</span><span class="p">,</span>
+            <span class="s2">"calculations"</span><span class="p">:</span> <span class="p">[</span><span class="n">Calculation</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="p">[</span><span class="n">fragments</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">k</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">],</span>
+            <span class="s2">"results"</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="p">}</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">print_fragments</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
-        <span class="n">warning</span> <span class="o">=</span> <span class="n">svd_warning</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">fragments</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">warning</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
-            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-                <span class="n">__</span><span class="p">(</span><span class="s2">"Warning: "</span> <span class="o">+</span> <span class="n">warning</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-            <span class="n">__</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"There are </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">calculations</span><span class="p">)</span><span class="si">}</span><span class="s2"> EDA calculations: "</span>
-                <span class="o">+</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">keys</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">m</span><span class="p">)</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2"> fragments"</span>
-                    <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">({</span><span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">})</span>
-                <span class="p">)</span>
-                <span class="o">+</span> <span class="s2">".</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
-                <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
 
-        <span class="c1"># Run what has not been done (a rerun skips finished calculations)</span>
-        <span class="n">results</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">read_results</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">calculations</span><span class="p">)</span>
-        <span class="n">pending</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">calculations</span> <span class="k">if</span> <span class="n">results</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">energies</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">pending</span><span class="p">:</span>
-            <span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">run_backend</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">calculations</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
-            <span class="n">wall</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
-            <span class="n">results</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">read_results</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">calculations</span><span class="p">)</span>
-            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-                <span class="n">__</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pending</span><span class="p">)</span><span class="si">}</span><span class="s2"> calculations took </span><span class="si">{</span><span class="n">wall</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> s.</span><span class="se">\n\n</span><span class="s2">"</span><span class="p">,</span>
-                    <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-
+<div class="viewcode-block" id="InteractionEda.finish_structure">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.finish_structure">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">finish_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">single</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Analyze, print, write and store one structure's results; returns the</span>
+<span class="sd">        number of its calculations that failed."""</span>
+        <span class="n">indent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span>
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span>
+        <span class="n">fragments</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="s2">"fragments"</span><span class="p">]</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="s2">"results"</span><span class="p">]</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="s2">"structure"</span><span class="p">][</span><span class="s2">"configuration_name"</span><span class="p">]</span> <span class="ow">or</span> <span class="n">s</span><span class="p">[</span><span class="s2">"structure"</span><span class="p">][</span><span class="s2">"system_name"</span><span class="p">]</span>
         <span class="n">failed</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">r</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">energies</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">failed</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">last</span> <span class="o">=</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">error</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="ow">or</span> <span class="p">[</span><span class="s2">"?"</span><span class="p">]</span>
             <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
                 <span class="n">__</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The calculation for fragments </span><span class="si">{</span><span class="s1">'+'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">))</span><span class="si">}</span><span class="s2"> "</span>
-                    <span class="sa">f</span><span class="s2">"failed: </span><span class="si">{</span><span class="n">last</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-                    <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">single</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">': '</span><span class="si">}</span><span class="s2">the calculation for fragments "</span>
+                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'+'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="p">))</span><span class="si">}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">last</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                    <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="p">)</span>
         <span class="n">energies</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">energies</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">energies</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">energies</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">total</span> <span class="ow">in</span> <span class="n">scheme</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0e-4</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">term</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">total</span> <span class="ow">in</span> <span class="n">scheme</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1.0e-4</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"EDA terms of </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> are inconsistent: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> "</span>
+                    <span class="sa">f</span><span class="s2">"EDA terms of </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> are inconsistent: </span><span class="si">{</span><span class="n">term</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> "</span>
                     <span class="sa">f</span><span class="s2">"but its parts sum to </span><span class="si">{</span><span class="n">total</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> kJ/mol"</span>
                 <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">energies</span><span class="p">:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="s2">"All of the EDA calculations failed."</span>
-            <span class="n">stderr</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"stderr.txt"</span>
-            <span class="n">refused</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="n">line</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">"REFUSED: "</span><span class="p">)</span> <span class="p">:]</span>
-                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="p">(</span><span class="n">stderr</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span> <span class="k">if</span> <span class="n">stderr</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"REFUSED: "</span><span class="p">)</span>
-            <span class="p">]</span>
-            <span class="k">if</span> <span class="n">refused</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">refused</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">if</span> <span class="n">stderr</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-                <span class="n">tail</span> <span class="o">=</span> <span class="n">stderr</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span>
-                <span class="k">if</span> <span class="n">tail</span><span class="p">:</span>
-                    <span class="n">message</span> <span class="o">+=</span> <span class="s2">" The end of the code's error output:</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="n">tail</span>
-                    <span class="p">)</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span>
 
-        <span class="n">mb</span> <span class="o">=</span> <span class="n">manybody</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">energies</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">scheme</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span>
+        <span class="n">mb</span> <span class="o">=</span> <span class="n">manybody</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">energies</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">),</span> <span class="n">scheme</span><span class="o">.</span><span class="n">terms</span><span class="p">)</span>
         <span class="n">method</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">method_string</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">print_results</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">fragments</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">single</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">print_results</span><span class="p">(</span><span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">fragments</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">mb</span><span class="o">.</span><span class="n">cluster</span> <span class="k">if</span> <span class="n">mb</span><span class="o">.</span><span class="n">cluster</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">mb</span><span class="o">.</span><span class="n">pairs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">mb</span><span class="o">.</span><span class="n">pairs</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">common</span> <span class="o">=</span> <span class="n">scheme</span><span class="o">.</span><span class="n">to_common</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
+                    <span class="n">__</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: total </span><span class="si">{</span><span class="n">common</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'total'</span><span class="p">,</span><span class="w"> </span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'total'</span><span class="p">))</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">"</span>
+                        <span class="s2">" kJ/mol"</span><span class="p">,</span>
+                        <span class="n">indent</span><span class="o">=</span><span class="n">indent</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">write_extxyz</span><span class="p">(</span>
             <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.extxyz"</span><span class="p">,</span>
             <span class="n">fragments</span><span class="p">,</span>
@@ -861,20 +985,20 @@
             <span class="n">scheme</span><span class="p">,</span>
             <span class="n">method</span><span class="p">,</span>
             <span class="n">results</span><span class="p">,</span>
-            <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
+            <span class="n">structure</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="s2">"structure"</span><span class="p">],</span>
+            <span class="n">append</span><span class="o">=</span><span class="ow">not</span> <span class="n">single</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">write_json</span><span class="p">(</span>
-            <span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.json"</span><span class="p">,</span>
-            <span class="n">fragments</span><span class="p">,</span>
-            <span class="n">results</span><span class="p">,</span>
-            <span class="n">mb</span><span class="p">,</span>
-            <span class="n">scheme</span><span class="p">,</span>
-            <span class="n">method</span><span class="p">,</span>
-            <span class="n">settings</span><span class="p">,</span>
-            <span class="n">structure</span><span class="o">=</span><span class="n">structure</span><span class="p">,</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">json_record</span><span class="p">(</span>
+            <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s2">"structure"</span><span class="p">]</span>
         <span class="p">)</span>
+        <span class="k">if</span> <span class="n">single</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.json"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"eda.jsonl"</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
 
         <span class="c1"># Results</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fragments</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">scheme</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'functional'</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">P</span><span class="p">[</span><span class="s1">'basis'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"EDA method"</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span> <span class="s2">"number of fragments"</span><span class="p">:</span> <span class="n">n</span><span class="p">}</span>
         <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span>
@@ -896,107 +1020,28 @@
             <span class="n">data</span><span class="p">[</span><span class="s2">"EDA triples"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">"+"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">k</span><span class="p">)):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mb</span><span class="o">.</span><span class="n">three_body</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
             <span class="p">}</span>
-
-        <span class="k">for</span> <span class="n">alias</span><span class="p">,</span> <span class="n">bibtex</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">note</span> <span class="ow">in</span> <span class="n">backend</span><span class="o">.</span><span class="n">citations</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">references</span><span class="o">.</span><span class="n">cite</span><span class="p">(</span>
-                <span class="n">raw</span><span class="o">=</span><span class="n">bibtex</span><span class="p">,</span>
-                <span class="n">alias</span><span class="o">=</span><span class="n">alias</span><span class="p">,</span>
-                <span class="n">module</span><span class="o">=</span><span class="s2">"interaction_eda_step"</span><span class="p">,</span>
-                <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
-                <span class="n">note</span><span class="o">=</span><span class="n">note</span><span class="p">,</span>
-            <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">store_results</span><span class="p">(</span><span class="n">configuration</span><span class="o">=</span><span class="n">configuration</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
-            <span class="n">printer</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span>
-                <span class="n">__</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span><span class="si">}</span><span class="s2"> of the </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">calculations</span><span class="p">)</span><span class="si">}</span><span class="s2"> calculations failed; "</span>
-                    <span class="s2">"rerun the step to retry them."</span><span class="p">,</span>
-                    <span class="n">indent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indent</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="s2">" "</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">return</span> <span class="n">next_node</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_results</span><span class="p">(</span><span class="n">configuration</span><span class="o">=</span><span class="n">s</span><span class="p">[</span><span class="s2">"configuration"</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">failed</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="InteractionEda.run_backend">
-<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.run_backend">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">calculations</span><span class="p">,</span> <span class="n">settings</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""Run the backend through the executor, with its ini file."""</span>
-        <span class="n">executor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flowchart</span><span class="o">.</span><span class="n">executor</span>
-        <span class="n">executor_type</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">name</span>
+<div class="viewcode-block" id="InteractionEda.check_ini">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.check_ini">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_ini</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">backend</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Make sure the backend's ini file exists here, writing the default from</span>
+<span class="sd">        the package's data if there is one."""</span>
         <span class="n">ini_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_options</span><span class="p">[</span><span class="s2">"root"</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
         <span class="n">ini_path</span> <span class="o">=</span> <span class="n">ini_dir</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">ini_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">resources</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"interaction_eda_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> needs </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">, which its own SEAMM step "</span>
-                    <span class="sa">f</span><span class="s2">"installs: install the </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> step "</span>
-                    <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">-step) and its code."</span>
-                <span class="p">)</span>
-            <span class="n">ini_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">((</span><span class="n">resources</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Wrote a default </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">full_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-        <span class="n">full_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ini_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">executor_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">full_config</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ini_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span>
+        <span class="n">resources</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"interaction_eda_step"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"data"</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">resources</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">"No section for '</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">' in </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">. Add one giving "</span>
-                <span class="sa">f</span><span class="s2">"the Python of the </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> environment, e.g.</span><span class="se">\n</span><span class="s2">"</span>
-                <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="s2">installation = local</span><span class="se">\n</span><span class="s2">"</span>
-                <span class="s2">"code = /path/to/env/bin/python"</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> needs </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">, which its own SEAMM step "</span>
+                <span class="sa">f</span><span class="s2">"installs: install the </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> step "</span>
+                <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">-step) and its code."</span>
             <span class="p">)</span>
-        <span class="n">config</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="nb">dict</span><span class="p">(</span><span class="n">full_config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">executor_type</span><span class="p">)))</span>
-        <span class="n">code</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"code"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"installation"</span><span class="p">,</span> <span class="s2">"local"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"local"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
-            <span class="n">Path</span><span class="p">(</span><span class="n">code</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">if</span> <span class="n">code</span> <span class="k">else</span> <span class="kc">False</span>
-        <span class="p">):</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">code</span><span class="p">)</span> <span class="k">if</span> <span class="n">code</span> <span class="k">else</span> <span class="kc">None</span>
-            <span class="k">if</span> <span class="n">found</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">"The </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> Python '</span><span class="si">{</span><span class="n">code</span><span class="si">}</span><span class="s2">' in </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2"> "</span>
-                    <span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">executor_type</span><span class="si">}</span><span class="s2">] does not exist. Point 'code' at the Python "</span>
-                    <span class="sa">f</span><span class="s2">"of the environment where </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> is installed."</span>
-                <span class="p">)</span>
-
-        <span class="n">ce</span> <span class="o">=</span> <span class="n">seamm_exec</span><span class="o">.</span><span class="n">computational_environment</span><span class="p">()</span>
-        <span class="n">ce</span><span class="p">[</span><span class="s2">"NTASKS"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_cores</span><span class="p">(</span><span class="n">ce</span><span class="p">[</span><span class="s2">"NTASKS"</span><span class="p">])</span>
-        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">backend_memory</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">ce</span><span class="p">)</span>
-        <span class="n">files</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">calculations</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">executor</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">cmd</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">command</span><span class="p">(),</span>
-            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
-            <span class="n">directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">,</span>
-            <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
-            <span class="n">return_files</span><span class="o">=</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">results_file</span><span class="p">,</span> <span class="s2">"*.log"</span><span class="p">],</span>
-            <span class="n">in_situ</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">ce</span><span class="o">=</span><span class="n">ce</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">"There was an error running </span><span class="si">{</span><span class="n">backend</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"stdout"</span><span class="p">,</span> <span class="s2">"stderr"</span><span class="p">):</span>
-                <span class="n">text</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
-                    <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directory</span><span class="p">)</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.txt"</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">result</span></div>
-
-
-<div class="viewcode-block" id="InteractionEda.backend_memory">
-<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.backend_memory">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">backend_memory</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">ce</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""The settings with the backend's memory (``memory_gb``, for a backend</span>
-<span class="sd">        that takes it, e.g. Psi4) set to 80 % of the memory the calculation was</span>
-<span class="sd">        given, when not set otherwise. Psi4's own default of 4 GB would push its</span>
-<span class="sd">        density-fitted integrals to disk for all but small systems."""</span>
-        <span class="k">if</span> <span class="s2">"memory_gb"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">settings</span> <span class="ow">or</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"memory_gb"</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">settings</span>
-        <span class="n">memory</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ce</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"MEM_PER_NODE"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">memory</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">settings</span>
-        <span class="k">return</span> <span class="p">{</span><span class="o">**</span><span class="n">settings</span><span class="p">,</span> <span class="s2">"memory_gb"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="n">memory</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">,</span> <span class="mi">1</span><span class="p">)}</span></div>
+        <span class="n">ini_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">((</span><span class="n">resources</span> <span class="o">/</span> <span class="n">backend</span><span class="o">.</span><span class="n">ini</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Wrote a default </span><span class="si">{</span><span class="n">ini_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="InteractionEda.n_cores">
@@ -1118,7 +1163,15 @@
 <div class="viewcode-block" id="InteractionEda.write_extxyz">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.write_extxyz">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">write_extxyz</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">,</span>
+        <span class="n">fragments</span><span class="p">,</span>
+        <span class="n">mb</span><span class="p">,</span>
+        <span class="n">scheme</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">,</span>
+        <span class="n">results</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">structure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">append</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">"""One frame per computed set of fragments, with the EDA terms as</span>
 <span class="sd">        labels ``EDA_&lt;scheme&gt;_&lt;term&gt;`` (kJ/mol), plus ``EDA_&lt;scheme&gt;_mod_pauli``,</span>
@@ -1190,14 +1243,19 @@
                 <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">xyz</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">symbols</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">coordinates</span><span class="p">):</span>
                     <span class="n">atoms</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">xyz</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">charge</span><span class="p">))</span>
             <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_extxyz_frame</span><span class="p">(</span><span class="n">atoms</span><span class="p">,</span> <span class="n">info</span><span class="p">))</span>
-        <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span></div>
+        <span class="k">if</span> <span class="n">append</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">fd</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frames</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="InteractionEda.write_json">
-<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.write_json">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">write_json</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span>
+<div class="viewcode-block" id="InteractionEda.json_record">
+<a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.interaction_eda.InteractionEda.json_record">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">json_record</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">fragments</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">mb</span><span class="p">,</span> <span class="n">scheme</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The eda.json record of one structure."""</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">"structure"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">structure</span> <span class="ow">or</span> <span class="p">{}),</span>
             <span class="s2">"method"</span><span class="p">:</span> <span class="n">method</span><span class="p">,</span>
@@ -1234,7 +1292,7 @@
             <span class="s2">"sum_3body_triples_truncated"</span><span class="p">:</span> <span class="n">mb</span><span class="o">.</span><span class="n">sum_three_body</span><span class="p">,</span>
             <span class="s2">"n_triples_total"</span><span class="p">:</span> <span class="n">mb</span><span class="o">.</span><span class="n">n_triples_total</span><span class="p">,</span>
         <span class="p">}</span>
-        <span class="n">path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="n">data</span></div>
 </div>
 
 
