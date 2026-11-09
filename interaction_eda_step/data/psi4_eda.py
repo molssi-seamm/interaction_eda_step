@@ -192,22 +192,17 @@ def block_conjugate_gradient(matvec, B, precond, tol, max_iter=200):
 # Psi4 pieces
 # ---------------------------------------------------------------------------
 def jk_algorithm(fragments, settings):
-    """PK (in core) when the integrals fit comfortably in memory, else DIRECT.
+    """Integral-direct (DIRECT), or MEM_DF with an auxiliary basis.
 
-    Both are exact. PK keeps the integrals in memory, so the many Fock builds of
-    the EDA are fast; it must never go out of core, because its disk files
-    collide with the SCFs' (psi4.core.clean() removes them), so anything that
-    might not fit is integral-direct. With an auxiliary basis: MEM_DF.
+    DIRECT is exact and, on 16 AMD cores, 4.5 times faster than keeping the
+    integrals in core (PK) for the EDA's many Fock builds: 260 s against 1179 s
+    for HF Li+-EC/def2-TZVPD (TinkerCliffs, 2026-11-08), with the same terms.
+    PK's in-core build is memory-bandwidth bound, and out of core its files
+    would collide with the SCFs'. ``fragments`` is unused, kept for the callers.
     """
     if settings.get("auxbasis"):
         return "MEM_DF"
-    basis = psi4.core.BasisSet.build(
-        molecule(fragments), "ORBITAL", settings.get("basis", "def2-tzvpd")
-    )
-    n = basis.nbf()
-    pk_bytes = 8.0 * (n * (n + 1) / 2) ** 2 / 2  # one triangle of pairs
-    # The full system's engine and Psi4's own SCF each hold one copy
-    return "PK" if 3 * pk_bytes < psi4.get_memory() else "DIRECT"
+    return "DIRECT"
 
 
 def method_name(xc):
@@ -254,7 +249,26 @@ class Engine:
         self.basis = basis
         self.sup = sup
         self.nbf = basis.nbf()
-        self.jk = psi4.core.JK.build(basis, jk_type=jk_type)
+        # The density-fitting metric needs the molecule's point group, which a
+        # molecule taken from a wavefunction may not have
+        mol = basis.molecule()
+        try:
+            mol.point_group()
+        except RuntimeError:
+            mol.set_point_group(mol.find_point_group())
+        aux = None
+        if "DF" in jk_type.upper():
+            # JK.build makes the fitting basis itself only for SCF_TYPE DF, so
+            # with MEM_DF it would get an empty one
+            aux = psi4.core.BasisSet.build(
+                mol,
+                "DF_BASIS_SCF",
+                psi4.core.get_option("SCF", "DF_BASIS_SCF"),
+                "JKFIT",
+                basis.name(),
+                basis.has_puream(),
+            )
+        self.jk = psi4.core.JK.build(basis, aux=aux, jk_type=jk_type)
         self.jk.set_memory(int(psi4.get_memory() * 0.5 / 8))
         self.lrc = sup.is_x_lrc()
         if self.lrc:
