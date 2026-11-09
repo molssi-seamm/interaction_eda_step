@@ -1,6 +1,17 @@
 =======
 History
 =======
+2026.11.9.1 -- Fine integration grids for GPU4PySCF by default
+    * GPU4PySCF's standard grids, (99,590) for the exchange-correlation and (50,194)
+      for VV10 with pruning, are not converged for compact clusters: for Na⁺(H₂O)₆ they
+      put 0.43 kJ/mol into the frozen term and 0.33 kJ/mol into dispersion, compared
+      with Psi4 at the same nominal grids. The new "Integration grid" setting defaults
+      to "fine", (150,974) and (99,590), which agrees with Psi4 to 0.012 kJ/mol for
+      the whole cluster. Pairs change by about 0.001 kJ/mol.
+    * "standard" keeps the earlier grids, about 7 times faster for a cluster, e.g. to
+      match labels made with 2026.11.9 or earlier. The EDA method string now records
+      the grids.
+
 2026.11.9 -- Psi4 backend: half the memory for density fitting, and memory from the allocation
     * The Psi4 backend (not yet offered by the step) held two sets of density-fitted
       integrals at once: its EDA engine's and those of the final SCF of the whole

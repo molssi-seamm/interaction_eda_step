@@ -23,10 +23,19 @@ def _values(**changes):
     return P, values
 
 
+GPU_ONLY = (
+    "vv10",
+    "vv10 in response",
+    "dispersion",
+    "low fp64 gpus",
+    "integration grid",
+)
+
+
 def test_rules_gpu4pyscf_defaults():
     P, values = _values()
     applies = P.applicable(values)
-    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+    for key in GPU_ONLY:
         assert applies[key], key
     assert not applies["fragment column"]
     assert not applies["triples cutoff"]
@@ -38,7 +47,7 @@ def test_rules_gpu4pyscf_defaults():
 def test_rules_psi4():
     P, values = _values(backend="Psi4", functional="wB97X-V")
     applies = P.applicable(values)
-    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+    for key in GPU_ONLY:
         assert not applies[key], key
         assert P.not_applicable_reason(key, values)
     assert P.problems(values) == []
@@ -66,6 +75,13 @@ def test_backend_settings():
     s = node.backend_settings(P)
     assert s["nlc"] is None and s["response_nlc"] is True
     assert s["disp"] is None and s["allow_low_fp64"] is False
+    # fine grids by default; 'standard' is GPU4PySCF's own
+    assert (s["xc_grid"], s["nlc_grid"]) == ([150, 974], [99, 590])
+    assert "integration grids" not in node.description_text(P)
+    P["integration grid"] = "standard"
+    s = node.backend_settings(P)
+    assert (s["xc_grid"], s["nlc_grid"]) == ([99, 590], [50, 194])
+    assert "standard integration grids" in " ".join(node.description_text(P).split())
 
     P["vv10"] = "off (whole functional)"
     s = node.backend_settings(P)
@@ -82,7 +98,7 @@ def test_backend_settings():
         }
     )
     s = node.backend_settings(P)
-    for key in ("nlc", "response_nlc", "disp", "allow_low_fp64"):
+    for key in ("nlc", "response_nlc", "disp", "allow_low_fp64", "xc_grid"):
         assert key not in s, key
     from interaction_eda_step.backends.psi4 import Psi4
 

@@ -23,7 +23,19 @@ DEFAULTS = {
     "ferf": "coupled",
     "response_nlc": True,
     "allow_low_fp64": False,
+    # The integration grids, (radial, angular) for the exchange-correlation and
+    # VV10 parts. GPU4PySCF's EDA defaults, (99, 590) and (50, 194) pruned, are
+    # 0.1-0.4 kJ/mol from converged in the frozen and dispersion terms of a compact
+    # Na+(H2O)6 cluster; these are within 0.012 kJ/mol of Psi4 there (2026-11-09).
+    "xc_grid": [150, 974],
+    "nlc_grid": [99, 590],
     "verbose": 3,
+}
+
+#: The grids for each choice of the step's "integration grid".
+GRIDS = {
+    "fine": {"xc_grid": [150, 974], "nlc_grid": [99, 590]},
+    "standard": {"xc_grid": [99, 590], "nlc_grid": [50, 194]},
 }
 
 BIBTEX = {
@@ -175,6 +187,8 @@ class GPU4PySCF(Backend):
             f"ferf={s['ferf']}",
             f"svd_threshold={s['svd_threshold']:g}",
         ]
+        if "xc_grid" in s:  # GPU4PySCF's grids; Psi4's are fixed
+            parts.append("grids={},{}/{},{}".format(*s["xc_grid"], *s["nlc_grid"]))
         return ";".join(parts)
 
     def citations(self, settings):

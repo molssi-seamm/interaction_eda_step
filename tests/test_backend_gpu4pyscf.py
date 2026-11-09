@@ -68,6 +68,19 @@ def test_method_string():
     text = GPU4PySCF().method_string({})
     assert text.startswith("scheme=ALMO-EDA2;backend=GPU4PySCF;xc=wb97m-v")
     assert "auxbasis=none" in text and "ferf=coupled" in text
+    assert text.endswith(";grids=150,974/99,590")
+    text = GPU4PySCF().method_string({"xc_grid": [99, 590], "nlc_grid": [50, 194]})
+    assert text.endswith(";grids=99,590/50,194")
+
+
+def test_grids_reach_the_driver():
+    driver = load_driver()
+    backend = GPU4PySCF()
+    calcs = [Calculation((0, 1), li_ec_fragments())]
+    s = json.loads(backend.files(calcs, {})["input.json"])["settings"]
+    assert driver.grid_options(s) == {"xc_grid": (150, 974), "nlc_grid": (99, 590)}
+    # an input from before the setting existed keeps GPU4PySCF's defaults
+    assert driver.grid_options({"xc": "wb97m-v"}) == {}
 
 
 def test_driver_helpers(tmp_path):

@@ -42,6 +42,7 @@ def test_dialog_layouts(tk_node):
     assert tk_node["functional"].grid_info() != {}
     assert tk_node["low fp64 gpus"].grid_info() != {}
     assert tk_node["low fp64 gpus"].get() == "refuse"
+    assert tk_node["integration grid"].get() == "fine"
 
     tk_node["fragments"].set("atom column")
     tk_node.reset_dialog()
@@ -71,7 +72,13 @@ def test_dialog_psi4(tk_node):
     assert tk_node["functional"].get() == "wB97M-V"
     tk_node["backend"].set("Psi4")
     tk_node.reset_dialog()
-    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+    for key in (
+        "vv10",
+        "vv10 in response",
+        "dispersion",
+        "low fp64 gpus",
+        "integration grid",
+    ):
         assert tk_node[key].grid_info() == {}, key
     # The default meta-GGA is replaced, and none are offered
     assert tk_node["functional"].get() == "wB97X-V"
@@ -81,6 +88,12 @@ def test_dialog_psi4(tk_node):
 
     tk_node["backend"].set("GPU4PySCF")
     tk_node.reset_dialog()
-    for key in ("vv10", "vv10 in response", "dispersion", "low fp64 gpus"):
+    for key in (
+        "vv10",
+        "vv10 in response",
+        "dispersion",
+        "low fp64 gpus",
+        "integration grid",
+    ):
         assert tk_node[key].grid_info() != {}, key
     assert "wB97M-V" in list(tk_node["functional"].combobox.cget("values"))

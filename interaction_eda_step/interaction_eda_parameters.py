@@ -196,6 +196,22 @@ class InteractionEdaParameters(seamm.Parameters):
                 "polarization space (GPU4PySCF's default, 1e-4, is the validated one)."
             ),
         },
+        "integration grid": {
+            "applies_when": {"backend": "GPU4PySCF"},
+            "default": "fine",
+            "kind": "enumeration",
+            "default_units": "",
+            "enumeration": ("fine", "standard"),
+            "format_string": "s",
+            "description": "Integration grid:",
+            "help_text": (
+                "The DFT integration grids. 'fine' is (150,974) for the "
+                "exchange-correlation and (99,590) for VV10, converged to about "
+                "0.01 kJ/mol for compact clusters. 'standard' is GPU4PySCF's default, "
+                "(99,590) and (50,194) pruned, about 7 times faster on a cluster but "
+                "0.1-0.4 kJ/mol off in the frozen and dispersion terms."
+            ),
+        },
         "low fp64 gpus": {
             "applies_when": {"backend": "GPU4PySCF"},
             "default": "refuse",
@@ -332,6 +348,9 @@ class InteractionEdaParameters(seamm.Parameters):
                 "vv10 in response": "Psi4 has no VV10 response kernel; it is off",
                 "dispersion": "dispersion corrections are not available with Psi4",
                 "low fp64 gpus": "Psi4 runs on CPUs",
+                "integration grid": (
+                    "Psi4 uses its own grids, (99,590) and (50,194) unpruned"
+                ),
             }
             if key in reasons:
                 return reasons[key]
