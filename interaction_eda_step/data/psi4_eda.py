@@ -236,6 +236,13 @@ def jk_algorithm(fragments, settings):
     )
 
 
+#: The part of Psi4's memory the EDA engine's JK may use. The full system's SCF
+#: runs, and frees its JK, before the engine is built (see :func:`eda`), so the
+#: engine's integrals are the only large ones held: with half, a 1121-function
+#: cluster had 1 % to spare and a 1388-function one none (TinkerCliffs,
+#: 2026-11-09), and would have fallen back to DISK_DF.
+ENGINE_JK_FRACTION = 0.75
+
 #: The part of Psi4's memory its JK may use: SCF_MEM_SAFETY_FACTOR (0.75) less the
 #: other matrices; 100 GB gave the JK 67-71 GB (TinkerCliffs, 2026-11-09).
 MEM_DF_FRACTION = 0.65
@@ -331,7 +338,7 @@ class Engine:
 
     def _jk(self, basis, aux, jk_type, sup):
         jk = psi4.core.JK.build(basis, aux=aux, jk_type=jk_type)
-        jk.set_memory(int(psi4.get_memory() * 0.5 / 8))
+        jk.set_memory(int(psi4.get_memory() * ENGINE_JK_FRACTION / 8))
         if self.lrc:
             jk.set_do_wK(True)
             jk.set_omega(sup.x_omega())

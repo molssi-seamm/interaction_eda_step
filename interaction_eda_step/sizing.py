@@ -81,8 +81,12 @@ PSI4_PER_THREAD_GB = 0.3
 #: Psi4's screening keeps about 3/4 of the function pairs (shell A, 1121 nbf:
 #: 47.6 GiB needed against 62.8 for all pairs, 2026-11-09).
 SCREENED = 0.75
-#: The EDA engine's JK gets half of Psi4's memory (the driver's Engine).
-ENGINE_FRACTION = 0.5
+#: The peak memory of a Psi4 EDA is about 1.9 times its in-core integrals (shell
+#: A, 1121 nbf: 98 GB at 51 GB, 2026-11-09): the integrals, plus the grids, the
+#: matrices and the threads' buffers. Asked for with 30 % to spare. The driver
+#: gives the integrals 75 % of Psi4's memory (80 % of this), so they fit in core.
+PEAK_OVER_JK = 1.9
+PEAK_HEADROOM = 1.3
 
 
 def df_bytes(nbf, naux, range_separated=True):
@@ -105,16 +109,17 @@ def psi4_cores(nbf, cores="automatic"):
 def psi4_memory(nbf, naux, density_fitting=True, memory="automatic", cores=16):
     """Bytes of memory for a Psi4 EDA task (what the queue is asked for).
 
-    Psi4 gets 80 % of it, and the EDA engine's in-core JK half of that, so the
-    screened integrals fit in core (MEM_DF) rather than being read from disk.
-    The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at 98 GB
-    with 160 GB for Psi4; this gives 130 GB."""
+    Enough for the peak, about 1.9 times the screened in-core integrals, with
+    30 % to spare. Psi4 gets 80 % of it, and the EDA engine's in-core JK 75 % of
+    that, so the integrals stay in core (MEM_DF) rather than being read from
+    disk. The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at
+    98 GB with 160 GB for Psi4; this gives 127 GB."""
     if str(memory) != "automatic":
         return int(memory)
     jk = SCREENED * df_bytes(nbf, naux) / 1e9 if density_fitting and naux else 0.0
     gb = 1.25 * (PSI4_FIXED_GB + PSI4_PER_THREAD_GB * cores + jk)
     if jk:
-        gb = max(gb, jk / ENGINE_FRACTION / 0.8 + 2.0)
+        gb = max(gb, PEAK_HEADROOM * PEAK_OVER_JK * jk + 2.0)
     return int(math.ceil(min(gb, PSI4_MAX_GB)) * 1e9)
 
 
