@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.6 documentation</title>
+    <title>interaction_eda_step package &#8212; SEAMM Interaction EDA Plug-in 2026.11.10 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -40,12 +40,12 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=eb7c770e"></script>
+    <script src="../_static/documentation_options.js?v=279938be"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/interaction_eda_step';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.6" />
+  <meta name="docsearch:version" content="2026.11.10" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -1393,20 +1393,6 @@ gives the integrals 75 % of Psi4’s memory (80 % of this), so they fit in core.
 </dd></dl>
 
 <dl class="py data">
-<dt class="sig sig-object py" id="interaction_eda_step.sizing.PSI4_FIXED_SECONDS">
-<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">PSI4_FIXED_SECONDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">180.0</span></span><a class="headerlink" href="#interaction_eda_step.sizing.PSI4_FIXED_SECONDS" title="Link to this definition">#</a></dt>
-<dd><p>setting up
-Psi4, the bases, the fitting and the grids. Small pairs (93-116 nbf, 8 threads)
-took 240-270 s on TinkerCliffs (ChemAI 5680, 2026-11-09), against about 80 s
-from the size alone; without it a bundle of small tasks overran its time.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A fixed time per calculation, on top of the size-dependent part</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py data">
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.PSI4_MAX_GB">
 <span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">PSI4_MAX_GB</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">240.0</span></span><a class="headerlink" href="#interaction_eda_step.sizing.PSI4_MAX_GB" title="Link to this definition">#</a></dt>
 <dd><p>above it the EDA engine reads its integrals
@@ -1426,7 +1412,7 @@ from disk (DISK_DF) rather than the task waiting for a bigger node.</p>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.PSI4_T16">
-<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">PSI4_T16</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">((116,</span> <span class="pre">66.0),</span> <span class="pre">(284,</span> <span class="pre">400.0),</span> <span class="pre">(552,</span> <span class="pre">956.0),</span> <span class="pre">(1121,</span> <span class="pre">5319.0))</span></span><a class="headerlink" href="#interaction_eda_step.sizing.PSI4_T16" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">PSI4_T16</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">((116,</span> <span class="pre">66.0),</span> <span class="pre">(284,</span> <span class="pre">400.0),</span> <span class="pre">(552,</span> <span class="pre">956.0),</span> <span class="pre">(1121,</span> <span class="pre">5008.0))</span></span><a class="headerlink" href="#interaction_eda_step.sizing.PSI4_T16" title="Link to this definition">#</a></dt>
 <dd><p>Wall time of a pair on 16 threads, by nbf; the 1121-nbf point is shell A (5
 fragments, 7712 s) divided by fragment_factor(5).</p>
 </dd></dl>
@@ -1436,6 +1422,22 @@ fragments, 7712 s) divided by fragment_factor(5).</p>
 <span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">SCREENED</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0.75</span></span><a class="headerlink" href="#interaction_eda_step.sizing.SCREENED" title="Link to this definition">#</a></dt>
 <dd><p>Psi4’s screening keeps about 3/4 of the function pairs (shell A, 1121 nbf:
 47.6 GiB needed against 62.8 for all pairs, 2026-11-09).</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.sizing.TASK_OVERHEAD_SECONDS">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">TASK_OVERHEAD_SECONDS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60.0</span></span><a class="headerlink" href="#interaction_eda_step.sizing.TASK_OVERHEAD_SECONDS" title="Link to this definition">#</a></dt>
+<dd><p>the
+batch job starting and staging the environments, launching the program, and
+writing and collecting the results. Measured on TinkerCliffs (ChemAI
+5680/5681, 425 tasks, 2026-11-10): launch and collection 7 s median, 41 s at
+most; a bundle’s start before its first task 6 s median, 14 s at the 90th
+percentile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Time per task outside the calculation itself, added to every estimate</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -1454,13 +1456,15 @@ all function pairs, three of them for a range-separated functional.</p>
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.fragment_factor">
 <span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">fragment_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_fragments</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/sizing.html#fragment_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.sizing.fragment_factor" title="Link to this definition">#</a></dt>
 <dd><p>More fragments, more SCF-MI and FERF work at the same size: na6_min (7
-fragments, 383 nbf) took 1362 s on 8 threads, about twice a pair.</p>
+fragments, 383 nbf) took 1362 s on 8 threads (ChemAI 5679), about twice a
+pair; 0.18 per extra fragment covers it with the task overhead.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.gpu_seconds">
 <span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">gpu_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_fragments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/sizing.html#gpu_seconds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.sizing.gpu_seconds" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Estimated wall time of a GPU4PySCF EDA task, with the task’s overhead.</p>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.n_functions">
@@ -1489,7 +1493,7 @@ disk. The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at
 <dl class="py function">
 <dt class="sig sig-object py" id="interaction_eda_step.sizing.psi4_seconds">
 <span class="sig-prename descclassname"><span class="pre">interaction_eda_step.sizing.</span></span><span class="sig-name descname"><span class="pre">psi4_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_fragments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/sizing.html#psi4_seconds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.sizing.psi4_seconds" title="Link to this definition">#</a></dt>
-<dd><p>Estimated wall time of a Psi4 EDA task.</p>
+<dd><p>Estimated wall time of a Psi4 EDA task, with the task’s overhead.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -1955,11 +1959,11 @@ A SEAMM plug-in for Interaction EDA</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.DEFAULT_AUX"><code class="docutils literal notranslate"><span class="pre">DEFAULT_AUX</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PEAK_OVER_JK"><code class="docutils literal notranslate"><span class="pre">PEAK_OVER_JK</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_FIXED_GB"><code class="docutils literal notranslate"><span class="pre">PSI4_FIXED_GB</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_FIXED_SECONDS"><code class="docutils literal notranslate"><span class="pre">PSI4_FIXED_SECONDS</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_MAX_GB"><code class="docutils literal notranslate"><span class="pre">PSI4_MAX_GB</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_SPEEDUP"><code class="docutils literal notranslate"><span class="pre">PSI4_SPEEDUP</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.PSI4_T16"><code class="docutils literal notranslate"><span class="pre">PSI4_T16</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.SCREENED"><code class="docutils literal notranslate"><span class="pre">SCREENED</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.TASK_OVERHEAD_SECONDS"><code class="docutils literal notranslate"><span class="pre">TASK_OVERHEAD_SECONDS</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.atomic_numbers"><code class="docutils literal notranslate"><span class="pre">atomic_numbers()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.df_bytes"><code class="docutils literal notranslate"><span class="pre">df_bytes()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.sizing.fragment_factor"><code class="docutils literal notranslate"><span class="pre">fragment_factor()</span></code></a></li>

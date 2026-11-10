@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.9.6 documentation</title>
+    <title>interaction_eda_step.sizing &#8212; SEAMM Interaction EDA Plug-in 2026.11.10 documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
     <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c224919a" />
   
   <!-- So that users can add custom icons -->
@@ -39,12 +39,12 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=eb7c770e"></script>
+    <script src="../../_static/documentation_options.js?v=279938be"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/interaction_eda_step/sizing';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.9.6" />
+  <meta name="docsearch:version" content="2026.11.10" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -511,6 +511,14 @@
 <span class="c1">#: The auxiliary basis used to size density-fitted runs when none is named.</span>
 <span class="n">DEFAULT_AUX</span> <span class="o">=</span> <span class="s2">"def2-universal-jkfit"</span>
 
+<span class="c1">#: Time per task outside the calculation itself, added to every estimate: the</span>
+<span class="c1">#: batch job starting and staging the environments, launching the program, and</span>
+<span class="c1">#: writing and collecting the results. Measured on TinkerCliffs (ChemAI</span>
+<span class="c1">#: 5680/5681, 425 tasks, 2026-11-10): launch and collection 7 s median, 41 s at</span>
+<span class="c1">#: most; a bundle's start before its first task 6 s median, 14 s at the 90th</span>
+<span class="c1">#: percentile.</span>
+<span class="n">TASK_OVERHEAD_SECONDS</span> <span class="o">=</span> <span class="mf">60.0</span>
+
 
 <span class="nd">@functools</span><span class="o">.</span><span class="n">lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_table</span><span class="p">():</span>
@@ -565,15 +573,10 @@
 <span class="c1"># ---------------------------------------------------------------------------</span>
 <span class="c1">#: Wall time of a pair on 16 threads, by nbf; the 1121-nbf point is shell A (5</span>
 <span class="c1">#: fragments, 7712 s) divided by fragment_factor(5).</span>
-<span class="n">PSI4_T16</span> <span class="o">=</span> <span class="p">((</span><span class="mi">116</span><span class="p">,</span> <span class="mf">66.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">284</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">552</span><span class="p">,</span> <span class="mf">956.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1121</span><span class="p">,</span> <span class="mf">5319.0</span><span class="p">))</span>
+<span class="n">PSI4_T16</span> <span class="o">=</span> <span class="p">((</span><span class="mi">116</span><span class="p">,</span> <span class="mf">66.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">284</span><span class="p">,</span> <span class="mf">400.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">552</span><span class="p">,</span> <span class="mf">956.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1121</span><span class="p">,</span> <span class="mf">5008.0</span><span class="p">))</span>
 <span class="c1">#: The largest memory to ask for: above it the EDA engine reads its integrals</span>
 <span class="c1">#: from disk (DISK_DF) rather than the task waiting for a bigger node.</span>
 <span class="n">PSI4_MAX_GB</span> <span class="o">=</span> <span class="mf">240.0</span>
-<span class="c1">#: A fixed time per calculation, on top of the size-dependent part: setting up</span>
-<span class="c1">#: Psi4, the bases, the fitting and the grids. Small pairs (93-116 nbf, 8 threads)</span>
-<span class="c1">#: took 240-270 s on TinkerCliffs (ChemAI 5680, 2026-11-09), against about 80 s</span>
-<span class="c1">#: from the size alone; without it a bundle of small tasks overran its time.</span>
-<span class="n">PSI4_FIXED_SECONDS</span> <span class="o">=</span> <span class="mf">180.0</span>
 <span class="c1">#: Speed-up relative to 16 threads.</span>
 <span class="n">PSI4_SPEEDUP</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">:</span> <span class="mf">0.41</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span> <span class="mf">0.85</span><span class="p">,</span> <span class="mi">16</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">32</span><span class="p">:</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">64</span><span class="p">:</span> <span class="mf">2.4</span><span class="p">}</span>
 <span class="c1">#: Memory besides the JK: about 4 GB plus 0.3 GB per thread (EC-EC: 6.3 GB on</span>
@@ -653,18 +656,19 @@
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.fragment_factor">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""More fragments, more SCF-MI and FERF work at the same size: na6_min (7</span>
-<span class="sd">    fragments, 383 nbf) took 1362 s on 8 threads, about twice a pair."""</span>
-    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span></div>
+<span class="sd">    fragments, 383 nbf) took 1362 s on 8 threads (ChemAI 5679), about twice a</span>
+<span class="sd">    pair; 0.18 per extra fragment covers it with the task overhead."""</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.18</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="psi4_seconds">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.psi4_seconds">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">psi4_seconds</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">cores</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Estimated wall time of a Psi4 EDA task."""</span>
+<span class="w">    </span><span class="sd">"""Estimated wall time of a Psi4 EDA task, with the task's overhead."""</span>
     <span class="n">t</span> <span class="o">=</span> <span class="n">_loglog</span><span class="p">(</span><span class="n">PSI4_T16</span><span class="p">,</span> <span class="n">nbf</span><span class="p">)</span> <span class="o">*</span> <span class="n">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span>
     <span class="n">t</span> <span class="o">/=</span> <span class="n">_loglog</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">PSI4_SPEEDUP</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">cores</span><span class="p">)))</span>
-    <span class="k">return</span> <span class="n">PSI4_FIXED_SECONDS</span> <span class="o">+</span> <span class="n">t</span></div>
+    <span class="k">return</span> <span class="n">TASK_OVERHEAD_SECONDS</span> <span class="o">+</span> <span class="n">t</span></div>
 
 
 
@@ -681,8 +685,10 @@
 <div class="viewcode-block" id="gpu_seconds">
 <a class="viewcode-back" href="../../api/interaction_eda_step.html#interaction_eda_step.sizing.gpu_seconds">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">gpu_seconds</span><span class="p">(</span><span class="n">nbf</span><span class="p">,</span> <span class="n">n_fragments</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Estimated wall time of a GPU4PySCF EDA task, with the task's overhead."""</span>
     <span class="n">t</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">GPU_T</span>
-    <span class="k">return</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">nbf</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">**</span> <span class="n">GPU_EXPONENT</span> <span class="o">*</span> <span class="n">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span></div>
+    <span class="n">t</span> <span class="o">*=</span> <span class="p">(</span><span class="n">nbf</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="o">**</span> <span class="n">GPU_EXPONENT</span> <span class="o">*</span> <span class="n">fragment_factor</span><span class="p">(</span><span class="n">n_fragments</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">TASK_OVERHEAD_SECONDS</span> <span class="o">+</span> <span class="n">t</span></div>
 
 </pre></div>
 
