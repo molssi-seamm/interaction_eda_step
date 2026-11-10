@@ -39,8 +39,24 @@ def test_shell_a_as_measured():
     assert engine_fraction() * 0.8 * job > 47.6 * 2**30
 
 
-def test_times_include_the_fixed_part():
-    # small pairs measured 240-270 s on 8 cores (ChemAI 5680)
-    assert 220 < sizing.psi4_seconds(116, 8) < 300
-    # na6_min, 7 fragments: 1362 s on 8 cores (ChemAI 5679)
-    assert 1200 < sizing.psi4_seconds(383, 8, 7) < 1600
+def test_times_include_the_task_overhead():
+    """Every estimate has the task's overhead on top of the calculation."""
+    overhead = sizing.TASK_OVERHEAD_SECONDS
+    assert overhead >= 41  # the longest launch + collection measured (5681)
+    for nbf in (50, 116, 300, 1121):
+        assert sizing.psi4_seconds(nbf, 8) > overhead
+        assert sizing.gpu_seconds(nbf) > overhead
+    # tiny calculations are mostly overhead
+    assert sizing.psi4_seconds(20, 8) < overhead + 20
+
+
+def test_times_cover_measured_runs():
+    """Estimates cover runs measured with the threads they asked for."""
+    # Li+ PF6- pair, 300 nbf, 8 threads: Psi4 336 s, task 356 s (TC 8586041)
+    assert 356 < sizing.psi4_seconds(300, 8) < 2 * 356
+    # na6_min, 7 fragments, 383 nbf: 1362 s on 8 threads (ChemAI 5679)
+    assert 1362 < sizing.psi4_seconds(383, 8, 7) < 1.5 * 1362
+    # shell A, 5 fragments, 1121 nbf: 7712 s on 16 threads (TC 8552392)
+    assert 7712 < sizing.psi4_seconds(1121, 16, 5) < 1.1 * 7712
+    # small pairs no longer carry the 1-thread floor (was 258 s at 116 nbf)
+    assert sizing.psi4_seconds(116, 8) < 180
