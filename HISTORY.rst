@@ -1,6 +1,15 @@
 =======
 History
 =======
+2026.11.10.1 -- Bugfix: finished calculations are no longer rerun after an update
+    * When a job is rerun, a finished calculation is now kept as long as what
+      determines its results is unchanged: the code, the method settings and the
+      fragments' atoms. Before, any change to the step's driver script, even one
+      that only changed how much memory it used, made every finished calculation
+      run again.
+    * Calculations finished with earlier versions are recorded the old way, so a
+      rerun with this version computes them once more.
+
 2026.11.10 -- Bugfix: time estimates no longer carry the 3-minute floor
     * The fixed 3 minutes added to every Psi4 calculation in 2026.11.9.5 came from
       small pairs that ran on one thread, because of a bug in seamm-exec (fixed in

@@ -304,12 +304,16 @@ class InteractionEda(seamm.Node):
                 resources, seconds = backend.task_resources(
                     calc, settings, cores=cores, memory=memory
                 )
+                files = backend.files([calc], settings)
                 task_set.add(
                     seamm_exec.Task(
                         key=key,
                         program=backend.program,
                         cmd=backend.command(),
-                        files=backend.files([calc], settings),
+                        files=files,
+                        # Only what determines the results: a change to the
+                        # driver that cannot change them keeps finished work
+                        fingerprint=backend.fingerprint(files["input.json"]),
                         return_files=[backend.results_file, "*.log"],
                         resources=resources,
                         estimated_seconds=seconds,
