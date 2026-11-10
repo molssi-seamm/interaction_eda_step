@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.10 documentation</title>
+    <title>interaction_eda_step.interaction_eda &#8212; SEAMM Interaction EDA Plug-in 2026.11.10.1 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=279938be"></script>
+    <script src="../../_static/documentation_options.js?v=73a6b10a"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.10" />
+  <meta name="docsearch:version" content="2026.11.10.1" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -810,12 +810,16 @@
                 <span class="n">resources</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">task_resources</span><span class="p">(</span>
                     <span class="n">calc</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="n">memory</span>
                 <span class="p">)</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">([</span><span class="n">calc</span><span class="p">],</span> <span class="n">settings</span><span class="p">)</span>
                 <span class="n">task_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
                     <span class="n">seamm_exec</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span>
                         <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
                         <span class="n">program</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">program</span><span class="p">,</span>
                         <span class="n">cmd</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">command</span><span class="p">(),</span>
-                        <span class="n">files</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">files</span><span class="p">([</span><span class="n">calc</span><span class="p">],</span> <span class="n">settings</span><span class="p">),</span>
+                        <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">,</span>
+                        <span class="c1"># Only what determines the results: a change to the</span>
+                        <span class="c1"># driver that cannot change them keeps finished work</span>
+                        <span class="n">fingerprint</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">fingerprint</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="s2">"input.json"</span><span class="p">]),</span>
                         <span class="n">return_files</span><span class="o">=</span><span class="p">[</span><span class="n">backend</span><span class="o">.</span><span class="n">results_file</span><span class="p">,</span> <span class="s2">"*.log"</span><span class="p">],</span>
                         <span class="n">resources</span><span class="o">=</span><span class="n">resources</span><span class="p">,</span>
                         <span class="n">estimated_seconds</span><span class="o">=</span><span class="n">seconds</span><span class="p">,</span>

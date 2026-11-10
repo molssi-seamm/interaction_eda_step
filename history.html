@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.10 documentation</title>
+    <title>History &#8212; SEAMM Interaction EDA Plug-in 2026.11.10.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=279938be"></script>
+    <script src="_static/documentation_options.js?v=73a6b10a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -54,7 +54,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.10" />
+  <meta name="docsearch:version" content="2026.11.10.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -511,6 +511,16 @@
   <section id="history">
 <h1>History<a class="headerlink" href="#history" title="Link to this heading">#</a></h1>
 <dl class="simple">
+<dt>2026.11.10.1 – Bugfix: finished calculations are no longer rerun after an update</dt><dd><ul class="simple">
+<li><p>When a job is rerun, a finished calculation is now kept as long as what
+determines its results is unchanged: the code, the method settings and the
+fragments’ atoms. Before, any change to the step’s driver script, even one
+that only changed how much memory it used, made every finished calculation
+run again.</p></li>
+<li><p>Calculations finished with earlier versions are recorded the old way, so a
+rerun with this version computes them once more.</p></li>
+</ul>
+</dd>
 <dt>2026.11.10 – Bugfix: time estimates no longer carry the 3-minute floor</dt><dd><ul class="simple">
 <li><p>The fixed 3 minutes added to every Psi4 calculation in 2026.11.9.5 came from
 small pairs that ran on one thread, because of a bug in seamm-exec (fixed in

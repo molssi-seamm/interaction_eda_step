@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>interaction_eda_step.backends.base &#8212; SEAMM Interaction EDA Plug-in 2026.11.10 documentation</title>
+    <title>interaction_eda_step.backends.base &#8212; SEAMM Interaction EDA Plug-in 2026.11.10.1 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=279938be"></script>
+    <script src="../../../_static/documentation_options.js?v=73a6b10a"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.10" />
+  <meta name="docsearch:version" content="2026.11.10.1" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -510,6 +510,7 @@
 <span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
@@ -578,6 +579,21 @@
     <span class="n">results_file</span> <span class="o">=</span> <span class="s2">"results.jsonl"</span>
     <span class="c1">#: The seamm_exec program of a task (its resolver finds the code's Python).</span>
     <span class="n">program</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1">#: The version of the results the driver computes from its input. Raise it when</span>
+    <span class="c1">#: a change to the driver could change the energies. Leave it for changes that</span>
+    <span class="c1">#: cannot (memory, threads, logging, speed): finished calculations are then</span>
+    <span class="c1">#: kept when a job is rerun.</span>
+    <span class="n">results_version</span> <span class="o">=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="Backend.fingerprint">
+<a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.fingerprint">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fingerprint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""The fingerprint of a task: what determines its results.</span>
+
+<span class="sd">        ``data`` is the task's input (``input.json``). See :func:`fingerprint`.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">fingerprint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_version</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="Backend.task_resources">
 <a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.base.Backend.task_resources">[docs]</a>
@@ -644,6 +660,54 @@
 <span class="w">        </span><span class="sd">"""[(alias, bibtex, level, note)] to cite."""</span>
         <span class="k">return</span> <span class="p">[]</span></div>
 </div>
+
+
+
+<span class="c1">#: Settings that change how a calculation runs but not its results.</span>
+<span class="n">RUN_ONLY_SETTINGS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"memory_gb"</span><span class="p">,</span> <span class="s2">"threads"</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="fingerprint">
+<a class="viewcode-back" href="../../../api/interaction_eda_step.backends.html#interaction_eda_step.backends.base.fingerprint">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fingerprint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">results_version</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""The fingerprint of an EDA task, from what determines its results.</span>
+
+<span class="sd">    seamm_exec otherwise fingerprints a task by its command and input files,</span>
+<span class="sd">    which include the driver script, so any edit to the driver -- even one that</span>
+<span class="sd">    only changes how much memory it uses -- makes every finished calculation run</span>
+<span class="sd">    again. This uses instead the backend, its ``results_version``, and the task's</span>
+<span class="sd">    input (settings and fragments) without the settings that only change how it</span>
+<span class="sd">    runs (:data:`RUN_ONLY_SETTINGS`).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : dict or str</span>
+<span class="sd">        The task's input, as written to ``input.json`` (or its text).</span>
+<span class="sd">    backend : str</span>
+<span class="sd">        The backend's name, e.g. "Psi4".</span>
+<span class="sd">    results_version : int</span>
+<span class="sd">        The backend's results version.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        "eda-sha256:" and the hex digest.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"settings"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">RUN_ONLY_SETTINGS</span>
+    <span class="p">}</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"backend"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">backend</span><span class="p">),</span>
+        <span class="s2">"results_version"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">results_version</span><span class="p">),</span>
+        <span class="s2">"settings"</span><span class="p">:</span> <span class="n">settings</span><span class="p">,</span>
+        <span class="s2">"calculations"</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"calculations"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[],</span>
+    <span class="p">}</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">":"</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">"eda-sha256:"</span> <span class="o">+</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
 
 

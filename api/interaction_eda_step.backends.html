@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>interaction_eda_step.backends package &#8212; SEAMM Interaction EDA Plug-in 2026.11.10 documentation</title>
+    <title>interaction_eda_step.backends package &#8212; SEAMM Interaction EDA Plug-in 2026.11.10.1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=279938be"></script>
+    <script src="../_static/documentation_options.js?v=73a6b10a"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.10" />
+  <meta name="docsearch:version" content="2026.11.10.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -582,6 +582,13 @@ CPUs) and <code class="docutils literal notranslate"><span class="pre">psi4_sapt
 <dd><p>The input files for a batch of calculations: {name: text}.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.fingerprint">
+<span class="sig-name descname"><span class="pre">fingerprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/backends/base.html#Backend.fingerprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.fingerprint" title="Link to this definition">#</a></dt>
+<dd><p>The fingerprint of a task: what determines its results.</p>
+<p><code class="docutils literal notranslate"><span class="pre">data</span></code> is the task’s input (<code class="docutils literal notranslate"><span class="pre">input.json</span></code>). See <a class="reference internal" href="#interaction_eda_step.backends.base.fingerprint" title="interaction_eda_step.backends.base.fingerprint"><code class="xref py py-func docutils literal notranslate"><span class="pre">fingerprint()</span></code></a>.</p>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.ini">
 <span class="sig-name descname"><span class="pre">ini</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.ini" title="Link to this definition">#</a></dt>
@@ -638,6 +645,15 @@ CPUs) and <code class="docutils literal notranslate"><span class="pre">psi4_sapt
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.results_version">
+<span class="sig-name descname"><span class="pre">results_version</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></span><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.results_version" title="Link to this definition">#</a></dt>
+<dd><p>The version of the results the driver computes from its input. Raise it when
+a change to the driver could change the energies. Leave it for changes that
+cannot (memory, threads, logging, speed): finished calculations are then
+kept when a job is rerun.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="interaction_eda_step.backends.base.Backend.scheme">
 <span class="sig-name descname"><span class="pre">scheme</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></span><a class="headerlink" href="#interaction_eda_step.backends.base.Backend.scheme" title="Link to this definition">#</a></dt>
 <dd><p>The EDA scheme (a key of <code class="xref py py-data docutils literal notranslate"><span class="pre">interaction_eda_step.terms.SCHEMES</span></code>).</p>
@@ -681,6 +697,12 @@ CPUs) and <code class="docutils literal notranslate"><span class="pre">psi4_sapt
 
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.base.RUN_ONLY_SETTINGS">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.backends.base.</span></span><span class="sig-name descname"><span class="pre">RUN_ONLY_SETTINGS</span></span><span class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('memory_gb',</span> <span class="pre">'threads')</span></span><a class="headerlink" href="#interaction_eda_step.backends.base.RUN_ONLY_SETTINGS" title="Link to this definition">#</a></dt>
+<dd><p>Settings that change how a calculation runs but not its results.</p>
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="interaction_eda_step.backends.base.Result">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">interaction_eda_step.backends.base.</span></span><span class="sig-name descname"><span class="pre">Result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/backends/base.html#Result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.backends.base.Result" title="Link to this definition">#</a></dt>
@@ -716,6 +738,33 @@ CPUs) and <code class="docutils literal notranslate"><span class="pre">psi4_sapt
 <span class="sig-name descname"><span class="pre">key</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span></span><a class="headerlink" href="#interaction_eda_step.backends.base.Result.key" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interaction_eda_step.backends.base.fingerprint">
+<span class="sig-prename descclassname"><span class="pre">interaction_eda_step.backends.base.</span></span><span class="sig-name descname"><span class="pre">fingerprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results_version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/interaction_eda_step/backends/base.html#fingerprint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interaction_eda_step.backends.base.fingerprint" title="Link to this definition">#</a></dt>
+<dd><p>The fingerprint of an EDA task, from what determines its results.</p>
+<p>seamm_exec otherwise fingerprints a task by its command and input files,
+which include the driver script, so any edit to the driver – even one that
+only changes how much memory it uses – makes every finished calculation run
+again. This uses instead the backend, its <code class="docutils literal notranslate"><span class="pre">results_version</span></code>, and the task’s
+input (settings and fragments) without the settings that only change how it
+runs (<a class="reference internal" href="#interaction_eda_step.backends.base.RUN_ONLY_SETTINGS" title="interaction_eda_step.backends.base.RUN_ONLY_SETTINGS"><code class="xref py py-data docutils literal notranslate"><span class="pre">RUN_ONLY_SETTINGS</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dict</em><em> or </em><em>str</em>) – The task’s input, as written to <code class="docutils literal notranslate"><span class="pre">input.json</span></code> (or its text).</p></li>
+<li><p><strong>backend</strong> (<em>str</em>) – The backend’s name, e.g. “Psi4”.</p></li>
+<li><p><strong>results_version</strong> (<em>int</em>) – The backend’s results version.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>“eda-sha256:” and the hex digest.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -907,6 +956,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.configure"><code class="docutils literal notranslate"><span class="pre">Backend.configure()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.device"><code class="docutils literal notranslate"><span class="pre">Backend.device</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.files"><code class="docutils literal notranslate"><span class="pre">Backend.files()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.fingerprint"><code class="docutils literal notranslate"><span class="pre">Backend.fingerprint()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.ini"><code class="docutils literal notranslate"><span class="pre">Backend.ini</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.max_fragments"><code class="docutils literal notranslate"><span class="pre">Backend.max_fragments</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.method_string"><code class="docutils literal notranslate"><span class="pre">Backend.method_string()</span></code></a></li>
@@ -916,6 +966,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.program"><code class="docutils literal notranslate"><span class="pre">Backend.program</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.read_results"><code class="docutils literal notranslate"><span class="pre">Backend.read_results()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.results_file"><code class="docutils literal notranslate"><span class="pre">Backend.results_file</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.results_version"><code class="docutils literal notranslate"><span class="pre">Backend.results_version</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.scheme"><code class="docutils literal notranslate"><span class="pre">Backend.scheme</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Backend.task_resources"><code class="docutils literal notranslate"><span class="pre">Backend.task_resources()</span></code></a></li>
 </ul>
@@ -926,6 +977,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Calculation.key"><code class="docutils literal notranslate"><span class="pre">Calculation.key</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.RUN_ONLY_SETTINGS"><code class="docutils literal notranslate"><span class="pre">RUN_ONLY_SETTINGS</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Result"><code class="docutils literal notranslate"><span class="pre">Result</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Result.data"><code class="docutils literal notranslate"><span class="pre">Result.data</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Result.energies"><code class="docutils literal notranslate"><span class="pre">Result.energies</span></code></a></li>
@@ -933,6 +985,7 @@ with the same id (a rerun after a failure).</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.Result.key"><code class="docutils literal notranslate"><span class="pre">Result.key</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.fingerprint"><code class="docutils literal notranslate"><span class="pre">fingerprint()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interaction_eda_step.backends.base.read_jsonl"><code class="docutils literal notranslate"><span class="pre">read_jsonl()</span></code></a></li>
 </ul>
 </li>
