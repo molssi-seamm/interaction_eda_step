@@ -17,6 +17,7 @@ CPUs) and ``psi4_sapt`` (SAPT0/F-SAPT, dimers only).
 """
 
 from dataclasses import dataclass, field
+import hashlib
 import json
 from pathlib import Path
 
@@ -77,6 +78,18 @@ class Backend:
     results_file = "results.jsonl"
     #: The seamm_exec program of a task (its resolver finds the code's Python).
     program = None
+    #: The version of the results the driver computes from its input. Raise it when
+    #: a change to the driver could change the energies. Leave it for changes that
+    #: cannot (memory, threads, logging, speed): finished calculations are then
+    #: kept when a job is rerun.
+    results_version = 1
+
+    def fingerprint(self, data):
+        """The fingerprint of a task: what determines its results.
+
+        ``data`` is the task's input (``input.json``). See :func:`fingerprint`.
+        """
+        return fingerprint(data, self.name, self.results_version)
 
     def task_resources(self, calc, settings, cores="automatic", memory="automatic"):
         """(seamm_exec.Resources, estimated seconds) for one calculation."""
@@ -116,6 +129,51 @@ class Backend:
     def citations(self, settings):
         """[(alias, bibtex, level, note)] to cite."""
         return []
+
+
+#: Settings that change how a calculation runs but not its results.
+RUN_ONLY_SETTINGS = ("memory_gb", "threads")
+
+
+def fingerprint(data, backend, results_version):
+    """The fingerprint of an EDA task, from what determines its results.
+
+    seamm_exec otherwise fingerprints a task by its command and input files,
+    which include the driver script, so any edit to the driver -- even one that
+    only changes how much memory it uses -- makes every finished calculation run
+    again. This uses instead the backend, its ``results_version``, and the task's
+    input (settings and fragments) without the settings that only change how it
+    runs (:data:`RUN_ONLY_SETTINGS`).
+
+    Parameters
+    ----------
+    data : dict or str
+        The task's input, as written to ``input.json`` (or its text).
+    backend : str
+        The backend's name, e.g. "Psi4".
+    results_version : int
+        The backend's results version.
+
+    Returns
+    -------
+    str
+        "eda-sha256:" and the hex digest.
+    """
+    if isinstance(data, (str, bytes)):
+        data = json.loads(data)
+    settings = {
+        k: v
+        for k, v in (data.get("settings") or {}).items()
+        if k not in RUN_ONLY_SETTINGS
+    }
+    content = {
+        "backend": str(backend),
+        "results_version": int(results_version),
+        "settings": settings,
+        "calculations": data.get("calculations") or [],
+    }
+    text = json.dumps(content, sort_keys=True, separators=(",", ":"))
+    return "eda-sha256:" + hashlib.sha256(text.encode()).hexdigest()
 
 
 def read_jsonl(path):

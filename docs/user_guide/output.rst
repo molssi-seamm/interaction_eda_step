@@ -67,5 +67,8 @@ Each calculation runs in its own directory, ``tasks/<key>``, where the key is th
 of fragments (``0+1``) or, with several structures, the structure's number and the set
 (``3.0+1``); its input, the code's log and its ``results.jsonl`` are there. Finished
 calculations are marked, so if a job stops -- for example it runs out of time --
-rerunning it computes only the others. A failed calculation is reported, tried again
-on a rerun, and the step still gives every part that does not need it.
+rerunning it computes only the others. A finished calculation is kept as long as
+what determines its results is unchanged: the code, the method settings and the
+fragments' atoms. The memory, the threads, and newer versions of the step that do
+not change the results do not make it run again. A failed calculation is reported,
+tried again on a rerun, and the step still gives every part that does not need it.
