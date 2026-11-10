@@ -21,7 +21,9 @@ Structures
     in the job's own cores, or, on a queue that sends tasks to the scheduler
     (``tasks = queue``), as batch jobs, several bundled together. Each task asks for
     the cores, memory and time its size needs, and a rerun keeps the calculations that
-    have finished.
+    have finished. The time is estimated from the numbers of basis functions and
+    fragments and the cores, plus a minute for starting the task and collecting its
+    results.
 
 Cores per calculation
     With Psi4, the threads for each calculation. ``automatic`` uses 8 up to 400 basis

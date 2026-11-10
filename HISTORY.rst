@@ -1,6 +1,21 @@
 =======
 History
 =======
+2026.11.10 -- Bugfix: time estimates no longer carry the 3-minute floor
+    * The fixed 3 minutes added to every Psi4 calculation in 2026.11.9.5 came from
+      small pairs that ran on one thread, because of a bug in seamm-exec (fixed in
+      2026.11.10). With the threads they ask for they are several times faster, so
+      the floor is gone.
+    * Every estimate, for Psi4 and GPU4PySCF, now includes a minute for the task
+      itself: starting the batch job and its environments, launching the program,
+      and writing and collecting the results (measured at 7 s typically and 41 s at
+      most for 425 tasks on TinkerCliffs, plus 14 s for most bundles to start).
+    * Each extra fragment now adds 18 % to a calculation's time instead of 15 %, so
+      the estimate covers the measured 7-fragment cluster (1362 s on 8 threads)
+      without the floor.
+    * Requires seamm-exec 2026.11.10 or later, so that tasks in a bundle get their
+      threads.
+
 2026.11.9.6 -- Psi4: more memory for the EDA's integrals, so large clusters keep them in core
     * The EDA's density-fitted integrals may now use 75 % of Psi4's memory instead of
       half. The full system's SCF has freed its own integrals by then, so these are

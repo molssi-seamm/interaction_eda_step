@@ -18,6 +18,14 @@ import math
 #: The auxiliary basis used to size density-fitted runs when none is named.
 DEFAULT_AUX = "def2-universal-jkfit"
 
+#: Time per task outside the calculation itself, added to every estimate: the
+#: batch job starting and staging the environments, launching the program, and
+#: writing and collecting the results. Measured on TinkerCliffs (ChemAI
+#: 5680/5681, 425 tasks, 2026-11-10): launch and collection 7 s median, 41 s at
+#: most; a bundle's start before its first task 6 s median, 14 s at the 90th
+#: percentile.
+TASK_OVERHEAD_SECONDS = 60.0
+
 
 @functools.lru_cache(maxsize=1)
 def _table():
@@ -63,15 +71,10 @@ def size(symbols, basis, auxbasis=None):
 # ---------------------------------------------------------------------------
 #: Wall time of a pair on 16 threads, by nbf; the 1121-nbf point is shell A (5
 #: fragments, 7712 s) divided by fragment_factor(5).
-PSI4_T16 = ((116, 66.0), (284, 400.0), (552, 956.0), (1121, 5319.0))
+PSI4_T16 = ((116, 66.0), (284, 400.0), (552, 956.0), (1121, 5008.0))
 #: The largest memory to ask for: above it the EDA engine reads its integrals
 #: from disk (DISK_DF) rather than the task waiting for a bigger node.
 PSI4_MAX_GB = 240.0
-#: A fixed time per calculation, on top of the size-dependent part: setting up
-#: Psi4, the bases, the fitting and the grids. Small pairs (93-116 nbf, 8 threads)
-#: took 240-270 s on TinkerCliffs (ChemAI 5680, 2026-11-09), against about 80 s
-#: from the size alone; without it a bundle of small tasks overran its time.
-PSI4_FIXED_SECONDS = 180.0
 #: Speed-up relative to 16 threads.
 PSI4_SPEEDUP = {4: 0.41, 8: 0.85, 16: 1.0, 32: 1.6, 64: 2.4}
 #: Memory besides the JK: about 4 GB plus 0.3 GB per thread (EC-EC: 6.3 GB on
@@ -140,15 +143,16 @@ def _loglog(points, x):
 
 def fragment_factor(n_fragments):
     """More fragments, more SCF-MI and FERF work at the same size: na6_min (7
-    fragments, 383 nbf) took 1362 s on 8 threads, about twice a pair."""
-    return 1.0 + 0.15 * max(0, int(n_fragments) - 2)
+    fragments, 383 nbf) took 1362 s on 8 threads (ChemAI 5679), about twice a
+    pair; 0.18 per extra fragment covers it with the task overhead."""
+    return 1.0 + 0.18 * max(0, int(n_fragments) - 2)
 
 
 def psi4_seconds(nbf, cores, n_fragments=2):
-    """Estimated wall time of a Psi4 EDA task."""
+    """Estimated wall time of a Psi4 EDA task, with the task's overhead."""
     t = _loglog(PSI4_T16, nbf) * fragment_factor(n_fragments)
     t /= _loglog(list(PSI4_SPEEDUP.items()), max(1, int(cores)))
-    return PSI4_FIXED_SECONDS + t
+    return TASK_OVERHEAD_SECONDS + t
 
 
 # ---------------------------------------------------------------------------
@@ -162,5 +166,7 @@ GPU_MEMORY_GB = 32
 
 
 def gpu_seconds(nbf, n_fragments=2):
+    """Estimated wall time of a GPU4PySCF EDA task, with the task's overhead."""
     t, n = GPU_T
-    return t * (nbf / n) ** GPU_EXPONENT * fragment_factor(n_fragments)
+    t *= (nbf / n) ** GPU_EXPONENT * fragment_factor(n_fragments)
+    return TASK_OVERHEAD_SECONDS + t
