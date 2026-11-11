@@ -44,6 +44,59 @@ def test_jk_algorithm():
     assert driver.jk_algorithm([], {"auxbasis": "def2-universal-jkfit"}) == "MEM_DF"
 
 
+def test_psi4_memory_from_the_cgroup_limit(monkeypatch):
+    """Psi4 is told a fraction of the task's memory, or of its cgroup's limit
+    when that is smaller (a bundle's cgroup holds all its tasks)."""
+    driver = _driver()
+    assert 0.5 <= driver.PSI4_MEMORY_FRACTION <= 0.7
+    monkeypatch.setattr(driver, "cgroup_memory_limit", lambda: None)
+    assert driver.task_memory(20e9) == 20e9
+    monkeypatch.setattr(driver, "cgroup_memory_limit", lambda: int(18e9))
+    assert driver.task_memory(20e9) == 18e9
+    assert driver.task_memory(10e9) == 10e9
+
+
+def test_cgroup_limit_v2(tmp_path, monkeypatch):
+    """The v2 limit is read from the process's own cgroup; 'max' is no limit."""
+    driver = _driver()
+    real_open = open
+    group = tmp_path / "sys/fs/cgroup/slurm/job_1"
+    group.mkdir(parents=True)
+    (group / "memory.max").write_text("19088000000\n")
+    files = {
+        "/proc/self/cgroup": "0::/slurm/job_1\n",
+        "/sys/fs/cgroup/slurm/job_1/memory.max": str(group / "memory.max"),
+    }
+
+    def fake_open(path, *args, **kwargs):
+        if path == "/proc/self/cgroup":
+            target = tmp_path / "cgroup"
+            target.write_text(files[path])
+            return real_open(target, *args, **kwargs)
+        if path in files:
+            return real_open(files[path], *args, **kwargs)
+        raise OSError(path)
+
+    monkeypatch.setattr("builtins.open", fake_open)
+    assert driver.cgroup_memory_limit() == 19088000000
+    (group / "memory.max").write_text("max\n")
+    assert driver.cgroup_memory_limit() is None
+
+
+def test_scratch_of_its_own(tmp_path, monkeypatch):
+    """Each task gets its own Psi4 scratch directory under TMPDIR (a full /tmp
+    failed every calculation on one node, ChemAI 5681)."""
+    driver = _driver()
+    monkeypatch.delenv("PSI_SCRATCH", raising=False)
+    monkeypatch.setenv("TMPDIR", str(tmp_path / "node"))
+    first, second = driver.task_scratch(), driver.task_scratch()
+    assert first != second
+    for path in (first, second):
+        assert Path(path).is_dir() and Path(path).parent == tmp_path / "node"
+    monkeypatch.setenv("PSI_SCRATCH", str(tmp_path / "psi"))
+    assert Path(driver.task_scratch()).parent == tmp_path / "psi"
+
+
 def _psi4_python():
     for path in (
         Path("~/miniconda3/envs/seamm-psi4/bin/python").expanduser(),

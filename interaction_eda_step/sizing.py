@@ -77,17 +77,20 @@ PSI4_T16 = ((116, 66.0), (284, 400.0), (552, 956.0), (1121, 5008.0))
 PSI4_MAX_GB = 240.0
 #: Speed-up relative to 16 threads.
 PSI4_SPEEDUP = {4: 0.41, 8: 0.85, 16: 1.0, 32: 1.6, 64: 2.4}
-#: Memory besides the JK: about 4 GB plus 0.3 GB per thread (EC-EC: 6.3 GB on
+#: Memory besides the JK: about 4 GB plus 0.5 GB per thread (EC-EC: 6.3 GB on
 #: 16 threads, 21 GB on 32, 2026-11-09).
 PSI4_FIXED_GB = 4.0
-PSI4_PER_THREAD_GB = 0.3
+PSI4_PER_THREAD_GB = 0.5
+#: At least this much per thread: solvent-solvent pairs on 16 threads were killed
+#: by the cgroup at 17-19 GB (ChemAI 5681, 2026-11-10).
+PSI4_MIN_GB_PER_THREAD = 2.0
 #: Psi4's screening keeps about 3/4 of the function pairs (shell A, 1121 nbf:
 #: 47.6 GiB needed against 62.8 for all pairs, 2026-11-09).
 SCREENED = 0.75
 #: The peak memory of a Psi4 EDA is about 1.9 times its in-core integrals (shell
 #: A, 1121 nbf: 98 GB at 51 GB, 2026-11-09): the integrals, plus the grids, the
 #: matrices and the threads' buffers. Asked for with 30 % to spare. The driver
-#: gives the integrals 75 % of Psi4's memory (80 % of this), so they fit in core.
+#: gives the integrals 75 % of Psi4's memory (65 % of this), so they fit in core.
 PEAK_OVER_JK = 1.9
 PEAK_HEADROOM = 1.3
 
@@ -113,16 +116,17 @@ def psi4_memory(nbf, naux, density_fitting=True, memory="automatic", cores=16):
     """Bytes of memory for a Psi4 EDA task (what the queue is asked for).
 
     Enough for the peak, about 1.9 times the screened in-core integrals, with
-    30 % to spare. Psi4 gets 80 % of it, and the EDA engine's in-core JK 75 % of
-    that, so the integrals stay in core (MEM_DF) rather than being read from
-    disk. The SCFs use DiskDFJK, which needs less. Shell A (1121 nbf) peaked at
-    98 GB with 160 GB for Psi4; this gives 127 GB."""
+    30 % to spare, and at least 2 GB per thread. Psi4 gets 65 % of it, and the
+    EDA engine's in-core JK 75 % of that, so the integrals stay in core (MEM_DF)
+    rather than being read from disk. The SCFs use DiskDFJK, which needs less.
+    Shell A (1121 nbf) peaked at 98 GB with 160 GB for Psi4; this gives 127 GB."""
     if str(memory) != "automatic":
         return int(memory)
     jk = SCREENED * df_bytes(nbf, naux) / 1e9 if density_fitting and naux else 0.0
     gb = 1.25 * (PSI4_FIXED_GB + PSI4_PER_THREAD_GB * cores + jk)
     if jk:
         gb = max(gb, PEAK_HEADROOM * PEAK_OVER_JK * jk + 2.0)
+    gb = max(gb, PSI4_MIN_GB_PER_THREAD * cores)
     return int(math.ceil(min(gb, PSI4_MAX_GB)) * 1e9)
 
 

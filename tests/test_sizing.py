@@ -16,6 +16,12 @@ def engine_fraction():
     return float(re.search(r"^ENGINE_JK_FRACTION = ([0-9.]+)", text, re.M).group(1))
 
 
+def psi4_fraction():
+    """The part of a task's memory the driver tells Psi4 it has."""
+    text = DRIVER.read_text()
+    return float(re.search(r"^PSI4_MEMORY_FRACTION = ([0-9.]+)", text, re.M).group(1))
+
+
 # (nbf, naux): Li+-EC, EC-EC, the stage-2 Li+ shells (2026-11-09) and shellC
 SIZES = [(284, 579), (552, 1092), (1085, 2163), (1121, 2235), (1388, 2763)]
 
@@ -25,7 +31,7 @@ def test_memory_holds_the_engine_integrals_and_the_peak(nbf, naux):
     cores = sizing.psi4_cores(nbf)
     job = sizing.psi4_memory(nbf, naux, True, cores=cores)
     integrals = sizing.SCREENED * sizing.df_bytes(nbf, naux)
-    psi4 = 0.8 * job
+    psi4 = psi4_fraction() * job
     # the engine's share keeps its integrals in core, with room to spare
     assert engine_fraction() * psi4 > 1.2 * integrals
     # the peak (about 1.9 times the integrals) fits in what is asked for
@@ -36,7 +42,7 @@ def test_shell_a_as_measured():
     """Shell A (1121 nbf) peaked at 98 GB; Psi4 needed 47.6 GiB in core."""
     job = sizing.psi4_memory(1121, 2235, True, cores=32)
     assert job >= 98e9 * 1.2
-    assert engine_fraction() * 0.8 * job > 47.6 * 2**30
+    assert engine_fraction() * psi4_fraction() * job > 47.6 * 2**30
 
 
 def test_times_include_the_task_overhead():
@@ -60,3 +66,11 @@ def test_times_cover_measured_runs():
     assert 7712 < sizing.psi4_seconds(1121, 16, 5) < 1.1 * 7712
     # small pairs no longer carry the 1-thread floor (was 258 s at 116 nbf)
     assert sizing.psi4_seconds(116, 8) < 180
+
+
+@pytest.mark.parametrize("cores", [8, 16, 32])
+def test_at_least_two_gb_per_thread(cores):
+    """Solvent-solvent pairs on 16 threads at 17-19 GB were killed by the cgroup
+    (ChemAI 5681); every task now has at least 2 GB per thread."""
+    for nbf, naux in ((116, 400), (260, 900), (552, 1092)):
+        assert sizing.psi4_memory(nbf, naux, True, cores=cores) >= 2e9 * cores

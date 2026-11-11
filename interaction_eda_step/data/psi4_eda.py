@@ -915,6 +915,69 @@ def done_ids(path):
     return ids
 
 
+#: The part of the task's memory Psi4 is told it has. Psi4 uses more than it is
+#: told (the ALMO/FERF buffers, the DFT grids and the threads' stacks are not all
+#: counted), and at 0.8 solvent-solvent pairs on 16 threads were killed by the
+#: cgroup at 17-19 GB (ChemAI 5681, 2026-11-10).
+PSI4_MEMORY_FRACTION = 0.65
+
+
+def cgroup_memory_limit():
+    """The memory limit (bytes) of this process's cgroup, or None if unlimited
+    or unknown (cgroup v2 ``memory.max``, else v1 ``memory.limit_in_bytes``)."""
+    try:
+        with open("/proc/self/cgroup") as fd:
+            lines = fd.read().splitlines()
+    except OSError:
+        return None
+    for line in lines:
+        parts = line.split(":", 2)
+        if len(parts) != 3:
+            continue
+        hierarchy, controllers, path = parts
+        if hierarchy == "0" and controllers == "":
+            candidates = [f"/sys/fs/cgroup{path}/memory.max"]
+        elif "memory" in controllers.split(","):
+            candidates = [f"/sys/fs/cgroup/memory{path}/memory.limit_in_bytes"]
+        else:
+            continue
+        for candidate in candidates:
+            try:
+                with open(candidate) as fd:
+                    text = fd.read().strip()
+            except OSError:
+                continue
+            if text and text != "max":
+                value = int(text)
+                if value < 2**60:  # v1 reports "unlimited" as a huge number
+                    return value
+    return None
+
+
+def task_memory(requested):
+    """The memory the task may use: what it was given, or its cgroup's limit if
+    that is smaller (a bundle's cgroup holds all of its tasks)."""
+    limit = cgroup_memory_limit()
+    return min(float(requested), float(limit)) if limit else float(requested)
+
+
+def task_scratch():
+    """A scratch directory of the task's own for Psi4's files, created under
+    ``PSI_SCRATCH``, else ``TMPDIR`` (node-local on clusters), else the system's
+    temporary directory. Without it Psi4 writes to /tmp, which on one full node
+    failed every calculation within seconds (PSIO_ERROR 5, ChemAI 5681)."""
+    import atexit
+    import shutil
+    import tempfile
+
+    base = os.environ.get("PSI_SCRATCH") or os.environ.get("TMPDIR") or None
+    if base is not None:
+        os.makedirs(base, exist_ok=True)
+    path = tempfile.mkdtemp(prefix="psi4-", dir=base)
+    atexit.register(shutil.rmtree, path, True)
+    return path
+
+
 def main(argv=None):
     global psi4
     p = argparse.ArgumentParser(description=__doc__.split("\n")[0])
@@ -926,7 +989,10 @@ def main(argv=None):
         "--memory",
         type=float,
         default=None,
-        help="bytes the task was given; Psi4 gets 80 %% unless memory_gb is set",
+        help=(
+            "bytes the task was given; Psi4 gets 65 %% (of its cgroup limit if "
+            "smaller) unless memory_gb is set"
+        ),
     )
     args = p.parse_args(argv)
 
@@ -935,11 +1001,14 @@ def main(argv=None):
     settings = data.get("settings", {})
     calculations = data["calculations"]
     if args.memory and not settings.get("memory_gb"):
-        settings["memory_gb"] = round(0.8 * args.memory / 1e9, 1)
+        allowed = task_memory(args.memory)
+        settings["memory_gb"] = round(PSI4_MEMORY_FRACTION * allowed / 1e9, 1)
 
     import psi4 as _psi4
 
     psi4 = _psi4
+    scratch = task_scratch()
+    psi4.core.IOManager.shared_object().set_default_path(scratch)
     threads = int(
         args.threads or settings.get("threads") or os.environ.get("OMP_NUM_THREADS", 1)
     )

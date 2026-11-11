@@ -32,10 +32,14 @@ Cores per calculation
     cores.
 
 Memory per calculation
-    With Psi4, the memory for each calculation, of which Psi4 gets 80 %. ``automatic``
-    sizes it so the density-fitted integrals of the EDA stay in memory: about 10 GB
-    for a Li⁺–EC pair, 20 GB for an EC–EC pair, 130 GB for a 1121-function cluster,
-    and at most 240 GB, above which they are read from disk.
+    With Psi4, the memory for each calculation, of which Psi4 is told it has 65 %
+    (of the job's memory limit, if that is smaller): Psi4 uses more than it is
+    told, and at 80 % solvent pairs ran out. ``automatic`` sizes it so the
+    density-fitted integrals of the EDA stay in memory, with at least 2 GB per
+    thread: about 16 GB for a Li⁺–EC pair on 8 threads, 32 GB for an EC–EC pair on
+    16, 130 GB for a 1121-function cluster, and at most 240 GB, above which they are
+    read from disk. Each calculation writes Psi4's scratch files to a directory of
+    its own under ``PSI_SCRATCH``, else ``TMPDIR`` (node-local disk on clusters).
 
 Method
 ======
@@ -77,7 +81,7 @@ Code
         range-separated functional takes about 3 × 8 × N\ :sub:`aux` × N\ :sup:`2`
         bytes -- about 70 GB for the 1121-function cluster, so give such a
         calculation about 130 GB. With less, Psi4 reads them from the scratch disk
-        at every Fock build, which is slower. The step gives Psi4 80 % of the
+        at every Fock build, which is slower. The step gives Psi4 65 % of the
         calculation's memory.
 
 Functional
