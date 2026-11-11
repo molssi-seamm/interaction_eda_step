@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.10.1 documentation</title>
+    <title>Settings &#8212; SEAMM Interaction EDA Plug-in 2026.11.11 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=73a6b10a"></script>
+    <script src="../_static/documentation_options.js?v=83e1bca7"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2026.11.10.1" />
+  <meta name="docsearch:version" content="2026.11.11" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -544,10 +544,14 @@ functions, 16 up to 800 and 32 above, which is where the extra cores still pay
 (see <a class="reference internal" href="#settings"><span class="std std-ref">Settings</span></a> under Code). GPU4PySCF calculations use one GPU and four
 cores.</p>
 </dd>
-<dt>Memory per calculation</dt><dd><p>With Psi4, the memory for each calculation, of which Psi4 gets 80 %. <code class="docutils literal notranslate"><span class="pre">automatic</span></code>
-sizes it so the density-fitted integrals of the EDA stay in memory: about 10 GB
-for a Li⁺–EC pair, 20 GB for an EC–EC pair, 130 GB for a 1121-function cluster,
-and at most 240 GB, above which they are read from disk.</p>
+<dt>Memory per calculation</dt><dd><p>With Psi4, the memory for each calculation, of which Psi4 is told it has 65 %
+(of the job’s memory limit, if that is smaller): Psi4 uses more than it is
+told, and at 80 % solvent pairs ran out. <code class="docutils literal notranslate"><span class="pre">automatic</span></code> sizes it so the
+density-fitted integrals of the EDA stay in memory, with at least 2 GB per
+thread: about 16 GB for a Li⁺–EC pair on 8 threads, 32 GB for an EC–EC pair on
+16, 130 GB for a 1121-function cluster, and at most 240 GB, above which they are
+read from disk. Each calculation writes Psi4’s scratch files to a directory of
+its own under <code class="docutils literal notranslate"><span class="pre">PSI_SCRATCH</span></code>, else <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> (node-local disk on clusters).</p>
 </dd>
 </dl>
 </section>
@@ -590,7 +594,7 @@ density-fitted integrals are kept in memory when they fit, which for a
 range-separated functional takes about 3 × 8 × N<sub>aux</sub> × N<sup>2</sup>
 bytes – about 70 GB for the 1121-function cluster, so give such a
 calculation about 130 GB. With less, Psi4 reads them from the scratch disk
-at every Fock build, which is slower. The step gives Psi4 80 % of the
+at every Fock build, which is slower. The step gives Psi4 65 % of the
 calculation’s memory.</p>
 </dd>
 </dl>
