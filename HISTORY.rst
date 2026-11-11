@@ -1,6 +1,16 @@
 =======
 History
 =======
+2026.11.11 -- Bugfix: Psi4 runs out of memory or scratch less easily
+    * Psi4 is told it has 65 % of a calculation's memory (of the job's memory limit,
+      if that is smaller) instead of 80 %: it uses more than it is told, and solvent
+      pairs on 16 threads were killed for exceeding their memory.
+    * Every calculation is given at least 2 GB per thread.
+    * Each calculation writes Psi4's scratch files to a directory of its own under
+      ``PSI_SCRATCH``, else ``TMPDIR`` (node-local disk on clusters), not /tmp: a
+      full /tmp on one node failed every calculation sent there within seconds.
+    * The results are unchanged, so finished calculations are kept on a rerun.
+
 2026.11.10.1 -- Bugfix: finished calculations are no longer rerun after an update
     * When a job is rerun, a finished calculation is now kept as long as what
       determines its results is unchanged: the code, the method settings and the

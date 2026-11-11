@@ -253,7 +253,7 @@ class InteractionEdaParameters(seamm.Parameters):
             "format_string": ".1f",
             "description": "Memory per calculation:",
             "help_text": (
-                "Memory for each EDA calculation; Psi4 is given 80 % of it. "
+                "Memory for each EDA calculation; Psi4 is given 65 % of it. "
                 "'automatic' sizes it from the density-fitted integrals."
             ),
         },
